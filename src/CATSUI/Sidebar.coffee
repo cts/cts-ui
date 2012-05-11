@@ -26,6 +26,10 @@ $ = jQueryHcss
 
 class Sidebar
   constructor: () ->
+    @clipboard = new CATSUI.Clipboard()
+    @.buildUI()
+
+  buildUI: () ->
     html = """
     <div id="catsui-sidebar-wrapper">
       <a href="#" id="catsui-sidebar-button">CATS</a>
