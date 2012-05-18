@@ -35,7 +35,7 @@ class Sidebar
       <a href="#" id="catsui-sidebar-button">CATS</a>
       <div id="catsui-sidebar">
         <h1>CATS</h1>
-        <h2>Copy / Paste</h2>
+        <h2>Clipboard</h2>
         <ul>
           <li><a href="#">Copy Data</a></li>
           <li><a href="#">Copy Style</a></li>

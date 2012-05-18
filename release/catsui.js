@@ -19770,23 +19770,26 @@ var CATSUI = {};
 
   $ = jQueryHcss;
 
-  $ = jQueryHcss;
-
   __t('CATSUI').Sidebar = (function() {
 
     Sidebar.name = 'Sidebar';
 
     function Sidebar() {
+      this.clipboard = new CATSUI.Clipboard();
+      this.buildUI();
+    }
+
+    Sidebar.prototype.buildUI = function() {
       var html,
         _this = this;
-      html = "<div id=\"catsui-sidebar-wrapper\">\n  <a href=\"#\" id=\"catsui-sidebar-button\">CATS</a>\n  <div id=\"catsui-sidebar\">\n    <h1>CATS</h1>\n    <h2>Copy / Paste</h2>\n    <ul>\n      <li><a href=\"#\">Copy Data</a></li>\n      <li><a href=\"#\">Copy Style</a></li>\n      <li><a href=\"#\">Paste Data</a></li>\n      <li><a href=\"#\">Paste Style</a></li>\n    </ul>\n    <h2>Edit</h2>\n    <ul>\n      <li><a href=\"#\">Edit Data</a></li>\n    </ul>\n  </div>\n</div>";
+      html = "<div id=\"catsui-sidebar-wrapper\">\n  <a href=\"#\" id=\"catsui-sidebar-button\">CATS</a>\n  <div id=\"catsui-sidebar\">\n    <h1>CATS</h1>\n    <h2>Clipboard</h2>\n    <ul>\n      <li><a href=\"#\">Copy Data</a></li>\n      <li><a href=\"#\">Copy Style</a></li>\n      <li><a href=\"#\">Paste Data</a></li>\n      <li><a href=\"#\">Paste Style</a></li>\n    </ul>\n    <h2>Edit</h2>\n    <ul>\n      <li><a href=\"#\">Edit Data</a></li>\n    </ul>\n  </div>\n</div>";
       $("body").append(html);
       this.container = $("#catsui-sidebar-wrapper");
       this.toggleBtn = $("#catsui-sidebar-button");
-      this.toggleBtn.click(function() {
+      return this.toggleBtn.click(function() {
         return _this.toggle();
       });
-    }
+    };
 
     Sidebar.prototype.toggle = function() {
       if (this.container.css("left") === "0px") {
