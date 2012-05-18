@@ -58,7 +58,8 @@ def makeBookmarkletFor(cssFiles, jsFiles, final, anchor):
 domain = "localhost:4000"
 
 cssFiles = [
-    "http://%s/catsui/hotlink/catsui.css" % domain
+    "http://%s/catsui/hotlink/catsui.css" % domain,
+    "http://%s/catsui/hotlink/bootstrap.css" % domain
 ]
 
 jsFiles = [
@@ -66,11 +67,8 @@ jsFiles = [
 ]
 
 
-bookmarklet = makeBookmarkletFor(cssFiles, jsFiles, "", "CATS")
-
 bookmarkletWithBoot = makeBookmarkletFor(cssFiles, jsFiles, "window.CATSUI.sidebar = new CATSUI.Sidebar();", "CATS")
 
-print bookmarklet
 print ""
 print ""
 print bookmarkletWithBoot
