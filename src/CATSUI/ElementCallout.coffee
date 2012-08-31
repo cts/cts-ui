@@ -26,9 +26,11 @@ class ElementCallout
   constructor: () ->
     
   callout: (node, title, body) ->
+    $(node).wrap('<div class="webCatsContainer" />')
     $(node).popover({'title':title, 'content':body, 'trigger':'manual'})
     $(node).popover('show')
 
   close: (node) ->
     $(node).popover('hide')
+    $(node).unwrap()
 

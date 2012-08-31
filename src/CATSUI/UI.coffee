@@ -58,6 +58,36 @@ class UI
         <button class="btn btn-primary pasterBtn">Paste</button>&nbsp<button class="btn pasteCancelBtn">Cancel</button></p>
       </div>
     """
+    @simplePasteUI = """
+      <div>
+        <div style="margin-left: 5px">
+          <div style="margin-top:9px">
+            <input type="radio" style="margin-right: 3px" data-location="before" id="pasteBefore" name="pasteWhere" />Before
+          </div>
+          <div style="margin-top:13px">
+            <input type="radio" style="margin-right: 3px" data-location="after" id="pasteAfter" selected name="pasteWhere" />After
+          </div>
+        </div>
+        <br />
+        <p align="center">
+          <button class="btn btn-primary pasterBtn">Paste</button>&nbsp<button class="btn pasteCancelBtn">Cancel</button>
+        </p>
+      </div>
+    """
+
+  offerEdits: (editRequestedCallback, editCompleteCallback) =>
+    @editRequestedCallback = editRequestedCallback
+    @editCompleteCallback = editCompleteCallback
+
+  rescindEditOffer: () =>
+
+  edit: (node) =>
+    if @editRequestedCallback
+      @editRequestedCallback(node)
+
+  completeEdit: (node) =>
+    if @editCompleteCallback
+      @editCompleteCallback(node)
 
 
   # Triggers the Element Picker, witha callback to the the Paste UI
@@ -71,13 +101,18 @@ class UI
     html = wrapper.html()
     @clipboard.copy(html)
 
-  paste: () =>
+  paste: (pasteTargetSelectedCallback, pasteCompleteCallback) =>
     @pasteTarget = null
+    @pasteTargetSelectedCallback = null
+    @pasteCompleteCallback = null
     @picker.pick(@.pasteTargetSelected, {'autoClear':no})
 
   pasteTargetSelected: (target) => 
     @target = target
-    @callout.callout(target, "Paste", @pasteUI)
+    if @pasteTargetSelectedCallback
+      @pasteTargetSelectedCallback(target)
+    
+    @callout.callout(target, "Paste", @simplePasteUI)
 
     $(".pasteCancelBtn").click (event) =>
       event.preventDefault()
@@ -106,6 +141,9 @@ class UI
   performPaste: (anchor, options, html) =>
     opts = $.extend {}, {'location':'prepend', 'style':true, 'data':true}, options
     node = $(html)
+
+    if @pasteCompleteCallback
+      @pasteCompleteCallback(anchor, options, html)
 
     replacementNode = $()
     if opts.data and opts.style
