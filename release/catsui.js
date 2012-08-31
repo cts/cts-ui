@@ -10432,7 +10432,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQueryHcss ) {
   $.fn.popover.defaults = $.extend({} , $.fn.tooltip.defaults, {
     placement: 'right'
   , content: ''
-  , template: '<div class="popover"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
+  , template: '<div class="webCatsContainer popover"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
   })
 
 }(window.jQueryHcss);
@@ -11649,7 +11649,7 @@ var CATS = {};
 
 var __t;
 
-__t = function(ns, expose) {
+__t = function(ns) {
   var curr, index, part, parts, _i, _len;
   curr = null;
   parts = [].concat = ns.split(".");
@@ -11657,16 +11657,10 @@ __t = function(ns, expose) {
     part = parts[index];
     if (curr === null) {
       curr = eval(part);
-      if (expose != null) {
-        expose[part] = curr;
-      }
       continue;
     } else {
       if (curr[part] == null) {
         curr = curr[part] = {};
-        if (expose != null) {
-          expose[part] = curr;
-        }
       } else {
         curr = curr[part];
       }
@@ -11684,8 +11678,6 @@ var CATSUI = {};
   $ = jQueryHcss;
 
   __t('CATSUI').Clipboard = (function() {
-
-    Clipboard.name = 'Clipboard';
 
     function Clipboard(clipboardServer) {
       this.paste = __bind(this.paste, this);
@@ -11756,11 +11748,10 @@ var CATSUI = {};
 
   __t('CATSUI').ElementCallout = (function() {
 
-    ElementCallout.name = 'ElementCallout';
-
     function ElementCallout() {}
 
     ElementCallout.prototype.callout = function(node, title, body) {
+      $(node).wrap('<div class="webCatsContainer" />');
       $(node).popover({
         'title': title,
         'content': body,
@@ -11770,7 +11761,8 @@ var CATSUI = {};
     };
 
     ElementCallout.prototype.close = function(node) {
-      return $(node).popover('hide');
+      $(node).popover('hide');
+      return $(node).unwrap();
     };
 
     return ElementCallout;
@@ -11780,8 +11772,6 @@ var CATSUI = {};
   $ = jQueryHcss;
 
   __t('CATSUI').ElementPicker = (function() {
-
-    ElementPicker.name = 'ElementPicker';
 
     function ElementPicker(options) {
       this.keyDown = __bind(this.keyDown, this);
@@ -11978,8 +11968,6 @@ var CATSUI = {};
 
   __t('CATSUI').Modal = (function() {
 
-    Modal.name = 'Modal';
-
     function Modal(title, content, ok, cancel, okCallback, cancelCallback) {
       this.title = title;
       this.content = content;
@@ -12007,8 +11995,6 @@ var CATSUI = {};
 
   __t('CATSUI').UI = (function() {
 
-    UI.name = 'UI';
-
     function UI() {
       this.performPaste = __bind(this.performPaste, this);
 
@@ -12019,12 +12005,40 @@ var CATSUI = {};
       this.copyTargetSelected = __bind(this.copyTargetSelected, this);
 
       this.copy = __bind(this.copy, this);
+
+      this.completeEdit = __bind(this.completeEdit, this);
+
+      this.edit = __bind(this.edit, this);
+
+      this.rescindEditOffer = __bind(this.rescindEditOffer, this);
+
+      this.offerEdits = __bind(this.offerEdits, this);
       this.clipboard = new CATSUI.Clipboard();
       this.callout = new CATSUI.ElementCallout();
       this.picker = new CATSUI.ElementPicker();
       this.pasteTarget = null;
       this.pasteUI = "<div>\n  <p align=\"center\" style=\"font-size: 1.3em\">\n    <input type=\"checkbox\" checked id=\"pasteData\" />Data &nbsp \n  <input type=\"checkbox\" checked id=\"pasteStyle\" />Style</p><br />\n  <div style=\"padding-left: 40px; float: left; margin-right: 5px;\">\n  <img src=\"http://webcats.github.com/catsui/hotlink/where.png\" />\n  </div>\n  <div style=\"margin-left: 5px\">\n    <div style=\"margin-top:9px\">\n      <input type=\"radio\" style=\"margin-right: 3px\" data-location=\"before\" id=\"pasteBefore\" name=\"pasteWhere\" />Before\n    </div>\n    <div style=\"margin-top:18px\">\n      <input type=\"radio\" style=\"margin-right: 3px\" data-location=\"prepend\" id=\"pastePrepend\" name=\"pasteWhere\" />Prepend<br />\n    </div>\n    <div style=\"margin-top:-1px\">\n      <input type=\"radio\" tyle=\"margin-right: 3px\" data-location=\"replace\" id=\"pasteReplace\" name=\"pasteWhere\" />Replace<br />\n    </div>\n    <div style=\"margin-top:0px\">\n      <input type=\"radio\" style=\"margin-right: 3px\" data-location=\"append\" id=\"pasteAppend\" name=\"pasteWhere\" />Append<br />\n    </div>\n    <div style=\"margin-top:13px\">\n      <input type=\"radio\" style=\"margin-right: 3px\" data-location=\"after\" id=\"pasteAfter\" name=\"pasteWhere\" />After\n    </div>\n  </div>\n  <br />\n  <p align=\"center\">\n  <button class=\"btn btn-primary pasterBtn\">Paste</button>&nbsp<button class=\"btn pasteCancelBtn\">Cancel</button></p>\n</div>";
+      this.simplePasteUI = "<div>\n  <div style=\"margin-left: 5px\">\n    <div style=\"margin-top:9px\">\n      <input type=\"radio\" style=\"margin-right: 3px\" data-location=\"before\" id=\"pasteBefore\" name=\"pasteWhere\" />Before\n    </div>\n    <div style=\"margin-top:13px\">\n      <input type=\"radio\" style=\"margin-right: 3px\" data-location=\"after\" id=\"pasteAfter\" selected name=\"pasteWhere\" />After\n    </div>\n  </div>\n  <br />\n  <p align=\"center\">\n    <button class=\"btn btn-primary pasterBtn\">Paste</button>&nbsp<button class=\"btn pasteCancelBtn\">Cancel</button>\n  </p>\n</div>";
     }
+
+    UI.prototype.offerEdits = function(editRequestedCallback, editCompleteCallback) {
+      this.editRequestedCallback = editRequestedCallback;
+      return this.editCompleteCallback = editCompleteCallback;
+    };
+
+    UI.prototype.rescindEditOffer = function() {};
+
+    UI.prototype.edit = function(node) {
+      if (this.editRequestedCallback) {
+        return this.editRequestedCallback(node);
+      }
+    };
+
+    UI.prototype.completeEdit = function(node) {
+      if (this.editCompleteCallback) {
+        return this.editCompleteCallback(node);
+      }
+    };
 
     UI.prototype.copy = function() {
       return this.picker.pick(this.copyTargetSelected, {
@@ -12040,8 +12054,10 @@ var CATSUI = {};
       return this.clipboard.copy(html);
     };
 
-    UI.prototype.paste = function() {
+    UI.prototype.paste = function(pasteTargetSelectedCallback, pasteCompleteCallback) {
       this.pasteTarget = null;
+      this.pasteTargetSelectedCallback = null;
+      this.pasteCompleteCallback = null;
       return this.picker.pick(this.pasteTargetSelected, {
         'autoClear': false
       });
@@ -12050,7 +12066,10 @@ var CATSUI = {};
     UI.prototype.pasteTargetSelected = function(target) {
       var _this = this;
       this.target = target;
-      this.callout.callout(target, "Paste", this.pasteUI);
+      if (this.pasteTargetSelectedCallback) {
+        this.pasteTargetSelectedCallback(target);
+      }
+      this.callout.callout(target, "Paste", this.simplePasteUI);
       $(".pasteCancelBtn").click(function(event) {
         event.preventDefault();
         _this.picker.clearSelection();
@@ -12085,6 +12104,9 @@ var CATSUI = {};
         'data': true
       }, options);
       node = $(html);
+      if (this.pasteCompleteCallback) {
+        this.pasteCompleteCallback(anchor, options, html);
+      }
       replacementNode = $();
       if (opts.data && opts.style) {
         replacementNode = node;
@@ -12134,8 +12156,6 @@ var CATSUI = {};
 
   __t('CATSUI').Sidebar = (function() {
 
-    Sidebar.name = 'Sidebar';
-
     function Sidebar() {
       this.ui = new CATSUI.UI();
       this.buildUI();
@@ -12180,8 +12200,6 @@ var CATSUI = {};
   $ = jQueryHcss;
 
   __t('CATSUI').Util = (function() {
-
-    Util.name = 'Util';
 
     function Util() {}
 
