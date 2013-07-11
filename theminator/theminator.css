@@ -1,0 +1,235 @@
+.tray {
+    width:300px;
+    height:700px;
+    border-right:solid black 1px;
+}
+
+.header {
+  background-image: url('images/cts-header-theminator.png');
+  height: 66px;
+}
+
+.search-container {
+    padding: 10px;
+}
+
+.favorites-icon-container {
+    padding: 10px;
+    padding-top:12px;
+}
+
+.search-query {
+    width:75%;
+}
+
+.form-search {
+    padding-bottom: 0px;
+}
+
+.favorites-icon {
+    width:auto;
+    height:25px;
+}
+
+.filter-tray {
+    border-bottom: solid black 1px;
+    padding:0px 10px 5px 10px;
+}
+.filter-container {
+    height:0px;
+}
+
+.filter-options {
+    padding-left:7%;
+}
+
+.top-container {
+    width:100%;
+    display:table;
+}
+
+.form-search {
+    margin-bottom: 0px;
+}
+
+.templates-tray {
+    text-align:center;
+    padding-top:10px;
+}
+
+.pager-custom {
+    display:inline-block;
+    font-weight:bold;
+    margin: 0px;
+    padding: 0px;
+    padding-bottom:10px;
+}
+
+.pager-custom > li {
+    display:inline;
+}
+
+.pager-custom > li.disabled > a {
+    color: #999999;
+    cursor: default;
+}
+
+.pager-custom > li.disabled > a:hover {
+    background-color: transparent;
+}
+
+.pager-custom > li.active > a {
+    background-color: #657208;
+    color: #FFFFFF;
+    cursor: default;
+}
+
+.pager-custom > li.active > a:hover {
+    background-color: #657208;
+}
+
+.pager-custom > li > a:hover {
+    background-color: #B9D310;
+}
+.pager-custom > li > a {
+    color:#000000;
+    padding:3px 5px;
+    cursor:pointer;
+    cursor:hand;
+}
+
+.templates-container {
+    overflow-y:auto;
+    height:518px;
+}
+
+.screenshot-thumbnail {
+    position:relative;
+    display:table;
+    margin-right:5px;
+    margin-left:5px;
+    margin-bottom:10px;
+}
+
+.screenshot-options {
+    position:absolute;
+    left:0;
+    top:0;
+}
+
+.add-to-favorites {
+    position:absolute;
+    left:89%;
+    top:0;
+    cursor: hand;
+    cursor: pointer;
+}
+
+.add-to-favorites > img {
+    width:27px;
+    height:25px;
+}
+    
+
+.screenshot {
+    width: 100%;;
+    height:auto;
+}
+
+
+.tint:before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    -moz-transition: all .3s linear;
+    -webkit-transition: all .3s linear;
+    -ms-transition: all .3s linear;
+    -o-transition: all .3s linear;
+    transition: all .3s linear;
+}
+
+.tint:hover:before, .tint.options-hover:before {
+    background: rgba(185, 211, 16, .5)
+}
+
+.tint.active:hover:before, .tint.active.options-hover:before, .tint.active:before {
+    background: rgba(101, 114, 8, .5)
+}
+
+a.filter-expand {
+    color:#000000;
+    cursor:pointer;
+    cursor:hand;
+}
+
+.tag-types-list {
+    list-style-type: none;
+    margin:0px;
+}
+
+.tag-types-list > li.active > a {
+    background-color: #657208;
+    color: #FFFFFF;
+    cursor: hand;
+    cursor: pointer;
+}
+
+.tag-types-list > li.active > a:hover {
+    background-color: #657208;
+}
+
+.tag-types-list > li > a:hover {
+    background-color: #B9D310;
+}
+.tag-types-list > li > a {
+    color:#000000;
+    cursor:pointer;
+    cursor:hand;
+    padding: 2px 3px;
+}
+
+.tag-details {
+    width:194px;
+}
+
+.tag-details-list {
+    list-style-type: none;
+    display:inline-block;
+    margin: 0px;
+}
+
+.tag-details-list > li {
+    display:inline;
+}
+
+.tag-details-list > li label.checkbox {
+    padding-left: 0px;
+    padding-right:5px;
+    display:inline
+}
+
+.tag-details-list > li label.checkbox > input[type=checkbox] {
+    float:none;
+    margin-top: -2px;
+    margin-left: 0px;
+    margin-right:5px;
+}
+
+a:hover {
+    color:#657208;
+    text-decoration:none;
+}
+a {
+    color:#B9D310;
+}
+
+input[type=text]:focus {
+      border-color:#B9D310;
+      -moz-box-shadow: 0px 0px 6px #B9D310;
+      -webkit-box-shadow: 0px 0px 6px #B9D310;
+      box-shadow: 0px 0px 6px #B9D310;
+}

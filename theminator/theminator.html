@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+        <script src="theminator.js"></script>
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" media="all" />
+        <link rel="stylesheet" href="theminator.css" media="all" />
+    </head>
+    
+    <body>
+        
+        <div class="tray">
+            <div class="header"></div>
+            <div class="top-container">
+                <div class="search-container pull-left">
+                    <form class="form-search">
+                      <div class="input-append">
+                        <input placeholder="Search..." type="text" class="search-query">
+                        <button type="submit" class="btn"><i class="icon-search"></i></button>
+                      </div>
+                    </form>
+                </div>
+                <div class="favorites-icon-container pull-right">
+                    <a class="pull-right" href="#"><img class="favorites-icon" src="images/star.png"></a>
+                </div>
+            </div>
+            <div class="filter-tray">
+                <div class="filter-container">
+                    <div class="btn-group filter-options">
+                        <button class="btn">Filter</button>
+                        <button class="btn">Deselect All</button>
+                    </div>
+                    <div class="filter-content-container">
+                    <div class="tag-details pull-left">
+                        <div class="tag-color-details tag-details-type">
+                            <ul class="tag-details-list">
+                                <li><label class="checkbox"><input type="checkbox">Black</label></li>
+                                <li><label class="checkbox"><input type="checkbox">Blue</label></li>
+                                <li><label class="checkbox"><input type="checkbox">Brown</label></li>
+                                <li><label class="checkbox"><input type="checkbox">Gray</label></li>
+                                <li><label class="checkbox"><input type="checkbox">Green</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Orange</label></li>
+                                <li><label class="checkbox"><input type="checkbox">Pink</label></li>
+                                <li><label class="checkbox"><input type="checkbox">Purple</label></li>
+                                <li><label class="checkbox"><input type="checkbox">Red</label></li>
+                                <li><label class="checkbox"><input type="checkbox">Silver</label></li>
+                                <li><label class="checkbox"><input type="checkbox">Tan</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">White</label></li>
+                                <li><label class="checkbox"><input type="checkbox">Yellow</label></li>
+                                <li><label class="checkbox"><input type="checkbox">Dark</label></li>
+                                <li><label class="checkbox"><input type="checkbox">Light</label></li>
+                            </ul>
+                        </div>
+                        <div class="tag-columns-details tag-details-type">
+                            <ul class="tag-details-list">
+                                <li><label class="checkbox"><input type="checkbox">One Column</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Two Columns</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Three Columns</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Four Columns</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Left Sidebar</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Right Sidebar</label></li>
+                            </ul>
+                        </div>
+                        <div class="tag-width-details tag-details-type">
+                            <ul class="tag-details-list">
+                                <li><label class="checkbox"><input type="checkbox">Fixed Width</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Flexible Width</label></li>
+                            </ul>
+                        </div>
+                        <div class="tag-features-details tag-details-type">
+                            <ul class="tag-details-list">
+                                <li><label class="checkbox"><input type="checkbox">Blavatar</label></li>
+                                <li><label class="checkbox"><input type="checkbox">Buddypress</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Custom Background</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Custom Colors</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Custom Header</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Custom Menu</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Editor Style</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Featured Image Header</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Featured Images</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Flexible Header</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Front Page Post Form</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Full Width Template</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Microformats</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Post Formats</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">RTL Language Support</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Sticky Post</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Theme Options</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Threaded Comments</label></li><br>
+                                <li><label class="checkbox"><input type="checkbox">Translation Ready</label></li>
+                            </ul>
+                        </div>
+                        <div class="tag-subject-details tag-details-type">
+                            <ul class="tag-details-list">
+                                <li><label class="checkbox"><input type="checkbox">Holiday</label></li>
+                                <li><label class="checkbox"><input type="checkbox">Photoblogging</label></li>
+                                <li><label class="checkbox"><input type="checkbox">Seasonal</label></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tag-types pull-right">
+                        <ul class="tag-types-list">
+                            <li><a class='filter-type color-filter' data-filter='color'><i class="icon-chevron-left"></i> Color</a></li>
+                            <li><a class='filter-type columns-filter' data-filter='columns'><i class="icon-chevron-left"></i> Columns</a></li>
+                            <li><a class='filter-type width-filter' data-filter='width'><i class="icon-chevron-left"></i> Width</a></li>
+                            <li><a class='filter-type features-filter' data-filter='features'><i class="icon-chevron-left"></i> Features</a></li>
+                            <li><a class='filter-type subject-filter' data-filter='subject'><i class="icon-chevron-left"></i> Subject</a></li>
+                        </ul>
+                    </div>
+                    </div>
+                </div>
+                <a class="filter-expand">Filter <i class="icon-chevron-down"></i></a>
+            </div>
+            <div class="templates-tray">
+                <ul class="pager-custom">
+                    <li class="disabled"><a><i class="icon-chevron-left"></i></a></li><li class="active"><a>1</a></li><li><a>2</a></li><li><a href="#">3</a></li><li><a>4</a></li><li><a href="#">5</a></li><li class="disabled"><a>...</a></li><li><a>10</a></li><li><a><i class="icon-chevron-right"></i></a></li>
+                </ul>
+                <div class="templates-container">
+                    <div class="screenshot-thumbnail">
+                        <img class="screenshot" src="screenshots/mog.png">
+                        <div class="btn-group screenshot-options">
+                            <button class="btn previewBtn" data-theme="mog">Preview</button>
+                            <button class="btn">Install</button>
+                        </div>
+                        <a class="add-to-favorites"><img class="not-favorite" src="images/empty-star.png"></a>
+                    </div>
+                    <div class="screenshot-thumbnail">
+                        <img class="screenshot" src="screenshots/spun.png">
+                        <div class="btn-group screenshot-options">
+                            <button class="btn previewBtn" data-theme="spun">Preview</button>
+                            <button class="btn">Install</button>
+                        </div>
+                        <a class="add-to-favorites"><img class="not-favorite" src="images/empty-star.png"></a>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        
+    </body>
+    
+</html>
