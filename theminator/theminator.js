@@ -1,4 +1,8 @@
 $(function() {
+    var favorites = [];
+    if (localStorage.getItem("favorites")!==null) {
+        favorites = JSON.parse(localStorage["favorites"]);
+    }
     $('.screenshot-options').hide();
     $('.add-to-favorites').hide();
     $('.filter-container').children().hide();
@@ -18,7 +22,10 @@ $(function() {
                 $(this).find('.add-to-favorites').hide();
             }
         });
-        
+        if (favorites.indexOf($(this).data("theme")) != -1) {
+            $(this).find(".add-to-favorites").html('<img class="favorite" src="images/star.png">');
+            $(this).find(".add-to-favorites").show();
+        }
     });
     
     $('.screenshot-options,.add-to-favorites').each(function() {
@@ -44,9 +51,13 @@ $(function() {
         $(this).on('click', function() {
             if ($(this).find('img').hasClass('hover-favorite')) {
                 $(this).html('<img class="favorite" src="images/star.png">');
+                favorites.push($(this).parents('.screenshot-thumbnail').data("theme"));
             } else if ($(this).find('img').hasClass('favorite')) {
                 $(this).html('<img class="hover-favorite" src="images/transparent-star.png">');
-            } 
+                favorites.splice(favorites.indexOf($(this).parents('.screenshot-thumbnail').data("theme")),1);
+                
+            }
+            localStorage["favorites"] = JSON.stringify(favorites);
         });
     });
     
@@ -99,13 +110,21 @@ $(function() {
     
     $('.previewBtn').on('click', function() {
         if ($(this).hasClass('active')) {
-            $(this).parent().parent().find('.tint').removeClass('active');
+            $(this).parents('.screenshot-thumbnail').find('.tint').removeClass('active');
             $(this).removeClass('active')
         } else {
             $('.tint').removeClass('active');
             $('.previewBtn').removeClass('active');
             $(this).addClass('active');
-            $(this).parent().parent().find('.tint').addClass('active');
+            $(this).parents('.screenshot-thumbnail').find('.tint').addClass('active');
+        }
+    });
+    
+    $('.deselectBtn').on('click', function() {
+        if ($('.tag-details-type:visible').length == 0) {
+            $('.tag-details input[type=checkbox]').attr('checked', false);
+        } else {
+            $('.tag-details-type:visible input[type=checkbox]').attr('checked', false);
         }
     });
 });
