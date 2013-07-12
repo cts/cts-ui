@@ -17,7 +17,7 @@ CTS.UI.Theminator.prototype.createInContainer = function(container, node) {
 };
 
 CTS.UI.Theminator.prototype.updateSize = function() {
-//  var whatever = this._node.height();
-//  this._node.height(whatever);
+  // var whatever = this._node.height();
+ // this._node.height(whatever);
 };
 

@@ -1,4 +1,4 @@
-/*******/
+/*
 .tray {
   background-color: red !important; 
   padding-bottom: 10px;
@@ -6,7 +6,7 @@
 .templates-tray { background-color: blue !important; }
 .theminator { background-color: green !important; }
 .theminator { margin-bottom: 10px !important; }
-/*******/
+*/
 
 
 .tray {
@@ -24,6 +24,8 @@
     border:solid black 1px;
     border-left:none;
     height: 100%;
+    display: table;
+    background-color: white;
 }
 
 .expand-tray {
@@ -36,6 +38,13 @@
 .header {
   background-image: url('images/cts-header-theminator.png');
   height: 66px;
+  display: table-row;
+}
+
+.header-content {
+  background-image: url('images/cts-header-theminator.png');
+  height: 66px;
+  display: table-cell;
 }
 
 .search-container {
@@ -63,7 +72,9 @@
 .filter-tray {
     border-bottom: solid black 1px;
     padding:0px 10px 5px 10px;
+    display: table-row;
 }
+
 .filter-container {
     height:0px;
 }
@@ -72,9 +83,13 @@
     padding-left:7%;
 }
 
+.subheader {
+  display: table-row;
+}
+
 .top-container {
-    width:100%;
-    display:table;
+    display:table-cell;
+    text-align: top;
 }
 
 .form-search {
@@ -86,6 +101,7 @@
     padding-top:10px;
     /*overflow: auto;*/
     height: 100%;
+    display: table-row;
 }
 
 .pager-custom {

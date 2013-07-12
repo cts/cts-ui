@@ -31,6 +31,9 @@ CTS.UI.Tray.prototype.close = function() {
   this._node.css("left", "-300px");
 };
 
+CTS.UI.Tray.prototype.toggle = function() {
+};
+
 CTS.UI.Tray.prototype.updateSize = function() {
   // Set the height of the tray to the window size
   var windowHeight = CTS.$(window).height();
