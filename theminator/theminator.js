@@ -69,13 +69,13 @@ $(function() {
             $('.filter-container').animate({"height":"130px"},500, function() {
                 $('a.filter-expand > i').attr('class', 'icon-chevron-up');
             });
-            $('.templates-container').animate( {"height": "388px"} , 500);
+            //$('.templates-container').animate( {"height": "388px"} , 500);
         } else if ($(this).find('i').hasClass('icon-chevron-up')) {
             $('.filter-container').animate({"height":"0px"},500, function() {
                 $('a.filter-expand > i').attr('class', 'icon-chevron-down');
                 $('.filter-container').children().hide();
             });
-            $('.templates-container').animate( {"height": "518px"} , 500);
+            //$('.templates-container').animate( {"height": "518px"} , 500);
         }
     });
     

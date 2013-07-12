@@ -1,16 +1,29 @@
+/*******/
 .tray {
-    width:300px;
-    height:700px;
-    border:solid black 1px;
-    border-left:none;
+  background-color: red !important; 
+  padding-bottom: 10px;
 }
+.templates-tray { background-color: blue !important; }
+.theminator { background-color: green !important; }
+.theminator { margin-bottom: 10px !important; }
+/*******/
 
-.body {
-    overflow:scroll;
-}
-.theminator {
+
+.tray {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
     width:337px;
     /*left:-300px;*/
+}
+
+.theminator{
+    width:300px;
+    /*height:700px;*/
+    border:solid black 1px;
+    border-left:none;
+    height: 100%;
 }
 
 .expand-tray {
@@ -71,6 +84,8 @@
 .templates-tray {
     text-align:center;
     padding-top:10px;
+    /*overflow: auto;*/
+    height: 100%;
 }
 
 .pager-custom {
@@ -116,7 +131,8 @@
 
 .templates-container {
     overflow-y:auto;
-    height:518px;
+    height: 100%;
+    /*height:518px;*/
 }
 
 .screenshot-thumbnail {
