@@ -25,7 +25,7 @@
 }
 
 .tray-contents {
-  border-right: 1px solid red;
+  border-right: 1px solid black;
   width: 300px;
   background-color: white;
   height: 100%;
@@ -33,9 +33,13 @@
 
 .expand-tray {
     position:absolute;
-    top:200px;
+    top:25%;
     left:301px;
-    width:30px;
+}
+
+.expand-tray-button {
+    cursor: hand;
+    cursor: pointer;
 }
 
 /* THEMINATOR
@@ -85,13 +89,17 @@
 }
 
 .filter-tray {
+    display: table-row;
+}
+
+.filter-expand-container {
     border-bottom: solid black 1px;
     padding:0px 10px 5px 10px;
-    display: table-row;
 }
 
 .filter-container {
     height:0px;
+    padding:0px 10px 0px 10px;
 }
 
 .filter-options {
@@ -124,7 +132,7 @@
     font-weight:bold;
     margin: 0px;
     padding: 0px;
-    padding-bottom:10px;
+    margin-top:10px;
 }
 
 .pager-custom > li {
@@ -161,6 +169,7 @@
 }
 
 .templates-container {
+    padding-top:10px;
     overflow-y:auto;
     height: calc(100% - 30px);
     /*height:518px;*/

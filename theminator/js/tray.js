@@ -10,28 +10,45 @@ CTS.UI.Tray = function() {
   // XXX Temporary Cheat!
   this.createInPage();
   this._theminatorNode = CTS.$('.theminator');
+  this._bodyNode = CTS.$('body');
   this._theminator = new CTS.UI.Theminator(this._node, this._theminatorNode);
+  this._originalBodyMargin = this._bodyNode.css("margin-left");
   this.updateSize();
 };
 
 CTS.UI.Tray.prototype.createInPage = function() {
-  this._node = $('.tray');
-  console.log("Hi, I'm Tray, and my node is: ", this._node);
+  this._node = CTS.$('.tray'); // Cheating line: in the future, we'll CREATE the HTML for this node.
   var self = this;
   CTS.$(window).resize(function() {
     self.updateSize();
   });
+  this._node.find('.expand-tray-button').on('click', function() {
+    self.toggle();
+  });
 };
 
 CTS.UI.Tray.prototype.open = function() {
-  this._node.css("left", "0px");
+  this._node.animate({"left":"0px"});
+  this._bodyNode.animate({"margin-left":(301+this._originalBodyMargin)});
+  
 };
 
 CTS.UI.Tray.prototype.close = function() {
-  this._node.css("left", "-300px");
+  this._node.animate({"left":"-301px"});
+  this._bodyNode.animate({"margin-left":this._originalBodyMargin});
+
 };
 
 CTS.UI.Tray.prototype.toggle = function() {
+    if (this._node.hasClass("open")) {
+        this.close();
+        this._node.removeClass("open");
+        this._node.addClass("closed");
+    } else if (this._node.hasClass("closed")) {
+        this.open();
+        this._node.removeClass("closed");
+        this._node.addClass("open");
+    } 
 };
 
 CTS.UI.Tray.prototype.updateSize = function() {

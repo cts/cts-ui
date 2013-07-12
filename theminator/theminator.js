@@ -127,4 +127,6 @@ $(function() {
             $('.tag-details-type:visible input[type=checkbox]').attr('checked', false);
         }
     });
+    
+    
 });
