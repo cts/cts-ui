@@ -21,7 +21,7 @@
 .theminator{
     width:300px;
     /*height:700px;*/
-    border:solid black 1px;
+    border:solid red 1px;
     border-left:none;
     height: 100%;
     display: table;
@@ -147,7 +147,7 @@
 
 .templates-container {
     overflow-y:auto;
-    height: 100%;
+    height: calc(100% - 30px);
     /*height:518px;*/
     display:block;
 }
