@@ -1,0 +1,59 @@
+{
+  "name": "cts-ui",
+  "version": "0.0.5",
+  "link": "http://www.treesheets.org/ui",
+  "description": "Cascading Tree Sheets UI",
+  "keywords": [
+    "static blogging",
+    "web editing",
+    "html editing",
+    "html",
+    "cts",
+    "cascading tree sheets",
+    "declarative",
+    "github pages"
+  ],
+  "author": {
+    "name": "Ted Benson",
+    "email": "eob@csail.mit.edu",
+    "url": "http://www.edwardbenson.com/"
+  },
+  "contributors": [{
+    "name": "Jessica Andersen",
+    "email": "jessmand@mit.edu"
+  }],
+  "bugs": {
+    "email": "eob@csail.mit.edu",
+    "url": "https://github.com/cts/cts-ui/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/cts/cts-cli/blob/master/LICENSE.txt"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "git",
+      "url": "http://github.com/cts/cts-ui.git"
+    }
+  ],
+  "dependencies": {
+  },
+  "devDependencies": {
+    "grunt": "*",
+    "grunt-contrib-jshint": "~0.1.1",
+    "grunt-contrib-nodeunit": "~0.1.2",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-qunit": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-watch": "*"
+  },
+  "engines": {
+    "node": ">=0.1.9"
+  },
+  "directories": {
+    "lib": "./lib"
+  }
+}
+
