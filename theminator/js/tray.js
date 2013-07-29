@@ -54,7 +54,6 @@ CTS.UI.Tray.prototype.toggle = function() {
 CTS.UI.Tray.prototype.updateSize = function() {
   // Set the height of the tray to the window size
   var windowHeight = CTS.$(window).height();
-  console.log("New window height:", windowHeight);
   this._node.height(windowHeight);
   this._theminator.updateSize();
 };
