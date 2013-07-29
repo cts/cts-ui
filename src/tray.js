@@ -23,7 +23,10 @@ _CTSUI.Tray.prototype.loadMockup = function() {
   cts += "this :is tray | #tray;";
   this._container.attr("data-cts", cts);
   var self = this;
-  this._container.on("cts-received-is", function() {self.setupMockup()});
+  this._container.on("cts-received-is", function(evt) {
+    self.setupMockup()
+    evt.stopPropagation();
+  });
   this._container.appendTo(this._bodyNode);
 };
 
@@ -31,6 +34,7 @@ _CTSUI.Tray.prototype.setupMockup = function() {
   console.log("setup mockup");
   var self = this;
   this._node = this._container.find('.tray');
+  this._trayContentsNode = this._container.find('.tray-contents');
   this.updateSize();
   CTS.$(window).resize(function() {
     self.updateSize();
@@ -40,9 +44,10 @@ _CTSUI.Tray.prototype.setupMockup = function() {
   });
 
   // Create the theminator
-  //this._theminatorNode = CTS.$('<div class="tray-page theminator-page"></div>');
-  //this._theminatorNode.appendTo(this._node.find(".tray-contents"));
-  //this._theminator = new CTS.UI.Theminator(this, this._theminatorNode);
+  this._editor = new CTS.UI.Editor(this, this._trayContentsNode);
+  this._theminator = new CTS.UI.Theminator(this, this._trayContentsNode);
+  this._pages.push(this._theminator);
+  this._pages.push(this._editor);
 };
 
 _CTSUI.Tray.prototype.open = function() {
