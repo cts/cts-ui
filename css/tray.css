@@ -58,16 +58,6 @@
     display: table;
 }
 
-.tag-details-list li {
-    float:left;
-}
-
-.effeckt-caption figcaption {
-    background: rgba(0, 0, 0, 0.6);
-    color: rgb(255, 255, 255);
-    padding: 1rem 0 1rem 0;
-}
-
 .header {
   background-image: url('images/cts-header-theminator.png');
   height: 66px;
@@ -147,7 +137,6 @@
     margin: 0px;
     padding: 0px;
     margin-top:10px;
-    margin-bottom:3px;
 }
 
 .pager-custom > li {
@@ -190,7 +179,6 @@
     /*height:518px;*/
     display:block;
 }
-
 
 .screenshot-thumbnail {
     position:relative;
