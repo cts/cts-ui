@@ -4,9 +4,6 @@
   overflow: hidden;
 }
 
-.effeckt-caption:nth-child(2n) {
-  margin-right: 0;
-}
 
 .effeckt-caption img {
   -webkit-transition: 500ms;
