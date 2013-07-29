@@ -1,4 +1,6 @@
 _CTSUI.Tray = function() {
+  console.log("Tray Loading");
+
   this._bodyNode = CTS.$('body');
   this._originalBodyMargin = this._bodyNode.css("margin-left");
 
