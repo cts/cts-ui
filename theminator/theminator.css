@@ -15,6 +15,10 @@
  * </div>
  */
 
+.tag-details-list li {
+  float: left;
+}
+
 .tray {
   position: absolute;
   top: 0;

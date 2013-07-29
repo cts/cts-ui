@@ -1,19 +1,34 @@
 _CTSUI.Tray = function() {
-  // XXX Temporary Cheat!
   this._bodyNode = CTS.$('body');
-  this.loadMockup();
   this._originalBodyMargin = this._bodyNode.css("margin-left");
+
+  // Pages inside the tray, such as the theminator
+  this._pages = [];
+
+  // The container DIV which contains the CTS to load the HTML impl.
+  this._container = null;
+
+  // The node representing the tray body, loaded by CTS.
+  this._node = null;
+
+  this.loadMockup();
 };
 
 _CTSUI.Tray.prototype.loadMockup = function() {
-  this._node = CTS.$("<div class='ctsTrayContainer'></div>");
-  this._node.attr("data-cts", ":is " + CTS.UI.Mockups.tray + ";")
-  //this._node.once("cts-is-incoming", this.setupMockup);
-  this._node.appendTo(this._bodyNode);
+  this._container = CTS.$("<div class='ctsTrayContainer'></div>");
+  var cts = "@html tray " + CTS.UI.Mockups.tray + ";";
+  cts += "@css " + CTS.UI.CSS.tray + ";";
+  cts += "this :is tray | #tray;";
+  this._container.attr("data-cts", cts);
+  var self = this;
+  this._container.on("cts-received-is", function() {self.setupMockup()});
+  this._container.appendTo(this._bodyNode);
 };
 
 _CTSUI.Tray.prototype.setupMockup = function() {
+  console.log("setup mockup");
   var self = this;
+  this._node = this._container.find('.tray');
   this.updateSize();
   CTS.$(window).resize(function() {
     self.updateSize();
@@ -23,9 +38,9 @@ _CTSUI.Tray.prototype.setupMockup = function() {
   });
 
   // Create the theminator
-  this._theminatorNode = CTS.$('<div class="tray-page theminator-page"></div>');
-  this._theminatorNode.appendTo(this._node.find(".tray-contents"));
-  this._theminator = new CTS.UI.Theminator(this, this._theminatorNode);
+  //this._theminatorNode = CTS.$('<div class="tray-page theminator-page"></div>');
+  //this._theminatorNode.appendTo(this._node.find(".tray-contents"));
+  //this._theminator = new CTS.UI.Theminator(this, this._theminatorNode);
 };
 
 _CTSUI.Tray.prototype.open = function() {
@@ -41,6 +56,7 @@ _CTSUI.Tray.prototype.close = function() {
 };
 
 _CTSUI.Tray.prototype.toggle = function() {
+  console.log("toggle");
   if (this._node.hasClass("open")) {
     this.close();
     this._node.removeClass("open");
@@ -57,5 +73,7 @@ _CTSUI.Tray.prototype.updateSize = function() {
   var windowHeight = CTS.$(window).height();
   console.log("New window height:", windowHeight);
   this._node.height(windowHeight);
-  this._theminator.updateSize();
+  for (var i = 0; i < this._pages.length; i++) {
+    this._pages[i].updateSize();
+  }
 };
