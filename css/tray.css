@@ -31,7 +31,7 @@
 .tray-contents {
   border-right: 1px solid black;
   width: 300px;
-  background-image: url('images/light_wool.png');
+  background-color: white;
   height: 100%;
 }
 
@@ -56,16 +56,6 @@
     border-left:none;
     height: 100%;
     display: table;
-}
-
-.tag-details-list li {
-    float:left;
-}
-
-.effeckt-caption figcaption {
-    background: rgba(0, 0, 0, 0.6);
-    color: rgb(255, 255, 255);
-    padding: 1rem 0 1rem 0;
 }
 
 .header {
@@ -146,8 +136,7 @@
     font-weight:bold;
     margin: 0px;
     padding: 0px;
-    margin-top:7px;
-    margin-bottom:3px;
+    margin-top:10px;
 }
 
 .pager-custom > li {
@@ -191,7 +180,6 @@
     display:block;
 }
 
-
 .screenshot-thumbnail {
     position:relative;
     display:table;
@@ -222,7 +210,7 @@
     
 
 .screenshot {
-    width: 100%;
+    width: 100%;;
     height:auto;
 }
 

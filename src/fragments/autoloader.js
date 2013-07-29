@@ -1,7 +1,9 @@
 _CTSUI.autoload = function() {
   if (typeof CTS != 'undefined') {
     CTS.UI = _CTSUI;
-    CTS.UI.load();
+    CTS.status.defaultTreeReady.then(function() {
+      CTS.UI.load();
+    });
   } else {
     // CTS isn't present. Let's create it with a script.
     var s = document.createElement('script');
@@ -10,7 +12,7 @@ _CTSUI.autoload = function() {
     s.onload = function() {
       CTS.UI = _CTSUI;
       // Now we have to wait for $ to load
-      CTS.ready.then(function() {
+      CTS.status.defaultTreeReady.then(function() {
         CTS.UI.load();
       });
     };
