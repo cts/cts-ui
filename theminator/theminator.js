@@ -3,8 +3,10 @@ $(function() {
     if (localStorage.getItem("favorites")!==null) {
         favorites = JSON.parse(localStorage["favorites"]);
     }
-    
+    var themes = {};
+    var filters = {};
     $('.filter-container').children().hide();
+    var themeDisplayList = [];
     
     $.getJSON('content.json', function(data) {
         for (var filterType in data.filters) {
@@ -16,36 +18,53 @@ $(function() {
             $('.tag-types-list').append(filterTypeButton);
             for (var i=0; i<data.filters[filterType].length; i++) {
                 var filter = data.filters[filterType][i];
-                tagDetailsList.append('<li><label class="checkbox"><input type="checkbox">'+capitalize(filter)+'</label></li>');
+                tagDetailsList.append('<li><label class="checkbox"><input type="checkbox"><span>'+capitalize(filter)+'</span></label></li>');
             }
         }
+        filters = data.filters;
         
         filterInitFunctions();
+
+        themes = data.themes;
         
-        for (var theme in data.themes) {
-            $('.templates-container').append(
-                '<div class="screenshot-thumbnail effeckt-caption effeckt-caption-2" data-theme="'+theme+'">'+
-                    '<img class="screenshot" src="'+data.themes[theme].screenshot+'">'+
-                    '<div class="screenshot-options">'+
-                        '<div class="btn-group">'+
-                            '<button class="btn previewBtn">Preview</button>'+
-                            '<button class="btn">Install</button>'+
-                        '</div>'+
-                        
-                    '</div>'+
-                    '<a class="add-to-favorites"><img class="not-favorite" src="images/empty-star.png"></a>'+
-                    '<figcaption>'+
-                        '<div class="effeckt-figcaption-wrap">'+
-                            '<span class="theme-title">'+capitalize(theme)+'</span>'+
-                        '</div>'+
-                    '</figcaption>'+
-                '</div>'
-            );
-        }
-        
-        themeInitFunctions();
+        displayNewData(data.themes);
         
     });
+    
+    var displayThemeThumbnail = function(theme,themeData) {
+        $('.templates-container').append(
+            '<div class="screenshot-thumbnail effeckt-caption effeckt-caption-2" data-theme="'+theme+'">'+
+                '<img class="screenshot" src="'+themeData.screenshot+'">'+
+                '<div class="screenshot-options">'+
+                    '<div class="btn-group">'+
+                        '<button class="btn preview-button">Preview</button>'+
+                        '<button class="btn">Install</button>'+
+                    '</div>'+
+                    
+                '</div>'+
+                '<a class="add-to-favorites"><img class="not-favorite" src="images/empty-star.png"></a>'+
+                '<figcaption>'+
+                    '<div class="effeckt-figcaption-wrap">'+
+                        '<span class="theme-title">'+capitalize(theme)+'</span>'+
+                    '</div>'+
+                '</figcaption>'+
+            '</div>'
+        );
+    };
+    
+    var displayNewData = function(newData) {
+        
+        paginate(newData);
+        displayPage(1);
+        
+        themeInitFunctions();
+    }
+    
+    var displayNewPage = function(pageNum) {
+        displayPage(pageNum);
+        
+        themeInitFunctions();
+    }
     
     var capitalize = function(str) {
         var stringArray = str.split(/[\s-]+/);
@@ -53,12 +72,36 @@ $(function() {
             stringArray[w] = stringArray[w].charAt(0).toUpperCase() + stringArray[w].substring(1);
         }
         return stringArray.join(" ");
-    }
+    };
 
+    var paginate = function(themesObject) {
+        
+        themeDisplayList = [];
+        var page = {};
+        var count = 0;
+        for (var theme in themesObject) {
+            page[theme] = themesObject[theme];
+            count++;
+            if (count>7) {
+                themeDisplayList.push($.extend({},page));
+                page = {};
+                count=0;
+            }
+        }
+        if (count!=0) {
+            themeDisplayList.push($.extend({},page));
+        }
+        
+    };
+    
+    var displayPage = function(pageNum) {
+        for (var theme in themeDisplayList[pageNum-1]) {
+            displayThemeThumbnail(theme, themeDisplayList[pageNum-1][theme]);
+        }
+    };
     
     var themeInitFunctions = function () {
         
-        scroll.bind('.templates-container');
         
         $('.screenshot-options').hide();
         $('.add-to-favorites').hide();
@@ -100,7 +143,9 @@ $(function() {
                 }
             });
             $(this).on('mouseleave', function() {
+                console.log('mouseenter fired');
                 if ($(this).find('img').hasClass('hover-favorite')) {
+                    console.log('hasclass');
                     $(this).html('<img class="not-favorite" src="images/empty-star.png">');
                 }
             });
@@ -117,13 +162,13 @@ $(function() {
             });
         });
         
-        $('.previewBtn').on('click', function() {
+        $('.preview-button').on('click', function() {
             if ($(this).hasClass('active')) {
                 $(this).parents('.screenshot-thumbnail').find('.tint').removeClass('active');
                 $(this).removeClass('active')
             } else {
                 $('.tint').removeClass('active');
-                $('.previewBtn').removeClass('active');
+                $('.preview-button').removeClass('active');
                 $(this).addClass('active');
                 $(this).parents('.screenshot-thumbnail').find('.tint').addClass('active');
             }
@@ -142,6 +187,7 @@ $(function() {
         } else if ($(this).find('i').hasClass('icon-chevron-up')) {
             $('.filter-container').animate({"height":"0px"},500, function() {
                 $('a.filter-expand > i').attr('class', 'icon-chevron-down');
+                $('.tag-types-list li').removeClass("active");
                 $('.filter-container').children().hide();
             });
             //$('.templates-container').animate( {"height": "518px"} , 500);
@@ -183,12 +229,72 @@ $(function() {
     
     
     
-    $('.deselectBtn').on('click', function() {
+    $('.deselect-button').on('click', function() {
         if ($('.tag-details-type:visible').length == 0) {
             $('.tag-details input[type=checkbox]').attr('checked', false);
         } else {
             $('.tag-details-type:visible input[type=checkbox]').attr('checked', false);
         }
+    });
+    
+    $('.filter-button').on('click', function() {
+        $('.templates-container').empty();
+        var filterSpans = $('.tag-details input[type=checkbox]:checked').next();
+        var filters = [];
+        filterSpans.each(function() {
+            filters.push($(this).text());
+        });
+        var filteredThemes = {}
+        for (var theme in themes) {
+            
+            var fits = true;
+            
+            for (var i=0; i<filters.length; i++) {
+                var themeTags = [];
+                for (var t=0; t<themes[theme].tags.length; t++) {
+                    themeTags.push(capitalize(themes[theme].tags[t]));
+                }
+                if (themeTags.indexOf(filters[i]) == -1) {
+                    fits = false;
+                }
+            }
+            
+            if (fits) {
+                filteredThemes[theme] = themes[theme];
+            }
+        }
+        displayNewData(filteredThemes);
+    });
+    
+    $('.search-button').on('click', function() {
+        $('.templates-container').empty();
+        var searchFor = $('.search-query').val();
+        
+        for (var theme in themes) {
+            
+            var inTags = false;
+            for (var i=0; i<themes[theme].tags.length; i++) {
+                if (themes[theme].tags[i].indexOf(searchFor) != -1) {
+                    inTags = true;
+                }
+            }
+            
+            if (theme.indexOf(searchFor) != -1 || inTags) {
+                displayThemeThumbnail(theme, themes[theme]);
+            }
+        }
+        themeInitFunctions();
+    });
+    
+    $('.favorites-icon').on('click', function() {
+        $('.templates-container').empty();
+        var displayFavorites = {}
+        for (var theme in themes) {
+            if (favorites.indexOf(theme) != -1) {
+                displayFavorites[theme] = themes[theme];
+            }
+        }
+        displayNewData(displayFavorites);
     });
     
     
