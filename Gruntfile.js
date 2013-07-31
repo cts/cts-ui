@@ -32,14 +32,14 @@ module.exports = function(grunt) {
           "src/util/util.js",
           "src/fragments/postfix.js"
         ],
-        dest : "release/ctsui.js"
+        dest : "release/cts-ui.js"
       }
     },
     lint: {
       all: ['grunt.js', 'src/**/*.js']
     },
     min: {
-      "release/ctsui.min.js": ["<banner>", "release/ctsui.js"]
+      "release/cts-ui.min.js": ["<banner>", "release/cts-ui.js"]
     },
     watch: {
       scripts: {
