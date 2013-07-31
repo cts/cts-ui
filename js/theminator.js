@@ -95,85 +95,10 @@ $(function() {
     };
     
     var displayPage = function(pageNum) {
-        $('.templates-container').empty();
-        if (themeDisplayList.length == 0) {
-            $('.templates-container').text('No results found');
-            $('.pager-custom').empty();
-        } else {
-            configurePager(pageNum, themeDisplayList.length);
-            for (var theme in themeDisplayList[pageNum-1]) {
-                displayThemeThumbnail(theme, themeDisplayList[pageNum-1][theme]);
-            }
+        for (var theme in themeDisplayList[pageNum-1]) {
+            displayThemeThumbnail(theme, themeDisplayList[pageNum-1][theme]);
         }
     };
-    
-    var newPageNumber = function(value) {
-        return $('<li><a>'+value+'</a></li>');
-    }
-    
-    var configurePager = function(pageNum, pageLength) {
-        $('.pager-custom').empty();
-        var leftArrow = $('<li><a><i class="icon-chevron-left"></i></a></li>');
-        var rightArrow = $('<li><a><i class="icon-chevron-right"></i></a></li>');
-        if (pageNum==1) {
-            leftArrow.addClass("disabled");
-        }
-        if (pageNum==pageLength) {
-            rightArrow.addClass("disabled");
-        }
-        var pageNumbers = []
-        if (pageLength<=7) {
-            for (var i=1; i<=pageLength; i++) {
-                var newPage = newPageNumber(i);
-                if (i==pageNum) {
-                    newPage.addClass("active");
-                }
-                pageNumbers.push(newPage);
-            }
-        } else if (pageLength>7) {
-            if (pageNum<=4) {
-                for (var i=1; i<=5; i++) {
-                    var newPage = newPageNumber(i);
-                    if (i==pageNum) {
-                        newPage.addClass("active");
-                    }
-                    pageNumbers.push(newPage);
-                }
-                pageNumbers.push(newPageNumber('...').addClass('disabled'));
-                pageNumbers.push(newPageNumber(pageLength));
-            } else if (pageNum+3>=pageLength) {
-                pageNumbers.push(newPageNumber(1));
-                pageNumbers.push(newPageNumber('...').addClass('disabled'));
-                for (var i=pageLength-4; i<=pageLength; i++) {
-                    var newPage = newPageNumber(i);
-                    if (i==pageNum) {
-                        newPage.addClass("active");
-                    }
-                    pageNumbers.push(newPage);
-                }
-            } else {
-                pageNumbers.push(newPageNumber(1));
-                pageNumbers.push(newPageNumber('...').addClass('disabled'));
-                pageNumbers.push(newPageNumber(pageNum-1));
-                pageNumbers.push(newPageNumber(pageNum).addClass('active'));
-                pageNumbers.push(newPageNumber(pageNum+1));
-                pageNumbers.push(newPageNumber('...').addClass('disabled'));
-                pageNumbers.push(newPageNumber(pageLength));
-            }
-        }
-        $('.pager-custom').append(leftArrow, pageNumbers, rightArrow);
-        $('.pager-custom a:not(.active,.disabled)').on('click', function() {
-            if (!isNaN($(this).html())) {
-                displayNewPage(parseInt($(this).html()));
-            } else {
-                if ($(this).find('i').hasClass('icon-chevron-left')) {
-                    displayNewPage(pageNum-1);
-                } else if ($(this).find('i').hasClass('icon-chevron-right')) {
-                    displayNewPage(pageNum+1);
-                }
-            }
-        });
-    }
     
     var themeInitFunctions = function () {
         
@@ -285,7 +210,7 @@ $(function() {
                 $(this).parent().removeClass("active");
                 $('.tag-details-type').hide();
                 $('.filter-container').animate({"height":"130px"},500);
-                //$('.templates-container').animate( {"height": "388px"} , 500);
+                $('.templates-container').animate( {"height": "388px"} , 500);
             } else {
                 $('.filter-type').parent().removeClass("active");
                 $(this).parent().addClass("active");
@@ -293,10 +218,10 @@ $(function() {
                 showOneFilter($(this).data('filter'));
                 if ((currentFilter.height()+30) != $('.filter-container').height() && currentFilter.height()>100) {
                     $('.filter-container').animate({"height":(currentFilter.height()+30)+"px"},500);
-                    //$('.templates-container').animate( {"height": (518-currentFilter.height()-30)+"px"} , 500);
+                    $('.templates-container').animate( {"height": (518-currentFilter.height()-30)+"px"} , 500);
                 } else if ($('.filter-container').height() > 130 && currentFilter.height()<=100) {
                     $('.filter-container').animate({"height":"130px"},500);
-                    //$('.templates-container').animate( {"height": "388px"} , 500);
+                    $('.templates-container').animate( {"height": "388px"} , 500);
                 }
             }
         });
@@ -313,12 +238,13 @@ $(function() {
     });
     
     $('.filter-button').on('click', function() {
+        $('.templates-container').empty();
         var filterSpans = $('.tag-details input[type=checkbox]:checked').next();
         var filters = [];
         filterSpans.each(function() {
             filters.push($(this).text());
         });
-        var filteredThemes = {};
+        var filteredThemes = {}
         for (var theme in themes) {
             
             var fits = true;
@@ -341,8 +267,9 @@ $(function() {
     });
     
     $('.search-button').on('click', function() {
+        $('.templates-container').empty();
         var searchFor = $('.search-query').val();
-        filteredThemes = {};
+        
         for (var theme in themes) {
             
             var inTags = false;
@@ -353,13 +280,14 @@ $(function() {
             }
             
             if (theme.indexOf(searchFor) != -1 || inTags) {
-                filteredThemes[theme] = themes[theme];
+                displayThemeThumbnail(theme, themes[theme]);
             }
         }
-        displayNewData(filteredThemes)
+        themeInitFunctions();
     });
     
     $('.favorites-icon').on('click', function() {
+        $('.templates-container').empty();
         var displayFavorites = {}
         for (var theme in themes) {
             if (favorites.indexOf(theme) != -1) {
