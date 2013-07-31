@@ -1,6 +1,6 @@
 $(function() {
     var favorites = [];
-    if (localStorage.getItem("favorites")!==null) {
+    if (localStorage.getItem("favorites")!==null && localStorage.getItem("favorites")!='undefined') {
         favorites = JSON.parse(localStorage["favorites"]);
     }
     var themes = {};

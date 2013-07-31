@@ -28,15 +28,18 @@ _CTSUI.Theminator.prototype.loadMockup = function() {
 };
 
 _CTSUI.Theminator.prototype.setupMockup = function() {
+    var self = this;
     this.theminator = this._container.find('.theminator');
     
-    if (localStorage.getItem("favorites")!==null) {
+    if (localStorage.getItem("favorites")!==null && localStorage.getItem("favorites")!='undefined') {
         this.favorites = JSON.parse(localStorage["favorites"]);
     }
     this.theminator.find('.filter-container').children().hide();
     
     this.loadContent();
-    this.theminator.find('a.filter-expand').on('click', CTS.$.proxy(this.toggleFilterTray, this));
+    this.theminator.find('a.filter-expand').on('click', function() {
+        self.toggleFilterTray(CTS.$(this))
+    });
     
     this.theminator.find('.deselect-button').on('click', CTS.$.proxy(this.deselectFilters, this));
     this.theminator.find('.filter-button').on('click', CTS.$.proxy(this.performFilter, this));
@@ -196,11 +199,13 @@ _CTSUI.Theminator.prototype.configurePager = function(pageNum, pageLength) {
         }
     }
     this.theminator.find('.pager-custom').append(leftArrow, pageNumbers, rightArrow);
-    this.theminator.find('.pager-custom a:not(.active,.disabled)').on('click', CTS.$.proxy(this.goToNewPage, this, pageNum));
+    var self = this;
+    this.theminator.find('.pager-custom a:not(.active,.disabled)').on('click', function() {
+        self.goToNewPage(CTS.$(this), pageNum)
+    });
 };
 
-_CTSUI.Theminator.prototype.goToNewPage = function(evt) {
-    var pagerValue = CTS.$(evt.target);
+_CTSUI.Theminator.prototype.goToNewPage = function(pagerValue, pageNum) {
     console.log(pagerValue);
     if (!isNaN(pagerValue.html())) {
         this.displayPage(parseInt(pagerValue.html()));
@@ -220,7 +225,7 @@ _CTSUI.Theminator.prototype.initiateThumbnailVisibilities = function(thumbnail) 
     });
     thumbnail.on('mouseleave', function() {
         CTS.$(this).find('.screenshot-options').hide();
-        if (CTS.$(this).find('.add-to-favorites').find('img').hasClass('favorite')) {
+        if (!CTS.$(this).find('.add-to-favorites').find('img').hasClass('favorite')) {
             CTS.$(this).find('.add-to-favorites').hide();
         }
     });
@@ -254,24 +259,26 @@ _CTSUI.Theminator.prototype.initiateFavoritesEvents = function(favoriteButton) {
             CTS.$(this).html('<img class="not-favorite" src="/css/img/empty-star.png">');
         }
     });
-    favoriteButton.on('click', CTS.$.proxy(this.toggleFavorite, this));
+    var self = this;
+    favoriteButton.on('click', function() {
+        self.toggleFavorite(CTS.$(this))
+    });
 };
 
-_CTSUI.Theminator.prototype.toggleFavorite = function(evt) {
-    var favoriteButton = CTS.$(evt.target);
+_CTSUI.Theminator.prototype.toggleFavorite = function(favoriteButton) {
+    
     if (favoriteButton.find('img').hasClass('hover-favorite')) {
         favoriteButton.html('<img class="favorite" src="/css/img/star.png">');
-        this.theminator.favorites.push(favoriteButton.parents('.screenshot-thumbnail').data("theme"));
+        this.favorites.push(favoriteButton.parents('.screenshot-thumbnail').data("theme"));
     } else if (favoriteButton.find('img').hasClass('favorite')) {
         favoriteButton.html('<img class="hover-favorite" src="/css/img/transparent-star.png">');
-        this.theminator.favorites.splice(this.theminator.favorites.indexOf(favoriteButton.parents('.screenshot-thumbnail').data("theme")),1);
+        this.favorites.splice(this.favorites.indexOf(favoriteButton.parents('.screenshot-thumbnail').data("theme")),1);
         
     }
-    localStorage["favorites"] = JSON.stringify(this.theminator.favorites);
+    localStorage["favorites"] = JSON.stringify(this.favorites);
 }
 
-_CTSUI.Theminator.prototype.togglePreview = function(evt) {
-    var previewButton = CTS.$(evt.target);
+_CTSUI.Theminator.prototype.togglePreview = function(previewButton) {
     if (previewButton.hasClass('active')) {
         previewButton.parents('.screenshot-thumbnail').find('.tint').removeClass('active');
         previewButton.removeClass('active')
@@ -299,12 +306,12 @@ _CTSUI.Theminator.prototype.initiateNewThemes = function() {
     this.theminator.find('.add-to-favorites').each(function() {
         self.initiateFavoritesEvents(CTS.$(this))
     });
-    this.theminator.find('.preview-button').on('click', CTS.$.proxy(this.togglePreview, this));
+    this.theminator.find('.preview-button').on('click', function() {
+        self.togglePreview(CTS.$(this))
+    });
 }
 
-_CTSUI.Theminator.prototype.toggleFilterTray = function(evt) {
-
-    var toggleButton = CTS.$(evt.target).parent('.filter-expand').andSelf().not('i');
+_CTSUI.Theminator.prototype.toggleFilterTray = function(toggleButton) {
     var self = this;
     if (toggleButton.find('i').hasClass('icon-chevron-down')) {
         this.theminator.find('.filter-content-container').show();
@@ -331,11 +338,13 @@ _CTSUI.Theminator.prototype.showOneFilter = function(filterType) {
 };
 
 _CTSUI.Theminator.prototype.initiateFilters = function() {
-    this.theminator.find('.filter-type').on('click', CTS.$.proxy(this.openFilterType, this));
+    var self = this;
+    this.theminator.find('.filter-type').on('click', function() {
+        self.openFilterType(CTS.$(this))
+    });
 };
 
-_CTSUI.Theminator.prototype.openFilterType = function(evt) {
-    var typeButton = CTS.$(evt.target).parent('.filter-type').andSelf().not('i');
+_CTSUI.Theminator.prototype.openFilterType = function(typeButton) {
     if (typeButton.parent().hasClass("active")) {
         typeButton.parent().removeClass("active");
         this.theminator.find('.tag-details-type').hide();
@@ -366,11 +375,10 @@ _CTSUI.Theminator.prototype.deselectFilters = function() {
 };
 
 _CTSUI.Theminator.prototype.performFilter = function() {
-    alert('filtering')
     var filterSpans = this.theminator.find('.tag-details input[type=checkbox]:checked').next();
     var filters = [];
     filterSpans.each(function() {
-        filters.push(this.text());
+        filters.push(CTS.$(this).text());
     });
     var filteredThemes = {};
     for (var theme in this.themes) {
