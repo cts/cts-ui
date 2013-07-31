@@ -35,6 +35,11 @@ _CTSUI.Tray.prototype.setupMockup = function() {
   var self = this;
   this._node = this._container.find('.tray');
   this._trayContentsNode = this._container.find('.tray-contents');
+    // Create the theminator
+  //this._editor = new CTS.UI.Editor(this, this._trayContentsNode);
+  this._theminator = new CTS.UI.Theminator(this, this._trayContentsNode);
+  this._pages.push(this._theminator);
+  //this._pages.push(this._editor);
   this.updateSize();
   CTS.$(window).resize(function() {
     self.updateSize();
@@ -43,11 +48,7 @@ _CTSUI.Tray.prototype.setupMockup = function() {
     self.toggle();
   });
 
-  // Create the theminator
-  this._editor = new CTS.UI.Editor(this, this._trayContentsNode);
-  this._theminator = new CTS.UI.Theminator(this, this._trayContentsNode);
-  this._pages.push(this._theminator);
-  this._pages.push(this._editor);
+
 };
 
 _CTSUI.Tray.prototype.open = function() {
@@ -81,6 +82,6 @@ _CTSUI.Tray.prototype.updateSize = function() {
   console.log("New window height:", windowHeight);
   this._node.height(windowHeight);
   for (var i = 0; i < this._pages.length; i++) {
-    this._pages[i].updateSize();
+    this._pages[i].updateSize(windowHeight);
   }
 };
