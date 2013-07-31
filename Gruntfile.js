@@ -30,7 +30,8 @@ module.exports = function(grunt) {
           "src/clipboard.js",
           "src/theminator.js",
           "src/util/util.js",
-          "src/fragments/postfix.js"
+          "src/fragments/postfix.js",  
+          "src/fragments/autoloader.js"
         ],
         dest : "release/cts-ui.js"
       }
