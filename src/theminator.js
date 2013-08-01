@@ -16,7 +16,6 @@ _CTSUI.Theminator.prototype.loadMockup = function() {
   var cts = "@html theminator " + CTS.UI.Mockups.theminator+ ";";
   cts += "@css " + CTS.UI.CSS.bootstrap + ";";
   cts += "@css " + CTS.UI.CSS.theminator + ";";
-  cts += "@js " + CTS.UI.Js.bootstrap + ";";  
   cts += "this :is theminator | #theminator;";
   this._container.attr("data-cts", cts);
   var self = this;
@@ -88,7 +87,7 @@ _CTSUI.Theminator.prototype.displayThemeThumbnail = function(theme, themeData) {
                     '<button class="btn">Install</button>'+
                 '</div>'+
             '</div>'+
-            '<a class="add-to-favorites"><img class="not-favorite" src="/css/img/empty-star.png"></a>'+
+            '<a class="add-to-favorites"><img class="not-favorite" src="localhost:8000/css/img/empty-star.png"></a>'+
             '<figcaption>'+
                 '<div class="effeckt-figcaption-wrap">'+
                     '<span class="theme-title">'+this.prettify(theme)+'</span>'+
@@ -141,6 +140,7 @@ _CTSUI.Theminator.prototype.displayPage = function(pageNum) {
         }
     }
     this.initiateNewThemes();
+    this.theminator.find('.templates-container').scrollTop(0);
 };
 
 _CTSUI.Theminator.prototype.newPageNumber = function(value) {
@@ -206,7 +206,6 @@ _CTSUI.Theminator.prototype.configurePager = function(pageNum, pageLength) {
 };
 
 _CTSUI.Theminator.prototype.goToNewPage = function(pagerValue, pageNum) {
-    console.log(pagerValue);
     if (!isNaN(pagerValue.html())) {
         this.displayPage(parseInt(pagerValue.html()));
     } else {
@@ -239,15 +238,6 @@ _CTSUI.Theminator.prototype.initiateScreenshotTints = function(screenshot) {
     screenshot.wrap('<div class="tint"></div>'); 
 };
 
-_CTSUI.Theminator.prototype.initiateTintVisibility = function(overlay) {
-    overlay.on('mouseenter', function() {
-        overlay.parent().find('.tint').addClass('options-hover');
-    });
-    overlay.on('mouseleave', function() {
-        overlay.parent().find('.tint').removeClass('options-hover');
-    });
-};
-
 _CTSUI.Theminator.prototype.initiateFavoritesEvents = function(favoriteButton) {
     favoriteButton.on('mouseenter', function() {
         if (CTS.$(this).find('img').hasClass('not-favorite')) {
@@ -268,10 +258,10 @@ _CTSUI.Theminator.prototype.initiateFavoritesEvents = function(favoriteButton) {
 _CTSUI.Theminator.prototype.toggleFavorite = function(favoriteButton) {
     
     if (favoriteButton.find('img').hasClass('hover-favorite')) {
-        favoriteButton.html('<img class="favorite" src="/css/img/star.png">');
+        favoriteButton.html('<img class="favorite" src="localhost:8000/css/img/star.png">');
         this.favorites.push(favoriteButton.parents('.screenshot-thumbnail').data("theme"));
     } else if (favoriteButton.find('img').hasClass('favorite')) {
-        favoriteButton.html('<img class="hover-favorite" src="/css/img/transparent-star.png">');
+        favoriteButton.html('<img class="hover-favorite" src="localhost:8000/css/img/transparent-star.png">');
         this.favorites.splice(this.favorites.indexOf(favoriteButton.parents('.screenshot-thumbnail').data("theme")),1);
         
     }
@@ -287,6 +277,7 @@ _CTSUI.Theminator.prototype.togglePreview = function(previewButton) {
         this.theminator.find('.preview-button').removeClass('active');
         previewButton.addClass('active');
         previewButton.parents('.screenshot-thumbnail').find('.tint').addClass('active');
+        this._theme = new CTS.UI.Theme("mog");
     }
 };
 
@@ -299,9 +290,6 @@ _CTSUI.Theminator.prototype.initiateNewThemes = function() {
     });
     this.theminator.find('.screenshot-thumbnail').each(function() {
         self.initiateThumbnailVisibilities(CTS.$(this))
-    });
-    this.theminator.find('.screenshot-options,.add-to-favorites,figcaption').each(function() {
-        self.initiateTintVisibility(CTS.$(this))
     });
     this.theminator.find('.add-to-favorites').each(function() {
         self.initiateFavoritesEvents(CTS.$(this))

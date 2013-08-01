@@ -2,7 +2,9 @@ _CTSUI.Tray = function() {
   console.log("Tray Loading");
 
   this._bodyNode = CTS.$('body');
+  this._bodyNode.css({"position": "relative", "overflow-x": "scroll", "left": "301px"});
   this._originalBodyMargin = this._bodyNode.css("margin-left");
+  //alert(this._originalBodyMargin);
 
   // Pages inside the tray, such as the theminator
   this._pages = [];
@@ -52,14 +54,18 @@ _CTSUI.Tray.prototype.setupMockup = function() {
 };
 
 _CTSUI.Tray.prototype.open = function() {
+    //var fromTop = CTS.$(window).scrollTop();
   this._node.animate({"left":"0px"});
-  this._bodyNode.animate({"margin-left":(301+this._originalBodyMargin)});
+    //CTS.$(window).scrollTop(fromTop);
+  this._bodyNode.animate({"left":"301px"});
   
 };
 
 _CTSUI.Tray.prototype.close = function() {
+    //var fromTop = CTS.$(window).scrollTop();
   this._node.animate({"left":"-301px"});
-  this._bodyNode.animate({"margin-left":this._originalBodyMargin});
+    //CTS.$(window).scrollTop(fromTop);
+  this._bodyNode.animate({"left":"0px"});
 
 };
 

@@ -15,12 +15,12 @@
  * </div>
  */
 
-.tag-details-list li {
+.ctsTrayContainer .tag-details-list li {
   float: left;
 }
 
-.tray {
-  position: absolute;
+.ctsTrayContainer .tray {
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 9999;
@@ -28,20 +28,20 @@
   /*left:-300px;*/
 }
 
-.tray-contents {
+.ctsTrayContainer .tray-contents {
   border-right: 1px solid black;
   width: 300px;
   background-image: url('img/light_wool.png');
   height: 100%;
 }
 
-.expand-tray {
+.ctsTrayContainer .expand-tray {
     position:absolute;
     top:25%;
     left:301px;
 }
 
-.expand-tray-button {
+.ctsTrayContainer .expand-tray-button {
     cursor: hand;
     cursor: pointer;
 }
