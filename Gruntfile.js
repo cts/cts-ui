@@ -24,7 +24,7 @@ module.exports = function(grunt) {
         src : [
           "<banner>",
           "src/fragments/prefix.js",
-          "src/util/util.js",
+          "src/utilities.js",
           "src/tray.js",
           "src/picker.js",
           "src/clipboard.js",
