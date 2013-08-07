@@ -15,11 +15,7 @@
  * </div>
  */
 
-.ctsTrayContainer .tag-details-list li {
-  float: left;
-}
-
-.ctsTrayContainer .tray {
+.cts-ui .cts-ui-tray {
   position: fixed;
   top: 0;
   left: 0;
@@ -28,20 +24,20 @@
   /*left:-300px;*/
 }
 
-.ctsTrayContainer .tray-contents {
+.cts-ui .cts-ui-tray .cts-ui-tray-contents {
   border-right: 1px solid black;
   width: 300px;
-  background-image: url('img/light_wool.png');
+  background-image: url('http://localhost:8000/css/img/light_wool.png');
   height: 100%;
 }
 
-.ctsTrayContainer .expand-tray {
+.cts-ui .cts-ui-tray .cts-ui-expand-tray {
     position:absolute;
     top:25%;
     left:301px;
 }
 
-.ctsTrayContainer .expand-tray-button {
+.cts-ui .cts-ui-tray .cts-ui-expand-tray-button {
     cursor: hand;
     cursor: pointer;
 }

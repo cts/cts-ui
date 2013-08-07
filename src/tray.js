@@ -19,10 +19,10 @@ _CTSUI.Tray = function() {
 };
 
 _CTSUI.Tray.prototype.loadMockup = function() {
-  this._container = CTS.$("<div class='ctsTrayContainer'></div>");
+  this._container = CTS.$("<div class='cts-ui'></div>");
   var cts = "@html tray " + CTS.UI.Mockups.tray + ";";
-  cts += "@css " + CTS.UI.CSS.tray + ";";
-  cts += "this :is tray | #tray;";
+  CTS.UI.Util.addCss(CTS.UI.CSS.tray);
+  cts += "this :is tray | #cts-ui-tray;";
   this._container.attr("data-cts", cts);
   var self = this;
   this._container.on("cts-received-is", function(evt) {
@@ -35,8 +35,8 @@ _CTSUI.Tray.prototype.loadMockup = function() {
 _CTSUI.Tray.prototype.setupMockup = function() {
   console.log("setup mockup");
   var self = this;
-  this._node = this._container.find('.tray');
-  this._trayContentsNode = this._container.find('.tray-contents');
+  this._node = this._container.find('.cts-ui-tray');
+  this._trayContentsNode = this._container.find('.cts-ui-tray-contents');
     // Create the theminator
   //this._editor = new CTS.UI.Editor(this, this._trayContentsNode);
   this._theminator = new CTS.UI.Theminator(this, this._trayContentsNode);
@@ -46,7 +46,7 @@ _CTSUI.Tray.prototype.setupMockup = function() {
   CTS.$(window).resize(function() {
     self.updateSize();
   });
-  this._node.find('.expand-tray-button').on('click', function() {
+  this._node.find('.cts-ui-expand-tray-button').on('click', function() {
     self.toggle();
   });
 
@@ -71,14 +71,14 @@ _CTSUI.Tray.prototype.close = function() {
 
 _CTSUI.Tray.prototype.toggle = function() {
   console.log("toggle");
-  if (this._node.hasClass("open")) {
+  if (this._node.hasClass("cts-ui-open")) {
     this.close();
-    this._node.removeClass("open");
-    this._node.addClass("closed");
-  } else if (this._node.hasClass("closed")) {
+    this._node.removeClass("cts-ui-open");
+    this._node.addClass("cts-ui-closed");
+  } else if (this._node.hasClass("cts-ui-closed")) {
     this.open();
-    this._node.removeClass("closed");
-    this._node.addClass("open");
+    this._node.removeClass("cts-ui-closed");
+    this._node.addClass("cts-ui-open");
   } 
 };
 

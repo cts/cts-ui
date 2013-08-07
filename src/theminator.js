@@ -12,11 +12,11 @@ _CTSUI.Theminator = function(tray, trayContentsNode) {
 };
 
 _CTSUI.Theminator.prototype.loadMockup = function() {
-  this._container = CTS.$("<div class='page theminator-page'></div>");
+  this._container = CTS.$("<div class='cts-ui-page cts-ui-theminator-page'></div>");
   var cts = "@html theminator " + CTS.UI.Mockups.theminator+ ";";
-  cts += "@css " + CTS.UI.CSS.bootstrap + ";";
-  cts += "@css " + CTS.UI.CSS.theminator + ";";
-  cts += "this :is theminator | #theminator;";
+    CTS.UI.Util.addCss(CTS.UI.CSS.bootstrap);
+    CTS.UI.Util.addCss(CTS.UI.CSS.theminator);
+  cts += "this :is theminator | #cts-ui-theminator;";
   this._container.attr("data-cts", cts);
   var self = this;
   this._container.on("cts-received-is", function(evt) {
@@ -28,24 +28,24 @@ _CTSUI.Theminator.prototype.loadMockup = function() {
 
 _CTSUI.Theminator.prototype.setupMockup = function() {
     var self = this;
-    this.theminator = this._container.find('.theminator');
+    this.theminator = this._container.find('.cts-ui-theminator');
     
     if (localStorage.getItem("favorites")!==null && localStorage.getItem("favorites")!='undefined') {
         this.favorites = JSON.parse(localStorage["favorites"]);
     }
-    this.theminator.find('.filter-container').children().hide();
+    this.theminator.find('.cts-ui-filter-container').children().hide();
     
     this.loadContent();
-    this.theminator.find('a.filter-expand').on('click', function() {
+    this.theminator.find('a.cts-ui-filter-expand').on('click', function() {
         self.toggleFilterTray(CTS.$(this))
     });
     
-    this.theminator.find('.deselect-button').on('click', CTS.$.proxy(this.deselectFilters, this));
-    this.theminator.find('.filter-button').on('click', CTS.$.proxy(this.performFilter, this));
+    this.theminator.find('.cts-ui-deselect-button').on('click', CTS.$.proxy(this.deselectFilters, this));
+    this.theminator.find('.cts-ui-filter-button').on('click', CTS.$.proxy(this.performFilter, this));
     
-    this.theminator.find('.search-button').on('click', CTS.$.proxy(this.performSearch, this));
+    this.theminator.find('.cts-ui-search-button').on('click', CTS.$.proxy(this.performSearch, this));
     
-    this.theminator.find('.favorites-icon').on('click', CTS.$.proxy(this.displayFavorites, this));
+    this.theminator.find('.cts-ui-favorites-icon').on('click', CTS.$.proxy(this.displayFavorites, this));
     
 
     
@@ -55,15 +55,15 @@ _CTSUI.Theminator.prototype.loadContent = function() {
     var self = this;
     CTS.$.getJSON(CTS.UI.JSON.content, function(data) {
         for (var filterType in data.filters) {
-            var tagDetailsType = CTS.$('<div class="tag-'+filterType+'-details tag-details-type"></div>');
-            var tagDetailsList = CTS.$('<ul class="tag-details-list"></ul>');
+            var tagDetailsType = CTS.$('<div class="cts-ui-tag-'+filterType+'-details cts-ui-tag-details-type"></div>');
+            var tagDetailsList = CTS.$('<ul class="cts-ui-tag-details-list"></ul>');
             tagDetailsType.append(tagDetailsList);
-            self.theminator.find('.tag-details').append(tagDetailsType);
-            var filterTypeButton = CTS.$('<li><a class="filter-type '+filterType+'-filter" data-filter="'+filterType+'"><i class="icon-chevron-left"></i> '+self.prettify(filterType)+'</a></li>')
-            self.theminator.find('.tag-types-list').append(filterTypeButton);
+            self.theminator.find('.cts-ui-tag-details').append(tagDetailsType);
+            var filterTypeButton = CTS.$('<li><a class="cts-ui-filter-type cts-ui-'+filterType+'-filter" data-filter="'+filterType+'"><i class="cts-ui-icon-chevron-left"></i> '+self.prettify(filterType)+'</a></li>')
+            self.theminator.find('.cts-ui-tag-types-list').append(filterTypeButton);
             for (var i=0; i<data.filters[filterType].length; i++) {
                 var filter = data.filters[filterType][i];
-                tagDetailsList.append('<li><label class="checkbox"><input type="checkbox"><span>'+self.prettify(filter)+'</span></label></li>');
+                tagDetailsList.append('<li><label class="cts-ui-checkbox"><input type="checkbox"><span>'+self.prettify(filter)+'</span></label></li>');
             }
         }
         self.filters = data.filters;
@@ -78,19 +78,19 @@ _CTSUI.Theminator.prototype.loadContent = function() {
 };
 
 _CTSUI.Theminator.prototype.displayThemeThumbnail = function(theme, themeData) {
-    this.theminator.find('.templates-container').append(
-        '<div class="screenshot-thumbnail effeckt-caption effeckt-caption-2" data-theme="'+theme+'">'+
-            '<img class="screenshot" src="'+themeData.screenshot+'">'+
-            '<div class="screenshot-options">'+
-                '<div class="btn-group">'+
-                    '<button class="btn preview-button">Preview</button>'+
-                    '<button class="btn">Install</button>'+
+    this.theminator.find('.cts-ui-templates-container').append(
+        '<div class="cts-ui-screenshot-thumbnail cts-ui-effeckt-caption cts-ui-effeckt-caption-2" data-theme="'+theme+'">'+
+            '<img class="cts-ui-screenshot" src="'+themeData.screenshot+'">'+
+            '<div class="cts-ui-screenshot-options">'+
+                '<div class="cts-ui-btn-group">'+
+                    '<button class="cts-ui-btn cts-ui-preview-button">Preview</button>'+
+                    '<button class="cts-ui-btn">Install</button>'+
                 '</div>'+
             '</div>'+
-            '<a class="add-to-favorites"><img class="not-favorite" src="localhost:8000/css/img/empty-star.png"></a>'+
+            '<a class="cts-ui-add-to-favorites"><img class="cts-ui-not-favorite" src="http://localhost:8000/css/img/empty-star.png"></a>'+
             '<figcaption>'+
-                '<div class="effeckt-figcaption-wrap">'+
-                    '<span class="theme-title">'+this.prettify(theme)+'</span>'+
+                '<div class="cts-ui-effeckt-figcaption-wrap">'+
+                    '<span class="cts-ui-theme-title">'+this.prettify(theme)+'</span>'+
                 '</div>'+
             '</figcaption>'+
         '</div>'
@@ -129,10 +129,10 @@ _CTSUI.Theminator.prototype.paginate = function(themesObject) {
 };
 
 _CTSUI.Theminator.prototype.displayPage = function(pageNum) {
-    this.theminator.find('.templates-container').empty();
+    this.theminator.find('.cts-ui-templates-container').empty();
     if (this.themeDisplayList.length == 0) {
-        this.theminator.find('.templates-container').text('No results found');
-        this.theminator.find('.pager-custom').empty();
+        this.theminator.find('.cts-ui-templates-container').text('No results found');
+        this.theminator.find('.cts-ui-pager-custom').empty();
     } else {
         this.configurePager(pageNum, this.themeDisplayList.length);
         for (var theme in this.themeDisplayList[pageNum-1]) {
@@ -140,7 +140,7 @@ _CTSUI.Theminator.prototype.displayPage = function(pageNum) {
         }
     }
     this.initiateNewThemes();
-    this.theminator.find('.templates-container').scrollTop(0);
+    this.theminator.find('.cts-ui-templates-container').scrollTop(0);
 };
 
 _CTSUI.Theminator.prototype.newPageNumber = function(value) {
@@ -149,21 +149,21 @@ _CTSUI.Theminator.prototype.newPageNumber = function(value) {
 
 _CTSUI.Theminator.prototype.configurePager = function(pageNum, pageLength) {
     
-    this.theminator.find('.pager-custom').empty();
-    var leftArrow = this.newPageNumber('<i class="icon-chevron-left"></i>');
-    var rightArrow = this.newPageNumber('<i class="icon-chevron-right"></i>');
+    this.theminator.find('.cts-ui-pager-custom').empty();
+    var leftArrow = this.newPageNumber('<i class="cts-ui-icon-chevron-left"></i>');
+    var rightArrow = this.newPageNumber('<i class="cts-ui-icon-chevron-right"></i>');
     if (pageNum==1) {
-        leftArrow.addClass("disabled");
+        leftArrow.addClass("cts-ui-disabled");
     }
     if (pageNum==pageLength) {
-        rightArrow.addClass("disabled");
+        rightArrow.addClass("cts-ui-disabled");
     }
     var pageNumbers = []
     if (pageLength<=7) {
         for (var i=1; i<=pageLength; i++) {
             var newPage = this.newPageNumber(i);
             if (i==pageNum) {
-                newPage.addClass("active");
+                newPage.addClass("cts-ui-active");
             }
             pageNumbers.push(newPage);
         }
@@ -172,35 +172,35 @@ _CTSUI.Theminator.prototype.configurePager = function(pageNum, pageLength) {
             for (var i=1; i<=5; i++) {
                 var newPage = this.newPageNumber(i);
                 if (i==pageNum) {
-                    newPage.addClass("active");
+                    newPage.addClass("cts-ui-active");
                 }
                 pageNumbers.push(newPage);
             }
-            pageNumbers.push(this.newPageNumber('...').addClass('disabled'));
+            pageNumbers.push(this.newPageNumber('...').addClass('cts-ui-disabled'));
             pageNumbers.push(this.newPageNumber(pageLength));
         } else if (pageNum+3>=pageLength) {
             pageNumbers.push(this.newPageNumber(1));
-            pageNumbers.push(this.newPageNumber('...').addClass('disabled'));
+            pageNumbers.push(this.newPageNumber('...').addClass('cts-ui-disabled'));
             for (var i=pageLength-4; i<=pageLength; i++) {
                 var newPage = this.newPageNumber(i);
                 if (i==pageNum) {
-                    newPage.addClass("active");
+                    newPage.addClass("cts-ui-active");
                 }
                 pageNumbers.push(newPage);
             }
         } else {
             pageNumbers.push(this.newPageNumber(1));
-            pageNumbers.push(this.newPageNumber('...').addClass('disabled'));
+            pageNumbers.push(this.newPageNumber('...').addClass('cts-ui-disabled'));
             pageNumbers.push(this.newPageNumber(pageNum-1));
-            pageNumbers.push(this.newPageNumber(pageNum).addClass('active'));
+            pageNumbers.push(this.newPageNumber(pageNum).addClass('cts-ui-active'));
             pageNumbers.push(this.newPageNumber(pageNum+1));
-            pageNumbers.push(this.newPageNumber('...').addClass('disabled'));
+            pageNumbers.push(this.newPageNumber('...').addClass('cts-ui-disabled'));
             pageNumbers.push(this.newPageNumber(pageLength));
         }
     }
-    this.theminator.find('.pager-custom').append(leftArrow, pageNumbers, rightArrow);
+    this.theminator.find('.cts-ui-pager-custom').append(leftArrow, pageNumbers, rightArrow);
     var self = this;
-    this.theminator.find('.pager-custom a:not(.active,.disabled)').on('click', function() {
+    this.theminator.find('.cts-ui-pager-custom li:not(.cts-ui-active,.cts-ui-disabled) a').on('click', function() {
         self.goToNewPage(CTS.$(this), pageNum)
     });
 };
@@ -209,9 +209,9 @@ _CTSUI.Theminator.prototype.goToNewPage = function(pagerValue, pageNum) {
     if (!isNaN(pagerValue.html())) {
         this.displayPage(parseInt(pagerValue.html()));
     } else {
-        if (pagerValue.find('i').hasClass('icon-chevron-left')) {
+        if (pagerValue.find('i').hasClass('cts-ui-icon-chevron-left')) {
             this.displayPage(pageNum-1);
-        } else if (pagerValue.find('i').hasClass('icon-chevron-right')) {
+        } else if (pagerValue.find('i').hasClass('cts-ui-icon-chevron-right')) {
             this.displayPage(pageNum+1);
         }
     }
@@ -219,34 +219,34 @@ _CTSUI.Theminator.prototype.goToNewPage = function(pagerValue, pageNum) {
 
 _CTSUI.Theminator.prototype.initiateThumbnailVisibilities = function(thumbnail) {
     thumbnail.on('mouseenter', function() {
-        CTS.$(this).find('.screenshot-options').show();
-        CTS.$(this).find('.add-to-favorites').show();
+        CTS.$(this).find('.cts-ui-screenshot-options').show();
+        CTS.$(this).find('.cts-ui-add-to-favorites').show();
     });
     thumbnail.on('mouseleave', function() {
-        CTS.$(this).find('.screenshot-options').hide();
-        if (!CTS.$(this).find('.add-to-favorites').find('img').hasClass('favorite')) {
-            CTS.$(this).find('.add-to-favorites').hide();
+        CTS.$(this).find('.cts-ui-screenshot-options').hide();
+        if (!CTS.$(this).find('.cts-ui-add-to-favorites').find('img').hasClass('cts-ui-favorite')) {
+            CTS.$(this).find('.cts-ui-add-to-favorites').hide();
         }
     });
     if (this.favorites.indexOf(thumbnail.data("theme")) != -1) {
-        thumbnail.find(".add-to-favorites").html('<img class="favorite" src="/css/img/star.png">');
-        thumbnail.find(".add-to-favorites").show();
+        thumbnail.find(".cts-ui-add-to-favorites").html('<img class="cts-ui-favorite" src="http://localhost:8000/css/img/star.png">');
+        thumbnail.find(".cts-ui-add-to-favorites").show();
     }
 };
 
 _CTSUI.Theminator.prototype.initiateScreenshotTints = function(screenshot) {
-    screenshot.wrap('<div class="tint"></div>'); 
+    screenshot.wrap('<div class="cts-ui-tint"></div>'); 
 };
 
 _CTSUI.Theminator.prototype.initiateFavoritesEvents = function(favoriteButton) {
     favoriteButton.on('mouseenter', function() {
-        if (CTS.$(this).find('img').hasClass('not-favorite')) {
-            CTS.$(this).html('<img class="hover-favorite" src="/css/img/transparent-star.png">');
+        if (CTS.$(this).find('img').hasClass('cts-ui-not-favorite')) {
+            CTS.$(this).html('<img class="cts-ui-hover-favorite" src="http://localhost:8000/css/img/transparent-star.png">');
         }
     });
     favoriteButton.on('mouseleave', function() {
-        if (CTS.$(this).find('img').hasClass('hover-favorite')) {
-            CTS.$(this).html('<img class="not-favorite" src="/css/img/empty-star.png">');
+        if (CTS.$(this).find('img').hasClass('cts-ui-hover-favorite')) {
+            CTS.$(this).html('<img class="cts-ui-not-favorite" src="http://localhost:8000/css/img/empty-star.png">');
         }
     });
     var self = this;
@@ -257,97 +257,97 @@ _CTSUI.Theminator.prototype.initiateFavoritesEvents = function(favoriteButton) {
 
 _CTSUI.Theminator.prototype.toggleFavorite = function(favoriteButton) {
     
-    if (favoriteButton.find('img').hasClass('hover-favorite')) {
-        favoriteButton.html('<img class="favorite" src="localhost:8000/css/img/star.png">');
-        this.favorites.push(favoriteButton.parents('.screenshot-thumbnail').data("theme"));
-    } else if (favoriteButton.find('img').hasClass('favorite')) {
-        favoriteButton.html('<img class="hover-favorite" src="localhost:8000/css/img/transparent-star.png">');
-        this.favorites.splice(this.favorites.indexOf(favoriteButton.parents('.screenshot-thumbnail').data("theme")),1);
+    if (favoriteButton.find('img').hasClass('cts-ui-hover-favorite')) {
+        favoriteButton.html('<img class="cts-ui-favorite" src="http://localhost:8000/css/img/star.png">');
+        this.favorites.push(favoriteButton.parents('.cts-ui-screenshot-thumbnail').data("theme"));
+    } else if (favoriteButton.find('img').hasClass('cts-ui-favorite')) {
+        favoriteButton.html('<img class="cts-ui-hover-favorite" src="http://localhost:8000/css/img/transparent-star.png">');
+        this.favorites.splice(this.favorites.indexOf(favoriteButton.parents('.cts-ui-screenshot-thumbnail').data("theme")),1);
         
     }
     localStorage["favorites"] = JSON.stringify(this.favorites);
 }
 
 _CTSUI.Theminator.prototype.togglePreview = function(previewButton) {
-    if (previewButton.hasClass('active')) {
-        previewButton.parents('.screenshot-thumbnail').find('.tint').removeClass('active');
-        previewButton.removeClass('active')
+    if (previewButton.hasClass('cts-ui-active')) {
+        previewButton.parents('.cts-ui-screenshot-thumbnail').find('.cts-ui-tint').removeClass('cts-ui-active');
+        previewButton.removeClass('cts-ui-active')
     } else {
-        this.theminator.find('.tint').removeClass('active');
-        this.theminator.find('.preview-button').removeClass('active');
-        previewButton.addClass('active');
-        previewButton.parents('.screenshot-thumbnail').find('.tint').addClass('active');
+        this.theminator.find('.cts-ui-tint').removeClass('cts-ui-active');
+        this.theminator.find('.cts-ui-preview-button').removeClass('cts-ui-active');
+        previewButton.addClass('cts-ui-active');
+        previewButton.parents('.cts-ui-screenshot-thumbnail').find('.cts-ui-tint').addClass('cts-ui-active');
         this._theme = new CTS.UI.Theme("mog");
     }
 };
 
 _CTSUI.Theminator.prototype.initiateNewThemes = function() {
     var self = this;
-    this.theminator.find('.screenshot-options').hide();
-    this.theminator.find('.add-to-favorites').hide();
-    this.theminator.find('.screenshot').each( function() {
+    this.theminator.find('.cts-ui-screenshot-options').hide();
+    this.theminator.find('.cts-ui-add-to-favorites').hide();
+    this.theminator.find('.cts-ui-screenshot').each( function() {
         self.initiateScreenshotTints(CTS.$(this));
     });
-    this.theminator.find('.screenshot-thumbnail').each(function() {
+    this.theminator.find('.cts-ui-screenshot-thumbnail').each(function() {
         self.initiateThumbnailVisibilities(CTS.$(this))
     });
-    this.theminator.find('.add-to-favorites').each(function() {
+    this.theminator.find('.cts-ui-add-to-favorites').each(function() {
         self.initiateFavoritesEvents(CTS.$(this))
     });
-    this.theminator.find('.preview-button').on('click', function() {
+    this.theminator.find('.cts-ui-preview-button').on('click', function() {
         self.togglePreview(CTS.$(this))
     });
 }
 
 _CTSUI.Theminator.prototype.toggleFilterTray = function(toggleButton) {
     var self = this;
-    if (toggleButton.find('i').hasClass('icon-chevron-down')) {
-        this.theminator.find('.filter-content-container').show();
-        this.theminator.find('.tag-details').hide();
-        this.theminator.find('.filter-options').show();
-        this.theminator.find('.filter-container').animate({"height":"130px"},500, function() {
-            self.theminator.find('a.filter-expand > i').attr('class', 'icon-chevron-up');
+    if (toggleButton.find('i').hasClass('cts-ui-icon-chevron-down')) {
+        this.theminator.find('.cts-ui-filter-content-container').show();
+        this.theminator.find('.cts-ui-tag-details').hide();
+        this.theminator.find('.cts-ui-filter-options').show();
+        this.theminator.find('.cts-ui-filter-container').animate({"height":"130px"},500, function() {
+            self.theminator.find('a.cts-ui-filter-expand > i').attr('class', 'cts-ui-icon-chevron-up');
         });
-    } else if (toggleButton.find('i').hasClass('icon-chevron-up')) {
-        this.theminator.find('.filter-container').animate({"height":"0px"},500, function() {
-            self.theminator.find('a.filter-expand > i').attr('class', 'icon-chevron-down');
-            self.theminator.find('.tag-types-list li').removeClass("active");
-            self.theminator.find('.filter-container').children().hide();
+    } else if (toggleButton.find('i').hasClass('cts-ui-icon-chevron-up')) {
+        this.theminator.find('.cts-ui-filter-container').animate({"height":"0px"},500, function() {
+            self.theminator.find('a.cts-ui-filter-expand > i').attr('class', 'cts-ui-icon-chevron-down');
+            self.theminator.find('.cts-ui-tag-types-list li').removeClass("active");
+            self.theminator.find('.cts-ui-filter-container').children().hide();
         });
     }
 };
 
 _CTSUI.Theminator.prototype.showOneFilter = function(filterType) {
-    this.theminator.find('.tag-details').show();
-    this.theminator.find('.tag-details-type').hide();
-    this.theminator.find('.tag-'+filterType+'-details').show();
-    this.theminator.find('.tag-details-type').parent().removeClass("active");
-    this.theminator.find('.tag-'+filterType+'-details').parent().addClass("active");
+    this.theminator.find('.cts-ui-tag-details').show();
+    this.theminator.find('.cts-ui-tag-details-type').hide();
+    this.theminator.find('.cts-ui-tag-'+filterType+'-details').show();
+    this.theminator.find('.cts-ui-tag-details-type').parent().removeClass("cts-ui-active");
+    this.theminator.find('.cts-ui-tag-'+filterType+'-details').parent().addClass("cts-ui-active");
 };
 
 _CTSUI.Theminator.prototype.initiateFilters = function() {
     var self = this;
-    this.theminator.find('.filter-type').on('click', function() {
+    this.theminator.find('.cts-ui-filter-type').on('click', function() {
         self.openFilterType(CTS.$(this))
     });
 };
 
 _CTSUI.Theminator.prototype.openFilterType = function(typeButton) {
-    if (typeButton.parent().hasClass("active")) {
-        typeButton.parent().removeClass("active");
-        this.theminator.find('.tag-details-type').hide();
-        this.theminator.find('.filter-container').animate({"height":"130px"},500);
+    if (typeButton.parent().hasClass("cts-ui-active")) {
+        typeButton.parent().removeClass("cts-ui-active");
+        this.theminator.find('.cts-ui-tag-details-type').hide();
+        this.theminator.find('.cts-ui-filter-container').animate({"height":"130px"},500);
         //$('.templates-container').animate( {"height": "388px"} , 500);
     } else {
-        this.theminator.find('.filter-type').parent().removeClass("active");
-        typeButton.parent().addClass("active");
-        var currentFilter = this.theminator.find('.tag-'+typeButton.data('filter')+'-details');
+        this.theminator.find('.cts-ui-filter-type').parent().removeClass("cts-ui-active");
+        typeButton.parent().addClass("cts-ui-active");
+        var currentFilter = this.theminator.find('.cts-ui-tag-'+typeButton.data('filter')+'-details');
         this.showOneFilter(typeButton.data('filter'));
-        if ((currentFilter.height()+30) != this.theminator.find('.filter-container').height() && currentFilter.height()>100) {
-            this.theminator.find('.filter-container').animate({"height":(currentFilter.height()+30)+"px"},500);
+        if ((currentFilter.height()+30) != this.theminator.find('.cts-ui-filter-container').height() && currentFilter.height()>100) {
+            this.theminator.find('.cts-ui-filter-container').animate({"height":(currentFilter.height()+30)+"px"},500);
             //$('.templates-container').animate( {"height": (518-currentFilter.height()-30)+"px"} , 500);
-        } else if (this.theminator.find('.filter-container').height() > 130 && currentFilter.height()<=100) {
-            this.theminator.find('.filter-container').animate({"height":"130px"},500);
+        } else if (this.theminator.find('.cts-ui-filter-container').height() > 130 && currentFilter.height()<=100) {
+            this.theminator.find('.cts-ui-filter-container').animate({"height":"130px"},500);
             //$('.templates-container').animate( {"height": "388px"} , 500);
         }
     }
@@ -363,7 +363,7 @@ _CTSUI.Theminator.prototype.deselectFilters = function() {
 };
 
 _CTSUI.Theminator.prototype.performFilter = function() {
-    var filterSpans = this.theminator.find('.tag-details input[type=checkbox]:checked').next();
+    var filterSpans = this.theminator.find('.cts-ui-tag-details input[type=checkbox]:checked').next();
     var filters = [];
     filterSpans.each(function() {
         filters.push(CTS.$(this).text());
@@ -390,8 +390,9 @@ _CTSUI.Theminator.prototype.performFilter = function() {
     this.displayNewData(filteredThemes);
 }
 
-_CTSUI.Theminator.prototype.performSearch = function() {
-    var searchFor = this.theminator.find('.search-query').val();
+_CTSUI.Theminator.prototype.performSearch = function(event) {
+    event.preventDefault();
+    var searchFor = this.theminator.find('.cts-ui-search-query').val();
     var searchedThemes = {};
     for (var theme in this.themes) {
         
