@@ -53,26 +53,29 @@ _CTSUI.Theminator.prototype.setupMockup = function() {
 
 _CTSUI.Theminator.prototype.loadContent = function() {
     var self = this;
-    CTS.$.getJSON(CTS.UI.JSON.content, function(data) {
-        for (var filterType in data.filters) {
+    CTS.$.getJSON(CTS.UI.JSON.filterInfo, function(data) {
+        for (var filterType in data) {
             var tagDetailsType = CTS.$('<div class="cts-ui-tag-'+filterType+'-details cts-ui-tag-details-type"></div>');
             var tagDetailsList = CTS.$('<ul class="cts-ui-tag-details-list"></ul>');
             tagDetailsType.append(tagDetailsList);
             self.theminator.find('.cts-ui-tag-details').append(tagDetailsType);
             var filterTypeButton = CTS.$('<li><a class="cts-ui-filter-type cts-ui-'+filterType+'-filter" data-filter="'+filterType+'"><i class="cts-ui-icon-chevron-left"></i> '+self.prettify(filterType)+'</a></li>')
             self.theminator.find('.cts-ui-tag-types-list').append(filterTypeButton);
-            for (var i=0; i<data.filters[filterType].length; i++) {
-                var filter = data.filters[filterType][i];
+            for (var i=0; i<data[filterType].length; i++) {
+                var filter = data[filterType][i];
                 tagDetailsList.append('<li><label class="cts-ui-checkbox"><input type="checkbox"><span>'+self.prettify(filter)+'</span></label></li>');
             }
         }
-        self.filters = data.filters;
+        self.filters =filters;
         
         self.initiateFilters();
-
-        self.themes = data.themes;
         
-        self.displayNewData(data.themes);
+    });
+    CTS.$.getJSON(CTS.UI.JSON.themeInfo, function(data) {
+
+        self.themes = data;
+        
+        self.displayNewData(data);
         
     });
 };

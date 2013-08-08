@@ -1,0 +1,74 @@
+{
+    "mog": {
+        "screenshot": "http://localhost:8000/css/screenshots/mog.png",
+        "tags": [
+            "fixed width", "gray", "light", "one-column", "silver", "white"
+        ]
+    },
+    "spun": {
+        "screenshot": "http://localhost:8000/css/screenshots/spun.png",
+        "tags": [
+            "custom-background", "custom-header", "custom-menu", "fixed width", "flexible-header", "gray", "light", "one-column", "rtl-language-support", "translation-ready", "white"
+        ]
+    },
+    "leaf": {
+        "screenshot": "http://localhost:8000/css/screenshots/leaf.png",
+        "tags": [
+            "custom-background", "custom-colors", "custom-header", "custom-menu", "editor-style", "featured-images", "flexible-width", "full-width-template", "gray", "light", "microformats", "one-column", "post-formats", "right sidebar", "rtl-language-support", "sticky-post", "theme-options", "translation-ready", "two columns", "white"
+        ]
+    },
+    "expound": {
+        "screenshot": "http://localhost:8000/css/screenshots/expound.png",
+        "tags": [
+            "black", "blue", "custom-background", "custom-header", "custom-menu", "editor-style", "featured-images", "flexible-header", "flexible-width", "full-width-template", "light", "one-column", "post-formats", "right sidebar", "sticky-post", "threaded-comments", "translation-ready", "two columns", "white"
+        ]
+    },
+    "discover": {
+        "screenshot": "http://localhost:8000/css/screenshots/discover.png",
+        "tags": [
+            "light", "orange", "theme-options", "threaded-comments", "two columns", "white"
+        ]
+    },
+    "twenty twelve": {
+        "screenshot": "http://localhost:8000/css/screenshots/twenty-twelve.png",
+        "tags": [
+            "custom-background", "custom-header", "custom-menu", "editor-style", "featured-images", "flexible-header", "flexible-width", "full-width-template", "gray", "light", "microformats", "one-column", "post-formats", "right sidebar", "rtl-language-support", "sticky-post", "theme-options", "translation-ready", "two columns", "white"
+        ]
+    },
+    "annotum base": {
+        "screenshot": "http://localhost:8000/css/screenshots/annotum-base.png",
+        "tags": [
+            "black", "blue", "brown", "custom-colors", "custom-header", "custom-menu", "dark", "featured-images", "fixed width", "gray", "green", "light", "microformats", "orange", "pink", "purple", "red", "right sidebar", "rtl-language-support", "silver", "sticky-post", "tan", "theme-options", "threaded-comments", "translation-ready", "two columns", "white", "yellow"
+        ]
+    },
+    "attitude": {
+        "screenshot": "http://localhost:8000/css/screenshots/attitude.png",
+        "tags": [
+            "blue", "custom-background", "custom-header", "custom-menu", "featured-images", "flexible-width", "full-width-template", "left sidebar", "light", "one-column", "right sidebar", "sticky-post", "theme-options", "threaded-comments", "three columns", "translation-ready", "two columns", "white"
+        ]
+    },
+    "twenty eleven": {
+        "screenshot": "http://localhost:8000/css/screenshots/twenty-eleven.png",
+        "tags": [
+            "black", "custom-background", "custom-colors", "custom-header", "custom-menu", "dark", "editor-style", "featured-image-header", "featured-images", "fixed width", "flexible-header", "flexible-width", "full-width-template", "gray", "left sidebar", "light", "microformats", "one-column", "post-formats", "right sidebar", "rtl-language-support", "sticky-post", "theme-options", "translation-ready", "two columns", "white"
+        ]
+    },
+    "swift basic": {
+        "screenshot": "http://localhost:8000/css/screenshots/swift-basic.png",
+        "tags": [
+            "blue", "brown", "custom-colors", "custom-header", "custom-menu", "editor-style", "fixed width", "left sidebar", "light", "microformats", "orange", "right sidebar", "rtl-language-support", "sticky-post", "theme-options", "threaded-comments", "three columns", "translation-ready", "two columns", "white"
+        ]
+    },
+    "pinboard": {
+        "screenshot": "http://localhost:8000/css/screenshots/pinboard.png",
+        "tags": [
+            "blue", "custom-background", "custom-colors", "custom-header", "custom-menu", "editor-style", "featured-images", "fixed width", "flexible-header", "flexible-width", "four columns", "full-width-template", "gray", "left sidebar", "light", "microformats", "one-column", "photoblogging", "post-formats", "right sidebar", "silver", "sticky-post", "theme-options", "threaded-comments", "three columns", "translation-ready", "two columns", "white"
+        ]
+    },
+    "twenty thirteen": {
+        "screenshot": "http://localhost:8000/css/screenshots/twenty-thirteen.png",
+        "tags": [
+            "black", "brown", "custom-header", "custom-menu", "editor-style", "featured-images", "flexible-width", "light", "microformats", "one-column", "orange", "post-formats", "right sidebar", "rtl-language-support", "sticky-post", "tan", "translation-ready", "two columns", "white", "yellow"
+        ]
+    }
+}

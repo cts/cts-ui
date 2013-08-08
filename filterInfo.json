@@ -1,0 +1,17 @@
+{
+    "color": [
+        "black", "blue", "brown", "gray", "green", "orange", "pink", "purple", "red", "silver", "tan", "white", "yellow", "dark", "light"
+    ],
+    "columns": [
+        "one-column", "two-columns", "three-columns", "four-columns", "left-sidebar", "right-sidebar"
+    ],
+    "width": [
+        "fixed-width", "flexible-width"
+    ],
+    "features": [
+        "blavatar", "buddypress", "custom-background", "custom-colors", "custom-header", "custom-menu", "editor-style", "featured-image-header", "featured-images", "flexible-header", "front-page-post-form", "full-width-template", "microformats", "post-formats", "rtl-language-support", "sticky-post", "theme-options", "threaded-comments", "translation-ready"
+    ],
+    "subject": [
+        "holiday", "photoblogging", "seasonal"
+    ]
+}

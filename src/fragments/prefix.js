@@ -1,20 +1,28 @@
 _CTSUI = {};
 
+
+//_CTSUI.mockupBase = "http://www.treesheets.org/cts-ui/mockups/";
+//_CTSUI.themeBase = "http://treesheets.csail.mit.edu/mockups/blog/";
+
+_CTSUI.mockupBase = "http://localhost:8000/";
+_CTSUI.themeBase = "http://localhost:4000/";
+
 _CTSUI.Mockups = {
-  tray: "http://localhost:8000/mockups/tray.html",
-  editor: "http://localhost:8000/mockups/editor.html",
-  theminator: "http://localhost:8000/mockups/theminator.html"
+  tray: _CTSUI.mockupBase + "tray.html",
+  editor: _CTSUI.mockupBase + "editor.html",
+  theminator: _CTSUI.mockupBase + "theminator.html"
 };
 
 _CTSUI.CSS = {
-  tray: "http://localhost:8000/css/tray.css",
-  editor: "http://localhost:8000/css/editor.css",
-  theminator: "http://localhost:8000/css/theminator.css",
-  bootstrap: "http://localhost:8000/css/bootstrap/bootstrap.min.css"
+  tray: _CTSUI.mockupBase + "css/tray.css",
+  editor: _CTSUI.mockupBase + "css/editor.css",
+  theminator: _CTSUI.mockupBase + "css/theminator.css",
+  bootstrap: _CTSUI.mockupBase + "css/bootstrap/bootstrap.min.css"
 };
 
 _CTSUI.JSON = {
-  content: "http://localhost:8000/content.json",
+  filterInfo: _CTSUI.themeBase + "filterInfo.json",
+  themesInfo: _CTSUI.themeBase + "themeInfo.json"
 };
 
 
@@ -22,31 +30,31 @@ _CTSUI.Blog = {
     Themes: {
         mog: {
             Mockup: {
-                Index: "http://localhost:4000/blog/themes/mog/index.html",
-                List: "http://localhost:4000/blog/themes/mog/list.html",
-                Post: "http://localhost:4000/blog/themes/mog/post.html",
-                Page: "http://localhost:4000/blog/themes/mog/page.html",
-                Default: "http://localhost:4000/blog/themes/mog/default.html"
+                index: _CTSUI.themeBase + "themes/mog/index.html",
+                list: _CTSUI.themeBase + "themes/mog/list.html",
+                post: _CTSUI.themeBase + "themes/mog/post.html",
+                page: _CTSUI.themeBase + "themes/mog/page.html",
+                default: _CTSUI.themeBase + "themes/mog/default.html"
             },
-            Cts: "http://localhost:4000/blog/themes/mog/mog.cts"
+            Cts: _CTSUI.themeBase + "themes/mog/mog.cts"
         },
         spun: {
             Mockup: {
-                Index: "http://localhost:4000/blog/themes/spun/index.html",
-                List: "http://localhost:4000/blog/themes/spun/list.html",
-                Post: "http://localhost:4000/blog/themes/spun/post.html",
-                Page: "http://localhost:4000/blog/themes/spun/page.html",
-                Default: "http://localhost:4000/blog/themes/spun/default.html"
+                index: _CTSUI.themeBase + "themes/spun/index.html",
+                list: _CTSUI.themeBase + "themes/spun/list.html",
+                post: _CTSUI.themeBase + "themes/spun/post.html",
+                page: _CTSUI.themeBase + "themes/spun/page.html",
+                default: _CTSUI.themeBase + "themes/spun/default.html"
             },
-            Cts: "http://localhost:4000/blog/themes/spun/spun.cts"
+            Cts: _CTSUI.themeBase + "themes/spun/spun.cts"
         }
     },
     Jekyll: {
         Cts: {
-            Index: "http://localhost:4000/blog/jekyll/index.cts",
-            List: "http://localhost:4000/blog/jekyll/list.cts",
-            Post: "http://localhost:4000/blog/jekyll/post.cts",
-            Page: "http://localhost:4000/blog/jekyll/page.cts",
+            index: _CTSUI.themeBase + "jekyll/index.cts",
+            list: _CTSUI.themeBase + "jekyll/list.cts",
+            post: _CTSUI.themeBase + "jekyll/post.cts",
+            page: _CTSUI.themeBase + "jekyll/page.cts",
         }
     }
 };

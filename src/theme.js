@@ -21,46 +21,59 @@ _CTSUI.Theme = function (theme) {
 };
 
 _CTSUI.Theme.prototype.loadMockup = function () {
-    console.log("load mockup")
-    console.log(CTS.engine);
-    CTS.engine.forrest.removeDependencies();
-    CTS.engine.shutdown();
-    var specs = [CTS.Parser.parse("@html mockup " + CTS.UI.Blog.Themes[this.theme].Mockup.Index + ";"),
-                 CTS.Parser.parse("@html default " + CTS.UI.Blog.Themes[this.theme].Mockup.Default + ";"),
-                CTS.Parser.parse("@cts " + CTS.UI.Blog.Themes[this.theme].Cts + ";"),
-                CTS.Parser.parse("@cts " + CTS.UI.Blog.Jekyll.Cts.Index + ";")];
-
-    
-    CTS.Utilities.fetchString({url: window.location}).then(
-      function(page) {
-        var pageContents = CTS.$(page).filter("#page").contents();
-        CTS.$('#page').empty();
-        CTS.$('#page').append(pageContents);
-        CTS.$('#page').removeAttr('data-ctsid');
-        console.log("BOOTING NEW ENGINE");
-        var newEngine = new CTS.Engine({
-          autoLoadSpecs: false,
-          forrestSpecs: specs,
-          forrest: {
-            defaultTree: CTS.$('#page')
-          }
-        });
-      console.log("newEngine",newEngine);
-
-        newEngine.boot().then(
-            function() {
-                console.log("BOOTED!");
-                CTS.engine = newEngine;
+    var self = this;
+    var loadTheme = function (self, pageType) {
+        CTS.engine.forrest.removeDependencies();
+        CTS.engine.shutdown();
+        var newEngine = null;
+        var cts = "@html mockup " + CTS.UI.Blog.Themes[self.theme].Mockup[pageType] + "; " +
+            "@html default " + CTS.UI.Blog.Themes[self.theme].Mockup.default + "; " +
+            "@cts " + CTS.UI.Blog.Themes[self.theme].Cts + "; " +
+            "@cts " + CTS.UI.Blog.Jekyll.Cts[pageType] + ";";
+        var opts = {
+            autoLoadSpecs: false,
+            forrest: {
+                defaultTree: CTS.$('#page')
             }
-        );
-      },
-      function(error) {
-          
-      }
-    );
-    
-};
+        };
+        CTS.Parser.parse(cts).then(function (specs) {
+            opts.forrestSpecs = specs;
+            newEngine = new CTS.Engine(opts);
+            newEngine.boot();
+            CTS.engine = newEngine;
+        }, function (reason) {
+            console.log(reason);
+        });
+    }
 
+
+    CTS.Utilities.fetchString({
+        url: window.location
+    }).then(function (html) {
+        var otherPage = CTS.$(html);
+        var ctsFile = otherPage.filter('script[data-treesheet]').data('treesheet');
+        console.log(ctsFile);
+        var pageType = "page";
+        if (ctsFile.indexOf('index.cts') != -1) {
+            pageType = "index";
+        } else if (ctsFile.indexOf('list.cts') != -1) {
+            pageType = "list";
+        } else if (ctsFile.indexOf('post.cts') != -1) {
+            pageType = "post";
+        }
+        console.log(pageType);
+        otherPage = otherPage.filter('#page').first();
+        var page = CTS.$('#page');
+        page.html(otherPage.html());
+        page.removeAttr('cts-id');
+        setTimeout(function() {
+            loadTheme(self, pageType);
+        }, 500);
+    }, function (reason) {
+        console.log("Problem", reason);
+    });
+
+};
 _CTSUI.Theme.prototype.revert = function () {
     console.log("revert")
     CTS.engine.forrest.removeDependencies();
@@ -68,22 +81,20 @@ _CTSUI.Theme.prototype.revert = function () {
 
     
     CTS.Utilities.fetchString({url: window.location}).then(
-      function(page) {
-        var pageContents = CTS.$(page).filter("#page").contents();
-        CTS.$('#page').empty();
-        CTS.$('#page').append(pageContents);
-        CTS.$('#page').removeAttr('data-ctsid');
-        console.log("BOOTING NEW ENGINE");
+      function(html) {
+        var otherPage = CTS.$(html);
+        otherPage = otherPage.filter('#page').first();
+        var page = CTS.$('#page');
+        page.html(otherPage.html());
+        page.removeAttr('cts-id');
         var newEngine = new CTS.Engine({
           forrest: {
             defaultTree: CTS.$('#page')
           }
         });
-      console.log("newEngine",newEngine);
 
         newEngine.boot().then(
             function() {
-                console.log("BOOTED!");
                 CTS.engine = newEngine;
             }
         );
