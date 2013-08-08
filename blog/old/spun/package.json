@@ -1,0 +1,7 @@
+{
+    "type": "blog",
+    "name": "spun",
+    "files": [
+        "index.html", "page.html", "post.html", "spun.cts", "tagcat.html"
+    ]
+}

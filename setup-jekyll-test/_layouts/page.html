@@ -1,0 +1,68 @@
+---
+
+---
+
+<html>
+
+    <head>
+        
+        <script src="http://treesheets.org/cts.js" data-treesheet="{{site.url}}/page.cts"></script>
+        <link rel="treesheet" href="{{site.url}}/mockups/{{site.theme}}/{{site.theme}}.cts" />
+ 
+        <title>Theme Preview</title>
+        
+        <style type="text/cts">
+            @html page {{site.url}}/mockups/{{site.theme}}/page.html;
+        </style>
+        
+    </head>
+    
+    <body>
+        
+        <div id="page">
+            
+            <h1 id="site-title"><a href="{{site.url}}">Theme Preview</a></h1>
+            <h2 id="site-description">Description of site</h2>
+
+            <div id="nav-main">
+                <ul>
+                    <li><a href="{{site.url}}">Home</a></li>
+                    <li><a href="{{site.url}}about">About</a></li>
+                    <li><a href="{{site.url}}#">Parent Page</a>
+                        <ul>
+                            <li><a href="{{site.url}}#">Sub-page</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
+            <a class="site-url">{{site.url}}</a>
+      
+            <div id="recent-posts">
+                {% for post in site.posts limit:5 %}
+                <a href="{{site.url}}{{post.url}}">{{post.title}}</a>
+                {% endfor %}
+            </div>
+              
+            <div id="archives">
+                <a href="/2013/06">June 2013</a>
+                <a href="/2013/05">May 2013</a>
+                <a href="/2013/04">April 2013</a>
+            </div>
+              
+            <div id="categories">
+                {% for cat in site.categories limit:5 %}
+                    <a href="{{site.url}}/category/{{cat[0]}}">{{cat[0]}}</a>
+                {% endfor %}
+            </div>
+      
+            <div id="content">
+                {{content}}
+            </div>
+            
+        </div>
+        
+    </body>
+
+</html>
+

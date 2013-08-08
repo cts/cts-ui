@@ -1,0 +1,9 @@
+.recentcomments a {
+    display:inline !important;
+    padding:0 !important;
+    margin:0 !important;
+}
+.site-header {
+    background: url(http://wp-themes.com/wp-content/themes/twentythirteen/images/headers/circle.png) no-repeat scroll top;
+    background-size: 1600px auto;
+}

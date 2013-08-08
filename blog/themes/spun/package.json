@@ -1,0 +1,7 @@
+{
+    "type": "blog",
+    "name": "spun",
+    "files": {
+        "index.html":"utf8", "page.html":"utf8", "post.html":"utf8", "spun.cts":"utf8", "list.html":"utf8", "default.html":"utf8"
+    }
+}

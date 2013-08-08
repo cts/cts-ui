@@ -271,13 +271,15 @@ _CTSUI.Theminator.prototype.toggleFavorite = function(favoriteButton) {
 _CTSUI.Theminator.prototype.togglePreview = function(previewButton) {
     if (previewButton.hasClass('cts-ui-active')) {
         previewButton.parents('.cts-ui-screenshot-thumbnail').find('.cts-ui-tint').removeClass('cts-ui-active');
-        previewButton.removeClass('cts-ui-active')
+        previewButton.removeClass('cts-ui-active');
+        this._theme = new CTS.UI.Theme();
     } else {
         this.theminator.find('.cts-ui-tint').removeClass('cts-ui-active');
         this.theminator.find('.cts-ui-preview-button').removeClass('cts-ui-active');
         previewButton.addClass('cts-ui-active');
         previewButton.parents('.cts-ui-screenshot-thumbnail').find('.cts-ui-tint').addClass('cts-ui-active');
-        this._theme = new CTS.UI.Theme("mog");
+        var theme = previewButton.parents('.cts-ui-screenshot-thumbnail').data('theme');
+        this._theme = new CTS.UI.Theme(theme);
     }
 };
 

@@ -1,0 +1,7 @@
+{
+    "type": "blog",
+    "name": "mog",
+    "files": {
+        "index.html":"utf8", "page.html":"utf8", "post.html":"utf8", "mog.cts":"utf8", "list.html":"utf8", "default.html":"utf8"
+    }
+}
