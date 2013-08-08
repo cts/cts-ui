@@ -1,4 +1,5 @@
 release
 *.swo
 *.swp
+node_modules
 
