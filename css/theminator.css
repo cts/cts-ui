@@ -56,13 +56,11 @@
 
 
 .cts-ui .cts-ui-tray .cts-ui-header {
-  background-image: url('http://localhost:8000/css/img/cts-header-theminator.png');
   height: 66px;
   display: table-row;
 }
 
 .cts-ui .cts-ui-tray .cts-ui-header-content {
-  background-image: url('http://localhost:8000/css/img/cts-header-theminator.png');
   height: 66px;
   display: table-cell;
 }

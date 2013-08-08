@@ -47,7 +47,8 @@ _CTSUI.Theminator.prototype.setupMockup = function() {
     
     this.theminator.find('.cts-ui-favorites-icon').on('click', CTS.$.proxy(this.displayFavorites, this));
     
-
+    this.theminator.find('.cts-ui-header').css('background-image','url('+CTS.UI.Img.header+')');
+    this.theminator.find('.cts-ui-header-content').css('background-image','url('+CTS.UI.Img.header+')');
     
 };
 
@@ -66,7 +67,7 @@ _CTSUI.Theminator.prototype.loadContent = function() {
                 tagDetailsList.append('<li><label class="cts-ui-checkbox"><input type="checkbox"><span>'+self.prettify(filter)+'</span></label></li>');
             }
         }
-        self.filters =filters;
+        self.filters =data;
         
         self.initiateFilters();
         

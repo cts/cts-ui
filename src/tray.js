@@ -37,6 +37,7 @@ _CTSUI.Tray.prototype.setupMockup = function() {
   var self = this;
   this._node = this._container.find('.cts-ui-tray');
   this._trayContentsNode = this._container.find('.cts-ui-tray-contents');
+  this._trayContentsNode.css("background-image",'url('+CTS.UI.Img.lightWool+')');
     // Create the theminator
   //this._editor = new CTS.UI.Editor(this, this._trayContentsNode);
   this._theminator = new CTS.UI.Theminator(this, this._trayContentsNode);
