@@ -2,6 +2,31 @@
  * Grunt Buildfile for Cascading Tree Sheets UI
  * To be used with GruntJS <http://gruntjs.com/>
  */
+
+sourcelist = [
+  "src/fragments/prefix.js",
+  "src/utilities.js",
+  "src/tray.js",
+  "src/picker.js",
+  "src/clipboard.js",
+  "src/theminator.js",
+  "src/theme.js",
+  "src/fragments/postfix.js",  
+  "src/fragments/autoloader.js"
+];
+
+var devSourceList = sourcelist.slice(0);
+var prodSourceList = sourcelist.slice(0);
+
+devSourceList.unshift('src/fragments/development/constants.js');
+prodSourceList.unshift('src/fragments/production/constants.js');
+
+devSourceList.unshift('<banner>');
+prodSourceList.unshift('<banner>');
+
+devSourceOut = 'release/cts-ui.dev.js';
+prodSourceOut = 'release/cts-ui.js';
+
 module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
@@ -20,20 +45,13 @@ module.exports = function(grunt) {
               " */"
     },
     concat: {
-      dist : {
-        src : [
-          "<banner>",
-          "src/fragments/prefix.js",
-          "src/utilities.js",
-          "src/tray.js",
-          "src/picker.js",
-          "src/clipboard.js",
-          "src/theminator.js",
-          "src/theme.js",
-          "src/fragments/postfix.js",  
-          "src/fragments/autoloader.js"
-        ],
-        dest : "release/cts-ui.js"
+      dev: {
+        src : devSourceList,
+        dest : devSourceOut
+      },
+      prod: {
+        src : prodSourceList,
+        dest : prodSourceOut
       }
     },
     lint: {
