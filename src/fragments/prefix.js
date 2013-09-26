@@ -25,8 +25,6 @@ _CTSUI.JSON = {
   themeInfo: _CTSUI.themeBase + "themeInfo.json"
 };
 
-
-
 _CTSUI.Blog = {
     Themes: {
         mog: {

@@ -1,4 +1,4 @@
 _CTSUI = {};
 _CTSUI.mockupBase = "http://treesheets.csail.mit.edu/mockups";
 _CTSUI.themeBase = "http://treesheets.csail.mit.edu/mockups/blog";
-_CTSUI.cts-js-location= "http://www.treesheets.org/cts.js";
+_CTSUI.ctsJsLocation= "http://www.treesheets.org/cts.js";
