@@ -1,5 +1,3 @@
-_CTSUI = {};
-
 
 _CTSUI.Mockups = {
   tray: _CTSUI.mockupBase + "tray.html",
