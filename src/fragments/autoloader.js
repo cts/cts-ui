@@ -16,7 +16,7 @@ _CTSUI.autoload = function() {
         CTS.UI.load();
       });
     };
-    //document.getElementsByTagName('head')[0].appendChild(s);
+    document.getElementsByTagName('head')[0].appendChild(s);
   }
 };
 _CTSUI.autoload();

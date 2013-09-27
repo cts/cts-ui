@@ -28,6 +28,12 @@ devSourceOut = 'release/cts-ui.dev.js';
 prodSourceOut = 'release/cts-ui.js';
 
 module.exports = function(grunt) {
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-qunit');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-web-server');
+
   // Project configuration.
   grunt.initConfig({
     pkg: "<json:package.json>",
@@ -54,6 +60,15 @@ module.exports = function(grunt) {
         dest : prodSourceOut
       }
     },
+    web_server: {
+      whyisthisnecessary: 'idontknow',
+      options: {
+        cors: true,
+        port: 8000,
+        logRequests: true,
+        nevercache: true
+      }
+    },
     lint: {
       all: ['grunt.js', 'src/**/*.js']
     },
@@ -72,10 +87,6 @@ module.exports = function(grunt) {
       }
     }
   });
-
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-concat');
 
   grunt.registerTask('default', [
     'jshint',

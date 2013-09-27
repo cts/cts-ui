@@ -47,7 +47,8 @@
     "grunt-contrib-uglify": "*",
     "grunt-contrib-qunit": "*",
     "grunt-contrib-concat": "*",
-    "grunt-contrib-watch": "*"
+    "grunt-contrib-watch": "*",
+    "grunt-web-server": "*"
   },
   "engines": {
     "node": ">=0.1.9"
