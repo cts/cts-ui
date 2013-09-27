@@ -11,12 +11,12 @@ one to rebuild the project when you make a change to the code.
 1. First checkout cts-js (github.com/cts/cts-js) and run the development server
    in that projet (port 9000):
 
-     python dev-server.js
+     grunt web_server
 
 2. Then, in this project, (github.com/cts/cts-ui), run the development server
    on (port 8000):
 
-    python dev-server.js
+    grunt web_server
 
 ### Getting the bookmarklet link
 
