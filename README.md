@@ -11,12 +11,18 @@ one to rebuild the project when you make a change to the code.
 1. First checkout cts-js (github.com/cts/cts-js) and run the development server
    in that projet (port 9000):
 
-     grunt web_server
+    ```
+    npm install (first time only)
+    grunt web_server
+    ```
 
 2. Then, in this project, (github.com/cts/cts-ui), run the development server
    on (port 8000):
 
+    ```
+    npm install (first time only)
     grunt web_server
+    ```
 
 ### Getting the bookmarklet link
 
@@ -26,7 +32,9 @@ page.
 
 Visit the following page:
 
+    ```
     http://localhost:8000/development-bookmarklet.html
+    ```
 
 And drag the bookmarklet link to the toolbar of your browser.
 
@@ -34,7 +42,9 @@ And drag the bookmarklet link to the toolbar of your browser.
 
 From a separate console, run grunt in the project root:
 
+    ```
     grunt
+    ```
 
 This will rebuild `release/ctsui.js`. If you refresh whatever web page you were
 testing CTS-UI on and click the Bookmarklet link again, you should load the new
