@@ -34,7 +34,9 @@ page.
 
 Visit the following page:
 
+    ```
     http://localhost:8000/development-bookmarklet.html
+    ```
 
 And drag the bookmarklet link to the toolbar of your browser.
 
@@ -42,7 +44,9 @@ And drag the bookmarklet link to the toolbar of your browser.
 
 From a separate console, run grunt in the project root:
 
+    ```
     grunt
+    ```
 
 This will rebuild `release/ctsui.js`. If you refresh whatever web page you were
 testing CTS-UI on and click the Bookmarklet link again, you should load the new
