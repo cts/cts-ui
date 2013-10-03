@@ -91,7 +91,7 @@ _CTSUI.Theminator.prototype.displayThemeThumbnail = function(theme, themeData) {
                     '<button class="cts-ui-btn">Install</button>'+
                 '</div>'+
             '</div>'+
-            '<a class="cts-ui-add-to-favorites"><img class="cts-ui-not-favorite" src="http://localhost:8000/css/img/empty-star.png"></a>'+
+            '<a class="cts-ui-add-to-favorites"><img class="cts-ui-not-favorite" src="' + _CTSUI.Img.emptyStar + '"></a>'+
             '<figcaption>'+
                 '<div class="cts-ui-effeckt-figcaption-wrap">'+
                     '<span class="cts-ui-theme-title">'+this.prettify(theme)+'</span>'+

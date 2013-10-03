@@ -9,7 +9,7 @@ _CTSUI.CSS = {
   tray: _CTSUI.mockupBase + "css/tray.css",
   editor: _CTSUI.mockupBase + "css/editor.css",
   theminator: _CTSUI.mockupBase + "css/theminator.css",
-  bootstrap: _CTSUI.mockupBase + "css/bootstrap.min.css"
+  bootstrap: _CTSUI.mockupBase + "css/bootstrap/bootstrap.min.css"
 };
 
 _CTSUI.Img = {
