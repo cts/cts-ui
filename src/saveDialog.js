@@ -25,5 +25,6 @@ _CTSUI.SaveDialog.prototype.loadMockup = function() {
     self.setupMockup()
     evt.stopPropagation();
   });
+  this._container.css({top:this.contentHeight+this.contentOffset.top, left:this.content.width+this.contentOffset.top});
   this._container.appendTo(this._bodyNode);
 };

@@ -11,6 +11,7 @@ sourcelist = [
   "src/clipboard.js",
   "src/theminator.js",
   "src/theme.js",
+  "src/saveDialog.js",
   "src/fragments/postfix.js",  
   "src/fragments/autoloader.js"
 ];

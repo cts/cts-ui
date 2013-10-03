@@ -9,7 +9,8 @@ _CTSUI.mockupBaseLocal = "http://localhost:8000/mockups/";
 _CTSUI.Mockups = {
   tray: _CTSUI.mockupBase + "tray.html",
   editor: _CTSUI.mockupBase + "editor.html",
-  theminator: _CTSUI.mockupBase + "theminator.html"
+  theminator: _CTSUI.mockupBase + "theminator.html",
+  saveDialog: _CTSUI.mockupBase + "saveDialog.html"
 };
 
 _CTSUI.CSS = {
