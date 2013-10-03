@@ -1,4 +1,3 @@
-_CTSUI = {};
 
 
 _CTSUI.mockupBase = "http://treesheets.csail.mit.edu/mockups/cts-ui/";
@@ -32,8 +31,6 @@ _CTSUI.JSON = {
   filterInfo: _CTSUI.themeBase + "filterInfo.json",
   themeInfo: _CTSUI.themeBase + "themeInfo.json"
 };
-
-
 
 _CTSUI.Blog = {
     Themes: {

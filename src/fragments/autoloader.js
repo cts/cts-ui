@@ -7,7 +7,7 @@ _CTSUI.autoload = function() {
   } else {
     // CTS isn't present. Let's create it with a script.
     var s = document.createElement('script');
-    s.setAttribute('src', 'http://localhost:9000/release/cts.js');
+    s.setAttribute('src', _CTSUI.ctsJsLocation);
     s.setAttribute('type', 'text/javascript');
     s.onload = function() {
       CTS.UI = _CTSUI;

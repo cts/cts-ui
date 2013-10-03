@@ -2,7 +2,38 @@
  * Grunt Buildfile for Cascading Tree Sheets UI
  * To be used with GruntJS <http://gruntjs.com/>
  */
+
+sourcelist = [
+  "src/fragments/prefix.js",
+  "src/utilities.js",
+  "src/tray.js",
+  "src/picker.js",
+  "src/clipboard.js",
+  "src/theminator.js",
+  "src/theme.js",
+  "src/fragments/postfix.js",  
+  "src/fragments/autoloader.js"
+];
+
+var devSourceList = sourcelist.slice(0);
+var prodSourceList = sourcelist.slice(0);
+
+devSourceList.unshift('src/fragments/development/constants.js');
+prodSourceList.unshift('src/fragments/production/constants.js');
+
+devSourceList.unshift('<banner>');
+prodSourceList.unshift('<banner>');
+
+devSourceOut = 'release/cts-ui.dev.js';
+prodSourceOut = 'release/cts-ui.js';
+
 module.exports = function(grunt) {
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-qunit');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-web-server');
+
   // Project configuration.
   grunt.initConfig({
     pkg: "<json:package.json>",
@@ -20,20 +51,22 @@ module.exports = function(grunt) {
               " */"
     },
     concat: {
-      dist : {
-        src : [
-          "<banner>",
-          "src/fragments/prefix.js",
-          "src/utilities.js",
-          "src/tray.js",
-          "src/picker.js",
-          "src/clipboard.js",
-          "src/theminator.js",
-          "src/theme.js",
-          "src/fragments/postfix.js",  
-          "src/fragments/autoloader.js"
-        ],
-        dest : "release/cts-ui.js"
+      dev: {
+        src : devSourceList,
+        dest : devSourceOut
+      },
+      prod: {
+        src : prodSourceList,
+        dest : prodSourceOut
+      }
+    },
+    web_server: {
+      whyisthisnecessary: 'idontknow',
+      options: {
+        cors: true,
+        port: 8000,
+        logRequests: true,
+        nevercache: true
       }
     },
     lint: {
@@ -54,10 +87,6 @@ module.exports = function(grunt) {
       }
     }
   });
-
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-concat');
 
   grunt.registerTask('default', [
     'jshint',
