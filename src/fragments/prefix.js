@@ -1,11 +1,11 @@
 _CTSUI = {};
 
 
-//_CTSUI.mockupBase = "http://www.treesheets.org/cts-ui/mockups/";
-//_CTSUI.themeBase = "http://treesheets.csail.mit.edu/mockups/blog/";
-
-_CTSUI.mockupBase = "http://localhost:8000/mockups/";
-_CTSUI.themeBase = "http://localhost:4000/mockups/";
+_CTSUI.mockupBase = "http://treesheets.csail.mit.edu/mockups/cts-ui/";
+_CTSUI.themeBase = "http://treesheets.csail.mit.edu/mockups/blog/";
+_CTSUI.mockupBaseLocal = "http://localhost:8000/mockups/";
+//_CTSUI.mockupBase = "http://localhost:8000/mockups/";
+//_CTSUI.themeBase = "http://localhost:4000/mockups/";
 
 _CTSUI.Mockups = {
   tray: _CTSUI.mockupBase + "tray.html",
@@ -14,7 +14,7 @@ _CTSUI.Mockups = {
 };
 
 _CTSUI.CSS = {
-  tray: _CTSUI.mockupBase + "css/tray.css",
+  tray: _CTSUI.mockupBaseLocal + "css/tray.css",
   editor: _CTSUI.mockupBase + "css/editor.css",
   theminator: _CTSUI.mockupBase + "css/theminator.css",
   bootstrap: _CTSUI.mockupBase + "css/bootstrap.min.css"
@@ -56,6 +56,16 @@ _CTSUI.Blog = {
                 default: _CTSUI.themeBase + "spun/default.html"
             },
             Cts: _CTSUI.themeBase + "spun/spun.cts"
+        },
+        twenty_thirteen: {
+            Mockup: {
+                index: _CTSUI.themeBase + "twenty-thirteen/index.html",
+                list: _CTSUI.themeBase + "twenty-thirteen/list.html",
+                post: _CTSUI.themeBase + "twenty-thirteen/post.html",
+                page: _CTSUI.themeBase + "twenty-thirteen/page.html",
+                default: _CTSUI.themeBase + "twenty-thirteen/default.html"
+            },
+            Cts: _CTSUI.themeBase + "twenty-thirteen/twenty-thirteen.cts"
         }
     },
     Jekyll: {
@@ -64,6 +74,7 @@ _CTSUI.Blog = {
             list: _CTSUI.themeBase + "list.cts",
             post: _CTSUI.themeBase + "post.cts",
             page: _CTSUI.themeBase + "page.cts",
+            default: _CTSUI.themeBase + "default.cts"
         }
     }
 };
