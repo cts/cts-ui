@@ -40,9 +40,10 @@ _CTSUI.Tray.prototype.setupMockup = function() {
   this._trayContentsNode.css("background-image",'url('+CTS.UI.Img.lightWool+')');
     // Create the theminator
   //this._editor = new CTS.UI.Editor(this, this._trayContentsNode);
-  this._theminator = new CTS.UI.Theminator(this, this._trayContentsNode);
-  this._pages.push(this._theminator);
-  //this._pages.push(this._editor);
+  //this._theminator = new CTS.UI.Theminator(this, this._trayContentsNode);
+  //this._pages.push(this._theminator);
+  this._editor = new CTS.UI.Editor(this, this._trayContentsNode);
+  this._pages.push(this._editor);
   this.updateSize();
   CTS.$(window).resize(function() {
     self.updateSize();
@@ -86,7 +87,6 @@ _CTSUI.Tray.prototype.toggle = function() {
 _CTSUI.Tray.prototype.updateSize = function() {
   // Set the height of the tray to the window size
   var windowHeight = CTS.$(window).height();
-  console.log("New window height:", windowHeight);
   this._node.height(windowHeight);
   for (var i = 0; i < this._pages.length; i++) {
     this._pages[i].updateSize(windowHeight);
