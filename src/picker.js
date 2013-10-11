@@ -1,15 +1,24 @@
-
 /**
+ * Element Picker.
+ *
  * Args:
- *  q - The Q library for deferred jobs.
+ *  $ - jQuery (can be found at CTS.$ once CTS loads)
+ *  q - The Q library (can be found at CTS.Q once CTS loads)
  */
 _CTSUI.Picker = function($, q) {
   this._$ = $;
   this._q = q;
+
+  // The promise for picking. Only one pick action possible at a time.
   this._deferred = null;
+
+  // For rate-limiting mousemove responses
   this._lastTime = new Date();
+
+  // For rate-limiting keypress responses
   this._isKeyDown = false;
 
+  // Various magic numbers
   this.CONST = {
     'PREV': 37, // Left
     'NEXT': 39, // Right
@@ -31,7 +40,10 @@ _CTSUI.Picker = function($, q) {
     'click': this._$.proxy(this._click, this)
   };
 
+  // The element currently under focus of the picker.
   this._$selected = null;
+
+  // The visual representation of the picker focus in the DOM
   this._$ui = this._$('<div id="' + this.CONST.UI_ID + '"></div>');
   this._$ui.css({
     display: 'none',
