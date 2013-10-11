@@ -95,7 +95,6 @@ _CTSUI.Picker.prototype.cancel = function(reason) {
  *-----------------------------------------------------*/
 
 _CTSUI.Picker.prototype._constructUI = function() {
-  console.log("construct UI");
   this._$('body')
     .on('keydown', this.CALLBACK.keydown)
     .on('keyup', this.CALLBACK.keyup)
@@ -122,13 +121,11 @@ _CTSUI.Picker.prototype._destroyUI = function() {
 _CTSUI.Picker.prototype._select = function($elem) {
   // Behavior on empty selection: nothing
   if ((typeof $elem == 'undefined') || ($elem == null) || ($elem.length == 0)) {
-    console.log("Null; skip");
     return;
   }
 
   // If the selected element is already this, do nothing.
   if ($elem == this._$selected) {
-    console.log("Same; skip");
     return;
   }
 
