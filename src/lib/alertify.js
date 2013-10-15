@@ -326,10 +326,13 @@ var Dialog = (function () {
                     val = controls.input.value;
                 }
                 if (controls.choices) {
-                    val = "RADIO";
+                  var selected = document.querySelector('input[name="alertify-choice"]:checked');
+                  if (selected) {
+                    val = selected.value;
+                  }
                 }
                 if (typeof item.accept === "function") {
-                    if (controls.input) {
+                    if ((controls.input) || (controls.choices)) {
                         item.accept(val);
                     } else {
                         item.accept();
@@ -426,25 +429,26 @@ var Dialog = (function () {
 
             html += "<article class=\"alertify-inner\">";
             html += tpl.message.replace("{{message}}", message);
-
             if (type === "prompt") {
                 html += tpl.input;
             }
 
             if (type === "choose") {
-                var choicesTxt = "";
+                var choicesTxt = "<div id='alertify-choices' style='align: left'>";
                 if ("choices" in item.placeholder) {
-                  for (choice in item.placeholder.choices) {
-                    choicesTxt += "<input type='radio' name='alertify-choice'>" + choice + "</input>";
+                  for (idx in item.placeholder.choices) {
+                    var choice = item.placeholder.choices[idx];
+                    choicesTxt += "<input type='radio' name='alertify-choice' value='" + choice + "' /> <span style='color: black'>" + choice + "</span><br />";
                   }
                 }
+                choicesTxt += "</div>";
                 html += tpl.choices.replace("{{choices}}", choicesTxt);
             }
 
             html += tpl.buttons.holder;
             html += "</article>";
 
-            if (type === "prompt") {
+            if ((type === "prompt") || (type === "choose")) {
                 html += "</form>";
             }
 
@@ -538,6 +542,7 @@ var Dialog = (function () {
             controls.cancel = Alertify.get("alertify-cancel") || undefined;
             controls.focus  = (dialog.buttonFocus === "cancel" && controls.cancel) ? controls.cancel : ((dialog.buttonFocus === "none") ? Alertify.get("alertify-noneFocus") : controls.ok),
             controls.input  = Alertify.get("alertify-text")   || undefined;
+            controls.choices = Alertify.get("alertify-choices")   || undefined;
             controls.form   = Alertify.get("alertify-form")   || undefined;
 
             if (typeof item.placeholder === "string" && item.placeholder !== "") {

@@ -16,6 +16,8 @@
  *           title: The  title
  *           body: The message to the user
  *           yesno: (boolean) Whether to display an OK and Cancel option.
+ *           question: (boolean) Whether to ask for user text input
+ *           choices: (array) Whether to ask choose among a list of choices
  *
  */
 _CTSUI.Modal = function($, q, opts) {
@@ -39,6 +41,7 @@ _CTSUI.Modal.prototype.show = function() {
   var hasTitle = ('title' in this._opts);
   var hasBody = ('body' in this._opts);
   var yesno = (('yesno' in this._opts) && (this._opts.yesno));
+  var question = (('question' in this._opts) && (this._opts.question));
   var hasChoices = ('choices' in this._opts);
 
   var msg = null;
@@ -48,36 +51,47 @@ _CTSUI.Modal.prototype.show = function() {
   } else if ((! hasTitle) && (hasBody)) {
     msg = this._opts.body;
   } else if (hasTitle && hasBody) {
-    msg = "<h2>" + this._opts.title + "</h2><div>" + this._opts.body + "</div>";
+    msg = "<h2 style='color: black'>" + this._opts.title + "</h2><div style='color:black;'>" + this._opts.body + "</div>";
   } else {
     msg = "The programmer asked me to tell you something, but didn't tell me what to tell you!";
   }
 
-
-  if (choices) {
+  if (hasChoices) {
     var choices = {
       'choices': this._opts.choices
     };
+
     if ('default' in this._opts) {
       choices['default'] = this._opts['default'];
     }
-    Alertify.dialog.choose(msg, function(e) {
-      // TODO: e doesn't seem to hold proper information
-      if (e) {
-        deferred.resolve();
-      } else {
-        deferred.reject();
-      }
-    }, choices);
+    Alertify.dialog.choose(msg,
+        function(choice) {
+          if (choice == "") {
+            deferred.reject("Did not select");
+          } else {
+            deferred.resolve(choice);
+          }
+        }, function() {
+          deferred.reject("Canceled");
+        },
+        choices);
   } else if (yesno) {
-    Alertify.dialog.confirm(msg, function(e) {
-      console.log(e);
-      if (e) {
+    Alertify.dialog.confirm(msg,
+      function() {
         deferred.resolve();
-      } else {
+      }, function() {
         deferred.reject();
       }
-    });
+    );
+  } else if (question) {
+    Alertify.dialog.prompt(msg,
+      function(answer) {
+        deferred.resolve(answer);
+      },
+      function() {
+        deferred.reject();
+      }
+    );
   } else {
     Alertify.dialog.alert(msg, function() {
       deferred.resolve();
@@ -92,23 +106,5 @@ _CTSUI.Modal.prototype.cancel = function() {
     this._deferred.reject("Canceled");
     this._deferred = null;
     this._destroyUI();
-  }
-};
-
-/*
- * Factory
- *-----------------------------------------------------*/
-
-// TODO: Form-based stuff.
-_CTSUI.ModalFactory = {
-  YesNo: function($, q, title, question) {
-    return new _CTSUI.Modal($, q,
-        {'title': title,
-         'body': '<p>' + question + '</p>',
-         'buttons': [
-           {'label': 'Yes'},
-           {'label': 'No'}
-         ]}
-    );
   }
 };

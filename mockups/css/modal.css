@@ -28,13 +28,21 @@
   overflow: hidden;
   position: absolute; }
 
-.alertify-text {
+.alertify-text, .alertify-dialog-inner {
   margin-bottom: 15px;
   width: 100%;
-  font-size: 100%;
+  font-size: 14px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
+
+.alertify-dialog-inner p {
+  margin: 7px;
+}
+
+.alertify-dialog-inner div {
+  margin: 7px;
+}
 
 .alertify-button,
 .alertify-button:hover,
@@ -44,7 +52,7 @@
   text-decoration: none;
   border: none;
   line-height: 1.5;
-  font-size: 100%;
+  font-size: 14px;
   display: inline-block;
   cursor: pointer;
   margin-left: 5px; }
