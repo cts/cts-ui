@@ -12,99 +12,156 @@
  * Args:
  *  $    - jQuery (can be found at CTS.$ once CTS loads)
  *  q    - The Q library (can be found at CTS.Q once CTS loads)
- *  opts - The options for this modal dialogue. This has the components:
- *           title: The  title
- *           body: The message to the user
- *           yesno: (boolean) Whether to display an OK and Cancel option.
- *           question: (boolean) Whether to ask for user text input
- *           choices: (array) Whether to ask choose among a list of choices
- *
  */
-_CTSUI.Modal = function($, q, opts) {
+_CTSUI.Modal = function($, q) {
   this._$ = $;
   this._q = q;
   this._deferred = null;
-
-  // No defaults.
-  this._opts = opts || {};
-
 };
 
 /*
  * Public methods
  *-----------------------------------------------------*/
 
-_CTSUI.Modal.prototype.show = function() {
-  this._deferred = this._q.defer();
-  var deferred = this._deferred;
 
-  var hasTitle = ('title' in this._opts);
-  var hasBody = ('body' in this._opts);
-  var yesno = (('yesno' in this._opts) && (this._opts.yesno));
-  var question = (('question' in this._opts) && (this._opts.question));
-  var hasChoices = ('choices' in this._opts);
-
-  var msg = null;
-
-  if (hasTitle && (! hasBody)) {
-    msg = this._opts.title;
-  } else if ((! hasTitle) && (hasBody)) {
-    msg = this._opts.body;
-  } else if (hasTitle && hasBody) {
-    msg = "<h2 style='color: black'>" + this._opts.title + "</h2><div style='color:black;'>" + this._opts.body + "</div>";
-  } else {
-    msg = "The programmer asked me to tell you something, but didn't tell me what to tell you!";
-  }
-
-  if (hasChoices) {
-    var choices = {
-      'choices': this._opts.choices
-    };
-
-    if ('default' in this._opts) {
-      choices['default'] = this._opts['default'];
-    }
-    Alertify.dialog.choose(msg,
-        function(choice) {
-          if (choice == "") {
-            deferred.reject("Did not select");
-          } else {
-            deferred.resolve(choice);
-          }
-        }, function() {
-          deferred.reject("Canceled");
-        },
-        choices);
-  } else if (yesno) {
-    Alertify.dialog.confirm(msg,
-      function() {
-        deferred.resolve();
-      }, function() {
-        deferred.reject();
-      }
-    );
-  } else if (question) {
-    Alertify.dialog.prompt(msg,
-      function(answer) {
-        deferred.resolve(answer);
-      },
-      function() {
-        deferred.reject();
-      }
-    );
-  } else {
-    Alertify.dialog.alert(msg, function() {
+/**
+ * Presents an alert with OK button.
+ *
+ * Params:
+ *   title   - null, or the Title of the modal.
+ *   body    - null, or the body of the modal.
+ *
+ * Note: either the title or body must contain a non-empty string.
+ *
+ * Returns via promise:
+ *   When the "OK" button clicked
+ */
+_CTSUI.Modal.prototype.alert = function(title, body) {
+  var deferred = this._deferred = this._q.defer();
+  var content = this._makeContent(title, body);
+  Alertify.dialog.alert(content, function() {
       deferred.resolve();
-    });
-  }
+  });
+  return deferred.promise;
+};
 
-  return this._deferred.promise;
+/**
+ * Presents a dialog box with a yes/no answer buttons.
+ *
+ * Params:
+ *   title   - null, or the Title of the modal.
+ *   body    - null, or the body of the modal.
+ *
+ * Note: either the title or body must contain a non-empty string.
+ *
+ * Returns via promise:
+ *   If the "yes" option clicked.
+ * Rejects via promise:
+ *   If the "no" option clicked.
+ */
+_CTSUI.Modal.prototype.confirm = function(title, body) {
+  var deferred = this._deferred = this._q.defer();
+  var content = this._makeContent(title, body);
+  Alertify.dialog.confirm(content,
+    function() {
+      deferred.resolve();
+    }, function() {
+      deferred.reject("Canceled");
+    }
+  );
+  return deferred.promise;
+};
+
+/**
+ * Presents a question with text answer to be filled in.
+ *
+ * Params:
+ *   title   - null, or the Title of the modal.
+ *   body    - null, or the body of the modal.
+ *
+ * Note: either the title or body must contain a non-empty string.
+ *
+ * Returns via promise:
+ *   The selection.
+ * Rejects via promise:
+ *   "No input" if no data entered.
+ *   "Canceled" if the cancel button clicked.
+ */
+_CTSUI.Modal.prototype.prompt = function(title, body) {
+  var deferred = this._deferred = this._q.defer();
+  var content = this._makeContent(title, body);
+  Alertify.dialog.prompt(content,
+    function(answer) {
+      if (answer == "") {
+        deferred.reject("No input");
+      } else {
+        deferred.resolve(answer);
+      }
+    },
+    function() {
+      deferred.reject("Canceled");
+    }
+  );
+  return deferred.promise;
+};
+
+/**
+ * Presents a set of choices to the user as radio-button options.
+ *
+ * Params:
+ *   title   - null, or the Title of the modal.
+ *   body    - null, or the body of the modal.
+ *   choices - A list of strings that represent the choices
+ *
+ * Note: either the title or body must contain a non-empty string.
+ *
+ * Returns via promise:
+ *   The choice.
+ * Rejects via promise:
+ *   "No input" if no choice selected.
+ *   "Canceled" if the cancel button clicked.
+ */
+_CTSUI.Modal.prototype.select = function(title, body, choices) {
+  var deferred = this._deferred = this._q.defer();
+  var content = this._makeContent(title, body);
+  var alertify_choices = {'choices': choices};
+  Alertify.dialog.choose(content,
+    function(choice) {
+      if (choice == "") {
+        deferred.reject("No input");
+      } else {
+        deferred.resolve(choice);
+      }
+    }, function() {
+      deferred.reject("Canceled");
+    },
+    alertify_choices
+  );
+  return deferred.promise;
 };
 
 _CTSUI.Modal.prototype.cancel = function() {
   if (this._deferred != null) {
     this._deferred.reject("Canceled");
     this._deferred = null;
-    this._destroyUI();
   }
+};
+
+
+/*
+ * Helper methods
+ *-----------------------------------------------------*/
+
+/**
+ * Combines the optional title and body components of the message
+ */
+_CTSUI.Modal.prototype._makeContent = function(title, body) {
+  var msg = "";
+  if ((typeof title != 'undefined') && (title != null)) {
+    msg += '<h2 style="color: black;">' + title + '</h2>';
+  }
+  if ((typeof body != 'undefined') && (body != null)) {
+    msg += '<div style="color: black;">' + body + '</div>';
+  }
+  return msg;
 };
