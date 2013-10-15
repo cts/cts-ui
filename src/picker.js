@@ -27,7 +27,8 @@ _CTSUI.Picker = function($, q) {
     'SELECT': 13, // Enter
     'QUIT': 27, // Esc
     'MOUSE_MOVEMENT_GRANULARITY': 25, // Millisec
-    'UI_ID': 'cts-ui-picker-chrome'
+    'UI_ID': 'cts-ui-picker-chrome',
+    'UI_BORDER': 1
   };
 
   // This dictionary stores a copy of these methods with the scope
@@ -50,7 +51,7 @@ _CTSUI.Picker = function($, q) {
     position: 'absolute',
     zIndex: 65000,
     background: 'rgba(255, 0, 0, 0.3)',
-    border: '1px solid red'
+    border: this.CONST.UI_BORDER + 'px solid red'
   });
 
 };
@@ -131,8 +132,8 @@ _CTSUI.Picker.prototype._select = function($elem) {
 
   var newCss = {
     position: 'absolute',
-    width: ($elem.outerWidth() - 1) + 'px',
-    height: ($elem.outerHeight() - 1) + 'px',
+    width: ($elem.outerWidth() - (this.CONST.UI_BORDER * 2)) + 'px',
+    height: ($elem.outerHeight() - (this.CONST.UI_BORDER * 2)) + 'px',
     left: $elem.offset().left + 'px',
     top: $elem.offset().top + 'px'
   };
@@ -174,7 +175,7 @@ _CTSUI.Picker.prototype._keyDown = function(event) {
       this._complete();
       break;
     case this.CONST.QUIT:
-      this._cancel("Pressed Esc");
+      this.cancel("Pressed Esc");
       break;
   }
   this._swallowEvent(event);

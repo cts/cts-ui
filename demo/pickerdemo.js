@@ -1,5 +1,5 @@
 CTS.status.libraryLoaded.then(function() {
-  alert("Type pickerDemo() into the console to run demo.");
+  pickerDemo();
 });
 
 var pickerDemo = function() {
@@ -7,15 +7,16 @@ var pickerDemo = function() {
   alert("Select an element with the mouse");
 
   _CTSUI.picker = new _CTSUI.Picker(CTS.$, CTS.Q);
+  CTS.$('body').focus();
 
   var promise = _CTSUI.picker.pick();
 
   promise.then(
     function(element) {
-      console.log("You picked an element:", element);
+      alert("You picked an element: " + element.html());
     },
     function(reason) {
-      console.log("You canceled the picking", reason);
+      alert("You canceled the picking: " + reason);
     }
   );
 
