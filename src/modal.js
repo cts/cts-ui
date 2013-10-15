@@ -62,6 +62,7 @@ _CTSUI.Modal.prototype.show = function() {
       choices['default'] = this._opts['default'];
     }
     Alertify.dialog.choose(msg, function(e) {
+      // TODO: e doesn't seem to hold proper information
       if (e) {
         deferred.resolve();
       } else {
