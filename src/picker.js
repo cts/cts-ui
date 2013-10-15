@@ -54,6 +54,9 @@ _CTSUI.Picker = function($, q) {
     border: this.CONST.UI_BORDER + 'px solid red'
   });
 
+  // Options for the current picking action
+  this._currentOpts = {};
+
 };
 
 /*
@@ -71,6 +74,8 @@ _CTSUI.Picker.prototype.isPickInProgress = function() {
  * Returns a promise to pick something.
  */
 _CTSUI.Picker.prototype.pick = function(opts) {
+  this._currentOpts = opts;
+
   if (this.isPickInProgress()) {
     this.cancel("New pick initiated.");
   }
@@ -88,6 +93,7 @@ _CTSUI.Picker.prototype.cancel = function(reason) {
     this._deferred.reject(reason);
     this._deferred = null;
     this._$selected = null
+    this._currentOpts = {};
   }
 };
 
@@ -144,6 +150,14 @@ _CTSUI.Picker.prototype._select = function($elem) {
 }
 
 /*
+ * Clears current selection.
+ */
+_CTSUI.Picker.prototype._deselect = function() {
+  this._$selected = null;
+  this._$ui.hide();
+};
+
+/*
  * Listeners
  *-----------------------------------------------------*/
 
@@ -153,23 +167,53 @@ _CTSUI.Picker.prototype._keyDown = function(event) {
     return;
   }
   this._isKeyDown = true;
+  var candidate = null;
+
+  var firstChild = function($e) {
+    var kids = $e.children();
+    var toSelect = null;
+    if (kids.length > 0) {
+      toSelect = this._$(kids[0]);
+    }
+    return toSelect;
+  };
+
   switch (event.which) {
     case this.CONST.PREV:
-      this._select(this._$selected.prev());
+      candidate = this._$selected.prev();
+      while ((candidate.length > 0) && (! this._canSelect(candidate)) && (this._canSelect(candidate))) {
+        candidate = candidate.prev();
+      }
+      if ((candidate != null) && (candidate.length > 0)) {
+        this._select(candidate);
+      }
       break;
     case this.CONST.NEXT:
-      this._select(this._$selected.next());
+      candidate = this._$selected.next();
+      while ((candidate.length > 0) && (! this._canSelect(candidate))) {
+        candidate = candidate.next();
+      }
+      if ((candidate != null) && (candidate.length > 0) && (this._canSelect(candidate))) {
+        this._select(candidate);
+      }
       break;
     case this.CONST.PARENT:
-      this._select(this._$selected.parent());
+      candidate = this._$selected.parent();
+      while ((candidate.length > 0) && (candidate[0] != document.body) && (! this._canSelect(candidate))) {
+        candidate = candidate.parent();
+      }
+      if ((candidate.length > 0) && (this._canSelect(candidate))) {
+        this._select(candidate);
+      }
       break;
     case this.CONST.CHILD:
-      var kids = this._$selected.children();
-      var toSelect = null;
-      if (kids.length > 0) {
-        toSelect = this._$(kids[0]);
+      candidate = firstChild(this._$selected);
+      while ((candidate != null) && (! this._canSelect(candidate))) {
+        candidate = firstChild(candidate);
       }
-      this._select(toSelect);
+      if ((candidate != null) && (this._canSelect(candidate))) {
+        this._select(toSelect);
+      }
       break;
     case this.CONST.SELECT:
       this._complete();
@@ -205,8 +249,20 @@ _CTSUI.Picker.prototype._mouseMove = function(event) {
     element = document.elementFromPoint(event.clientX, event.clientY);
   }
 
-  element = this._$(element);
-  this._select(element);
+  $element = this._$(element);
+  
+  if (this._canSelect($element)) {
+    this._select($element);
+  } else {
+    while (($element.length > 0) && ($element[0] != document.body) && (! this._canSelect($element))) {
+      $element = $element.parent();
+    }
+    if (this._canSelect($element)) {
+      this._select($element);
+    } else {
+      this._deselect();
+    }
+  }
 };
 
 _CTSUI.Picker.prototype._click = function(event) {
@@ -223,6 +279,7 @@ _CTSUI.Picker.prototype._complete= function(reason) {
     this._deferred.resolve(this._$selected);
     this._deferred = null;
     this._$selected = null;
+    this._currentOpts = {};
   }
 };
 
@@ -230,10 +287,32 @@ _CTSUI.Picker.prototype._complete= function(reason) {
  * Utility methods (General)
  *-----------------------------------------------------*/
 
+/**
+ * Returns whether the picker is able to select the jQuery element $e
+ * according to the 'restrict' mode in the current options.
+ *
+ * Valid modes:
+ *   text: Only permit editing childless nodes
+ *   css: Only permit editing nodes with calss `css-class`
+ *
+ * Planned modes:
+ *   cts-value: Only permit editing cts-value nodes
+ * 
+ */
+_CTSUI.Picker.prototype._canSelect = function($e) {
+  if (this._currentOpts.restrict == 'text') {
+    return ($e.children().length == 0)
+  } else if (this._currentOpts.restrict == 'css') {
+    if ('restrict-class' in this._currentOpts) {
+      return $e.hasClass(this._currentOpts['restrict-class']);
+    }
+  } else {
+    return true;
+  }
+};
+
 _CTSUI.Picker.prototype._swallowEvent = function(e) {
   e.preventDefault();
   e.stopPropagation();
 };
-
-
 
