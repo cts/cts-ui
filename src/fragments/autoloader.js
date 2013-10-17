@@ -13,7 +13,9 @@ _CTSUI.autoload = function() {
       CTS.UI = _CTSUI;
       // Now we have to wait for $ to load
       CTS.status.defaultTreeReady.then(function() {
-        CTS.UI.load();
+        CTS.engine.booted.then(function() {
+          CTS.UI.load();
+        });
       });
     };
     document.getElementsByTagName('head')[0].appendChild(s);
