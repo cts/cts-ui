@@ -74,7 +74,7 @@ _CTSUI.Picker.prototype.isPickInProgress = function() {
  * Returns a promise to pick something.
  */
 _CTSUI.Picker.prototype.pick = function(opts) {
-  this._currentOpts = opts;
+  this._currentOpts = opts || {};
 
   if (this.isPickInProgress()) {
     this.cancel("New pick initiated.");
@@ -300,11 +300,15 @@ _CTSUI.Picker.prototype._complete= function(reason) {
  * 
  */
 _CTSUI.Picker.prototype._canSelect = function($e) {
-  if (this._currentOpts.restrict == 'text') {
-    return ($e.children().length == 0)
-  } else if (this._currentOpts.restrict == 'css') {
-    if ('restrict-class' in this._currentOpts) {
-      return $e.hasClass(this._currentOpts['restrict-class']);
+  if ('restrict' in this._currentOpts) {
+    if (this._currentOpts.restrict == 'text') {
+      return ($e.children().length == 0)
+    } else if (this._currentOpts.restrict == 'css') {
+      if ('restrict-class' in this._currentOpts) {
+        return $e.hasClass(this._currentOpts['restrict-class']);
+      }
+    } else {
+      return true;
     }
   } else {
     return true;
