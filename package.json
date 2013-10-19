@@ -18,10 +18,12 @@
     "email": "eob@csail.mit.edu",
     "url": "http://www.edwardbenson.com/"
   },
-  "contributors": [{
-    "name": "Jessica Andersen",
-    "email": "jessmand@mit.edu"
-  }],
+  "contributors": [
+    {
+      "name": "Jessica Andersen",
+      "email": "jessmand@mit.edu"
+    }
+  ],
   "bugs": {
     "email": "eob@csail.mit.edu",
     "url": "https://github.com/cts/cts-ui/issues"
@@ -38,8 +40,7 @@
       "url": "http://github.com/cts/cts-ui.git"
     }
   ],
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "grunt": "*",
     "grunt-contrib-jshint": "~0.1.1",
@@ -48,7 +49,8 @@
     "grunt-contrib-qunit": "*",
     "grunt-contrib-concat": "*",
     "grunt-contrib-watch": "*",
-    "grunt-web-server": "*"
+    "grunt-web-server": "*",
+    "grunt-contrib-less": "~0.7.0"
   },
   "engines": {
     "node": ">=0.1.9"
@@ -57,4 +59,3 @@
     "lib": "./lib"
   }
 }
-

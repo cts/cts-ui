@@ -37,6 +37,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-web-server');
+  grunt.loadNpmTasks('grunt-contrib-less');
 
   // Project configuration.
   grunt.initConfig({
@@ -87,16 +88,43 @@ module.exports = function(grunt) {
       scripts: {
         files: "<config:lint.files>",
         tasks: "default"
+      },
+      less: {
+        files: "mockups/less/*",
+        tasks: ["less"]
       }
     },
     jshint: {
       options: {
         browser: true
       }
+    },
+    less: {
+      development: {
+        options: {
+          paths: ["mockups/css"]
+        },
+        files: {
+          "mockups/css/theminator.css": "mockups/less/theminator.less",
+          "mockups/css/tray.css": "mockups/less/tray.less"
+        }
+      },
+      production: {
+        options: {
+          paths: ["mocksups/css"],
+          yuicompress: true
+        },
+        files: {
+          "mockups/css/theminator.css": "mockups/less/theminator.less",
+          "mockups/css/tray.css": "mockups/less/tray.less"
+        }
+      }
     }
   });
   grunt.registerTask('default', [
     'jshint',
-    'concat']);
+    'concat',
+    'less:production'
+  ]);
 };
 

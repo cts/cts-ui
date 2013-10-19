@@ -60,3 +60,27 @@ Code Notes
 This code makes use of some other excellent open source libraries:
 
 *  **Alertify**, by Fabien Doiron (http://fabien-d.github.io/alertify.js/)
+
+### Changing LESS
+
+To automatically compile LESS to CSS:
+
+  ```
+  grunt watch less
+  ```
+
+To manually compile:
+
+  ```
+  grunt less:development
+  ```
+
+  or
+
+  ```
+  grunt less:production
+  ```
+
+This will compiled your less files into the /mockups/css directory.
+
+Note that you must add new less files to the Gruntfile.
