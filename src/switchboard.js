@@ -1,4 +1,10 @@
-_CTSUI.Switchboard = function($, q) {
+_CTSUI.Switchboard = function($, q, opts) {
+  this.opts = opts || {};
+
+  if (typeof this.opts.serverUrl == 'undefined') {
+    this.opts.serverUrl = _CTSUI.serverBase + _CTSUI.switchboardPath;
+  }
+
   this._q = q;
   this._$ = $;
   this._opQueue = [];
@@ -54,19 +60,17 @@ _CTSUI.Switchboard.prototype._flushComplete = function(success, msg, jqXHR, text
   }
 };
 
-
 _CTSUI.Switchboard.prototype._doFlush = function() {
   var self = this;
   this._$.ajax({
     type: "POST",
-    url: this.opts.serverSwitchboardUrl,
+    url: this.opts.serverUrl,
   }).done(function(message) {
     self._flushComplete(true, message, null, null);
   }).fail(function(jqXHR, textStatus) {
     self._flushComplete(false, null, jqXHR, textStatus);
   });
 };
-
 
 _CTSUI.Switchboard.prototype._maybeFlush = function() {
   // TODO: It would be nice to pool multiple operations together.
