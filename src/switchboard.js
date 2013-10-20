@@ -14,29 +14,35 @@ _CTSUI.Switchboard = function($, q, opts) {
 };
 
 _CTSUI.Switchboard.prototype.saveOperation = function(operation) {
+  console.log("Saving operation: ", operation)
   this._operationQueue.push(operation);
   return this._maybeFlush();
 };
 
-_CTSUI.Switchboard.prototype.flush = function(operation, cb) {
+_CTSUI.Switchboard.prototype.flush = function() {
+  console.log("Switchboard::flush");
   if (this._flushLock != null) {
+    console.log("Switchboard::flush -- Flush already in progress");
     // A flush is already in progress. 
     // So we'll return a promise for the *next* flush.
     if (this._flushAgain == null) {
+      console.log("Switchboard::flush -- Creating second flush to come after");
       this._flushAgain = this._q.defer();
     }
     return this._flushAgain.promise;
   } else {
     // No flush is in progress, so we'll perform one and return the promise to
     // finish it.
-    this._flushLock = this._q.defer);
-    var opsToSend = this._operationQueue.slice(0); // Clone the array
+    this._flushLock = this._q.defer();
+    this._opSending = this._operationQueue.slice(0); // Clone the array
+    console.log("Switchboard::flush -- No flush in progress: performing flush of " + opsToSend.length + " operations");
     this._doFlush();
     return this._flushLock.promise;
   }
 };
 
 _CTSUI.Switchboard.prototype._flushComplete = function(success, msg, jqXHR, textStatus) {
+  console.log("Switchboard::_flushComplete");
   // Rotate all the locks.
   var oldLock = this._flushLock;
   this._flushLock = this._flushAgain;
@@ -45,22 +51,26 @@ _CTSUI.Switchboard.prototype._flushComplete = function(success, msg, jqXHR, text
   // Now before we do anything, curate the queued operations.
   // If success, prune the ones send. Else, do nothing.
   if (success) {
+    console.log("Switchboard::_flushComplete -- Success!");
     this._opQueue = this._opQueue.slice(this._opSending.length);
     // TODO: Have a promise on each operation?
     this._opSending = null;
     oldLock.resolve();
   } else {
+    console.log("Switchboard::_flushComplete -- Fail");
     this._opSending = null;
     oldLock.reject();
   }
 
   // If other flushes were pending, do them now.
   if (this._flushLock != null) {
+    console.log("Switchboard::_flushComplete -- Doing flush again, since it was scheduled");
     this._doFlush();
   }
 };
 
 _CTSUI.Switchboard.prototype._doFlush = function() {
+  console.log("Switchboard::_doFlush");
   var self = this;
   this._$.ajax({
     type: "POST",
@@ -73,6 +83,7 @@ _CTSUI.Switchboard.prototype._doFlush = function() {
 };
 
 _CTSUI.Switchboard.prototype._maybeFlush = function() {
+  console.log("Switchboard::_maybeFlush");
   // TODO: It would be nice to pool multiple operations together.
   return this.flush();
 };
