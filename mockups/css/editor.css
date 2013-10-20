@@ -1,1 +1,7 @@
- 
+.cts-ui .cts-ui-tray .cts-ui-editor-page {
+    width:300px;
+    border-left:none;
+    height: 100%;
+    display: table;
+    background-color: red;
+}

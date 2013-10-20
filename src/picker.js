@@ -319,4 +319,3 @@ _CTSUI.Picker.prototype._swallowEvent = function(e) {
   e.preventDefault();
   e.stopPropagation();
 };
-

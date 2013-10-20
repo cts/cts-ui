@@ -33,20 +33,21 @@ _CTSUI.Tray.prototype.loadMockup = function() {
 };
 
 _CTSUI.Tray.prototype.setupMockup = function() {
-  console.log("setup mockup");
   var self = this;
   this._node = this._container.find('.cts-ui-tray');
   this._trayContentsNode = this._container.find('.cts-ui-tray-contents');
-  this._trayContentsNode.css("background-image",'url('+CTS.UI.Img.lightWool+')');
-    // Create the theminator
-  //this._editor = new CTS.UI.Editor(this, this._trayContentsNode);
-  this._theminator = new CTS.UI.Theminator(this, this._trayContentsNode);
-  this._pages.push(this._theminator);
-  //this._pages.push(this._editor);
+
+  //this._theminator = new CTS.UI.Theminator(this, this._trayContentsNode);
+  //this._pages.push(this._theminator);
+ 
+  this._editor = new CTS.UI.Editor(this, this._trayContentsNode);
+  this._pages.push(this._editor);
+
   this.updateSize();
   CTS.$(window).resize(function() {
     self.updateSize();
   });
+  
   this._node.find('.cts-ui-expand-tray-button').on('click', function() {
     self.toggle();
   });
@@ -71,7 +72,6 @@ _CTSUI.Tray.prototype.close = function() {
 };
 
 _CTSUI.Tray.prototype.toggle = function() {
-  console.log("toggle");
   if (this._node.hasClass("cts-ui-open")) {
     this.close();
     this._node.removeClass("cts-ui-open");
@@ -86,7 +86,6 @@ _CTSUI.Tray.prototype.toggle = function() {
 _CTSUI.Tray.prototype.updateSize = function() {
   // Set the height of the tray to the window size
   var windowHeight = CTS.$(window).height();
-  console.log("New window height:", windowHeight);
   this._node.height(windowHeight);
   for (var i = 0; i < this._pages.length; i++) {
     this._pages[i].updateSize(windowHeight);
