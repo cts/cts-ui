@@ -1,5 +1,6 @@
-_CTSUI.Switchboard = function(q) {
+_CTSUI.Switchboard = function($, q) {
   this._q = q;
+  this._$ = $;
   this._opQueue = [];
   this._opSending = null;
   this._flushLock = null; // Null or a promise.
@@ -29,13 +30,11 @@ _CTSUI.Switchboard.prototype.flush = function(operation, cb) {
   }
 };
 
-_CTSUI.Switchboard.prototype._flushComplete = function(operation) {
+_CTSUI.Switchboard.prototype._flushComplete = function(success, msg, jqXHR, textStatus) {
   // Rotate all the locks.
   var oldLock = this._flushLock;
   this._flushLock = this._flushAgain;
   this._flushAgain = null;
-
-  var success = false;
 
   // Now before we do anything, curate the queued operations.
   // If success, prune the ones send. Else, do nothing.
@@ -53,11 +52,19 @@ _CTSUI.Switchboard.prototype._flushComplete = function(operation) {
   if (this._flushLock != null) {
     this._doFlush();
   }
-  
 };
 
 
 _CTSUI.Switchboard.prototype._doFlush = function() {
+  var self = this;
+  this._$.ajax({
+    type: "POST",
+    url: this.opts.serverSwitchboardUrl,
+  }).done(function(message) {
+    self._flushComplete(true, message, null, null);
+  }).fail(function(jqXHR, textStatus) {
+    self._flushComplete(false, null, jqXHR, textStatus);
+  });
 };
 
 
