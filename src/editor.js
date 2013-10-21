@@ -36,9 +36,8 @@ _CTSUI.Editor.prototype.setupMockup = function() {
     self.duplicateClicked();
   });
 
-  this._duplicateButton.on('click', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
+  this._duplicateBtn.on('click', function(e) {
+    console.log("Duplicate Btn!");
     self.duplicateClicked();
   });
 
@@ -49,8 +48,20 @@ _CTSUI.Editor.prototype.setupMockup = function() {
  */
 
 _CTSUI.Editor.prototype.duplicateClicked = function() {
+  // Hit the CTS server with a request to duplicate this page, and then redirect.
+  this.duplicateFailed("Not yet implemented!");
 };
 
+_CTSUI.Editor.prototype.duplicateSuccess = function(urlOfDuplicate) {
+  window.location.replace(urlOfDuplicate);
+};
+
+_CTSUI.Editor.prototype.duplicateFailed = function(reason) {
+  var body = "<p>Terribly sorry, but I wasn't able to duplicate the page.</p>"
+    "<p>The error message my code generated was:</p>"
+    "<p>" + reason + "</p>";
+  CTS.UI.modal.alert("Oops...", body).then(function() {}, function() {});
+};
 
 /* EDIT
  * ====================================================================

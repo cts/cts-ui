@@ -27,6 +27,7 @@ _CTSUI.Tray.prototype.loadMockup = function() {
   var cts = "@html tray " + CTS.UI.Mockups.tray + ";";
   CTS.UI.Util.addCss(CTS.UI.CSS.tray);
   CTS.UI.Util.addCss(CTS.UI.CSS.bootstrap);
+  CTS.UI.Util.addCss(CTS.UI.CSS.modal);
   cts += "this :is tray | #cts-ui-tray;";
   this._container.attr("data-cts", cts);
   var self = this;

@@ -8,6 +8,7 @@ _CTSUI.Mockups = {
 _CTSUI.CSS = {
   tray: _CTSUI.mockupBase + "css/tray.css",
   editor: _CTSUI.mockupBase + "css/editor.css",
+  modal: _CTSUI.mockupBase + "css/modal.css",
   theminator: _CTSUI.mockupBase + "css/theminator.css",
   bootstrap: _CTSUI.mockupBase + "css/bootstrap/bootstrap.min.css"
 };
