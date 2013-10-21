@@ -20,8 +20,13 @@ _CTSUI.Tray = function() {
 
 _CTSUI.Tray.prototype.loadMockup = function() {
   this._container = CTS.$("<div class='cts-ui'></div>");
+  this._container.css({
+    zIndex: 64999// Important: more than the picker.
+  });
+
   var cts = "@html tray " + CTS.UI.Mockups.tray + ";";
   CTS.UI.Util.addCss(CTS.UI.CSS.tray);
+  CTS.UI.Util.addCss(CTS.UI.CSS.bootstrap);
   cts += "this :is tray | #cts-ui-tray;";
   this._container.attr("data-cts", cts);
   var self = this;
@@ -37,6 +42,14 @@ _CTSUI.Tray.prototype.setupMockup = function() {
   this._node = this._container.find('.cts-ui-tray');
   this._trayContentsNode = this._container.find('.cts-ui-tray-contents');
 
+  this._button = this._node.find('.cts-ui-expand-tray-button');
+  this._button.on('click', function() {
+    self.toggle();
+  });
+
+  this._buttonContainer = this._node.find('.cts-ui-expand-tray');
+  this._buttonContainer.css({ zIndex: 65000 });
+
   //this._theminator = new CTS.UI.Theminator(this, this._trayContentsNode);
   //this._pages.push(this._theminator);
  
@@ -48,10 +61,7 @@ _CTSUI.Tray.prototype.setupMockup = function() {
     self.updateSize();
   });
   
-  this._node.find('.cts-ui-expand-tray-button').on('click', function() {
-    self.toggle();
-  });
-
+  
 
 };
 

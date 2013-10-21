@@ -14,8 +14,7 @@ _CTSUI.Theminator = function(tray, trayContentsNode) {
 _CTSUI.Theminator.prototype.loadMockup = function() {
   this._container = CTS.$("<div class='cts-ui-page cts-ui-theminator-page'></div>");
   var cts = "@html theminator " + CTS.UI.Mockups.theminator+ ";";
-    CTS.UI.Util.addCss(CTS.UI.CSS.bootstrap);
-    CTS.UI.Util.addCss(CTS.UI.CSS.theminator);
+  CTS.UI.Util.addCss(CTS.UI.CSS.theminator);
   cts += "this :is theminator | #cts-ui-theminator;";
   this._container.attr("data-cts", cts);
   var self = this;

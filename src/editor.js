@@ -6,10 +6,8 @@ _CTSUI.Editor = function(tray, trayContentsNode) {
 
 _CTSUI.Editor.prototype.loadMockup = function() {
   this._container = CTS.$("<div class='cts-ui-page cts-ui-editor-page'></div>");
-  console.log(CTS.UI.Mockups.editor);
-  console.log(CTS.UI.CSS.editor);
   var cts = "@html editor " + CTS.UI.Mockups.editor + ";";
-  cts += "@css " + CTS.UI.CSS.editor + ";";
+  CTS.UI.Util.addCss(CTS.UI.CSS.editor);
   cts += "this :is editor | #cts-ui-editor;";
   this._container.attr("data-cts", cts);
   var self = this;
@@ -25,23 +23,60 @@ _CTSUI.Editor.prototype.setupMockup = function() {
  // this._node.height(whatever);
   this._node = this._container.find('.cts-ui-editor');
   this._editBtn = this._node.find('.cts-ui-edit-btn');
-  console.log(this._editBtn);
-  //this._editBtn.on('click', CTS.$.proxy(this.edit, this));
-  this._editBtn.on('click', EDIT);
+  this._duplicateBtn = this._node.find('.cts-ui-duplicate-btn');
+  var self = this;
+
+  /* Note: picker-related events have to stop propagation.  Otherwise the
+   * picker will load and catch the same mouseup event that initiated it in the
+   * first place!
+   */
+  this._editBtn.on('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    self.duplicateClicked();
+  });
+
+  this._duplicateButton.on('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    self.duplicateClicked();
+  });
+
 };
 
-_CTSUI.Editor.prototype.edit = function(evt) {
-  console.log("edit");
-  // Pick.
-  CTS.UI.picker.pick();
+/* DUPLICATE
+ * ====================================================================
+ */
+
+_CTSUI.Editor.prototype.duplicateClicked = function() {
 };
+
+
+/* EDIT
+ * ====================================================================
+ */
+
+_CTSUI.Editor.prototype.editClicked = function() {
+  CTS.UI.picker.pick({
+    ignoreCTSUI: true
+  });
+};
+
+_CTSUI.Editor.prototype.beginEdit = function($e) {
+  // TODO: Jessica
+};
+
+_CTSUI.Editor.prototype.cancelEdit = function($e) {
+  // TODO: Jessica
+};
+
+_CTSUI.Editor.prototype.completeEdit = function($e) {
+  // TODO: Jessica
+};
+
 
 _CTSUI.Editor.prototype.updateSize = function(height) {
   if (typeof this._container != undefined) {
     this._container.height(height);
   }
 };
-
-function EDIT() {
-  CTS.UI.tray._pages[0].edit();
-}
