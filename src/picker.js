@@ -136,12 +136,14 @@ _CTSUI.Picker.prototype._select = function($elem) {
     return;
   }
 
+  var bodyPos = $('body').position();
+
   var newCss = {
     position: 'absolute',
     width: ($elem.outerWidth() - (this.CONST.UI_BORDER * 2)) + 'px',
     height: ($elem.outerHeight() - (this.CONST.UI_BORDER * 2)) + 'px',
-    left: $elem.offset().left + 'px',
-    top: $elem.offset().top + 'px'
+    left: ($elem.offset().left - bodyPos.left) + 'px',
+    top: ($elem.offset().top - bodyPos.top) + 'px'
   };
 
   this._$ui.css(newCss);
