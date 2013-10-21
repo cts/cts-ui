@@ -45,11 +45,11 @@ _CTSUI.Picker = function($, q) {
   this._$selected = null;
 
   // The visual representation of the picker focus in the DOM
-  this._$ui = this._$('<div id="' + this.CONST.UI_ID + '"></div>');
+  this._$ui = this._$('<div id="' + this.CONST.UI_ID + '" class="cts-ignore"></div>');
   this._$ui.css({
     display: 'none',
     position: 'absolute',
-    zIndex: 65000,
+    zIndex: 60000,
     background: 'rgba(255, 0, 0, 0.3)',
     border: this.CONST.UI_BORDER + 'px solid red'
   });
@@ -102,22 +102,23 @@ _CTSUI.Picker.prototype.cancel = function(reason) {
  *-----------------------------------------------------*/
 
 _CTSUI.Picker.prototype._constructUI = function() {
-  this._$('body')
+  this._$(document)
     .on('keydown', this.CALLBACK.keydown)
     .on('keyup', this.CALLBACK.keyup)
     .on('mousemove', this.CALLBACK.mousemove)
     .on('click', this.CALLBACK.click);
 
+  var h1 = this._$('body').html();
   this._$('body').append(this._$ui);
+  var h2 = this._$('body').html();
 };
 
 _CTSUI.Picker.prototype._destroyUI = function() {
-  this._$('body')
+  this._$(document)
     .off('keydown', this.CALLBACK.keydown)
     .off('keyup', this.CALLBACK.keyup)
     .off('mousemove', this.CALLBACK.mousemove)
     .off('click', this.CALLBACK.click);
-
   this._$ui.remove();
 };
 
@@ -136,12 +137,14 @@ _CTSUI.Picker.prototype._select = function($elem) {
     return;
   }
 
+  var bodyPos = $('body').position();
+
   var newCss = {
     position: 'absolute',
     width: ($elem.outerWidth() - (this.CONST.UI_BORDER * 2)) + 'px',
     height: ($elem.outerHeight() - (this.CONST.UI_BORDER * 2)) + 'px',
-    left: $elem.offset().left + 'px',
-    top: $elem.offset().top + 'px'
+    left: ($elem.offset().left - bodyPos.left) + 'px',
+    top: ($elem.offset().top - bodyPos.top) + 'px'
   };
 
   this._$ui.css(newCss);
@@ -266,8 +269,10 @@ _CTSUI.Picker.prototype._mouseMove = function(event) {
 };
 
 _CTSUI.Picker.prototype._click = function(event) {
-  this._complete(this._$selected);
-  this._swallowEvent(event);
+  if (this._canSelect(this._$selected)) {
+    this._complete(this._$selected);
+    this._swallowEvent(event);
+  }
 };
 
 /*
@@ -300,23 +305,40 @@ _CTSUI.Picker.prototype._complete= function(reason) {
  * 
  */
 _CTSUI.Picker.prototype._canSelect = function($e) {
+  var passesRestriction = false;
+
   if ('restrict' in this._currentOpts) {
     if (this._currentOpts.restrict == 'text') {
-      return ($e.children().length == 0)
+      passesRestriction = ($e.children().length == 0);
     } else if (this._currentOpts.restrict == 'css') {
       if ('restrict-class' in this._currentOpts) {
-        return $e.hasClass(this._currentOpts['restrict-class']);
+        passesRestriction = $e.hasClass(this._currentOpts['restrict-class']);
       }
     } else {
-      return true;
+      passesRestriction = true;
     }
   } else {
-    return true;
+    passesRestriction = true;
   }
+
+  var passesIgnore = true;
+  if (('ignoreCTSUI' in this._currentOpts) && (this._currentOpts.ignoreCTSUI)) {
+    if ($e.is(CTS.UI.tray._container) || (CTS.UI.tray._container.find($e).length)) {
+      passesIgnore = false;
+    } else {
+      console.log(CTS.UI.tray._container.find($e), $e);
+      passesIgnore = true;
+    }
+  }
+
+  console.log(passesRestriction, passesIgnore);
+
+  var passes = (passesRestriction && passesIgnore);
+  console.log(passes);
+  return passes;
 };
 
 _CTSUI.Picker.prototype._swallowEvent = function(e) {
   e.preventDefault();
   e.stopPropagation();
 };
-
