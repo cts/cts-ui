@@ -57,8 +57,8 @@ _CTSUI.Editor.prototype.duplicateSuccess = function(urlOfDuplicate) {
 };
 
 _CTSUI.Editor.prototype.duplicateFailed = function(reason) {
-  var body = "<p>Terribly sorry, but I wasn't able to duplicate the page.</p>"
-    "<p>The error message my code generated was:</p>"
+  var body = "<p><b>Terribly sorry, but I wasn't able to duplicate the page.</b></p>" +
+    "<p>The error message my code generated was:</p><br />" +
     "<p>" + reason + "</p>";
   CTS.UI.modal.alert("Oops...", body).then(function() {}, function() {});
 };
