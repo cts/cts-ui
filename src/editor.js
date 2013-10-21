@@ -26,7 +26,8 @@ _CTSUI.Editor.prototype.setupMockup = function() {
   this._node = this._container.find('.cts-ui-editor');
   this._editBtn = this._node.find('.cts-ui-edit-btn');
   console.log(this._editBtn);
-  this._editBtn.on('click', CTS.$.proxy(this.edit, this));
+  //this._editBtn.on('click', CTS.$.proxy(this.edit, this));
+  this._editBtn.on('click', EDIT);
 };
 
 _CTSUI.Editor.prototype.edit = function(evt) {
@@ -40,3 +41,7 @@ _CTSUI.Editor.prototype.updateSize = function(height) {
     this._container.height(height);
   }
 };
+
+function EDIT() {
+  CTS.UI.tray._pages[0].edit();
+}
