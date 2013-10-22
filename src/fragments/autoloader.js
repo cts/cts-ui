@@ -11,6 +11,7 @@ _CTSUI.autoload = function() {
     s.setAttribute('type', 'text/javascript');
 
     s.onload = function() {
+
       CTS.UI = _CTSUI;
       // Now we have to wait for $ to load
       CTS.status.defaultTreeReady.then(function() {
@@ -20,6 +21,8 @@ _CTSUI.autoload = function() {
       });
     };
     document.getElementsByTagName('head')[0].appendChild(s);
+
+    // TODO(Jessica): Inject the editor stuff.
   }
 };
 _CTSUI.autoload();
