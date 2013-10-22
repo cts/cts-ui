@@ -9,9 +9,10 @@ _CTSUI.Editor = function(tray, trayContentsNode) {
 
 _CTSUI.Editor.prototype.loadMockup = function() {
   this._container = CTS.$("<div class='cts-ui-page cts-ui-editor-page'></div>");
-  var cts = "@html editor " + CTS.UI.Mockups.editor+ ";";
-  cts += "@css " + CTS.UI.CSS.editor + ";";
-  cts += "this :is editor | #editor;";
+
+  var cts = "@html editor " + CTS.UI.Mockups.editor + ";";
+  CTS.UI.Util.addCss(CTS.UI.CSS.editor);
+  cts += "this :is editor | #cts-ui-editor;";
   this._container.attr("data-cts", cts);
   var self = this;
   this._container.on("cts-received-is", function(evt) {
@@ -25,20 +26,66 @@ _CTSUI.Editor.prototype.loadMockup = function() {
 _CTSUI.Editor.prototype.setupMockup = function() {
  // var whatever = this._node.height();
  // this._node.height(whatever);
-  console.log("setup mockup");
-  this.editor = this._container.find('.cts-ui-editor');
-  this.editor.find('.cts-ui-save-btn').on('click', CTS.$.proxy(this.toggleSave, this));
-  this.editor.find('.cts-ui-trigger-btn').on('click', CTS.$.proxy(this.triggerSave, this));
+
+  this._node = this._container.find('.cts-ui-editor');
+  this._editBtn = this._node.find('.cts-ui-edit-btn');
+  this._duplicateBtn = this._node.find('.cts-ui-duplicate-btn');
+  var self = this;
+
+  /* Note: picker-related events have to stop propagation.  Otherwise the
+   * picker will load and catch the same mouseup event that initiated it in the
+   * first place!
+   */
+  this._editBtn.on('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    self.duplicateClicked();
+  });
+
+  this._duplicateButton.on('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    self.duplicateClicked();
+  });
+
 };
 
-_CTSUI.Editor.prototype.toggleSave = function(saveButton) {
-    if (saveButton.hasClass("active")) {
-        this.editing = false;
-        saveButton.removeClass("active");
-    } else {
-        this.editing = true;
-        saveButton.addClass("active");
-    }
+/* DUPLICATE
+ * ====================================================================
+ */
+
+_CTSUI.Editor.prototype.duplicateClicked = function() {
+};
+
+
+/* EDIT
+ * ====================================================================
+ */
+
+_CTSUI.Editor.prototype.editClicked = function() {
+  CTS.UI.picker.pick({
+    ignoreCTSUI: true
+  });
+};
+
+_CTSUI.Editor.prototype.beginEdit = function($e) {
+  // TODO: Jessica
+};
+
+_CTSUI.Editor.prototype.cancelEdit = function($e) {
+  // TODO: Jessica
+};
+
+_CTSUI.Editor.prototype.completeEdit = function($e) {
+  // TODO: Jessica
+};
+
+
+_CTSUI.Editor.prototype.updateSize = function(height) {
+  if (typeof this._container != undefined) {
+    this._container.height(height);
+  }
+
 };
 
 _CTSUI.Editor.prototype.triggerSave = function(content) {

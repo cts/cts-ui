@@ -53,3 +53,10 @@ testing CTS-UI on and click the Bookmarklet link again, you should load the new
 version.
 
 Note that sometimes you have to clear your browser history.
+
+Code Notes
+----------
+
+This code makes use of some other excellent open source libraries:
+
+*  **Alertify**, by Fabien Doiron (http://fabien-d.github.io/alertify.js/)
