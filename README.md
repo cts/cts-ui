@@ -60,3 +60,10 @@ Code Notes
 This code makes use of some other excellent open source libraries:
 
 *  **Alertify**, by Fabien Doiron (http://fabien-d.github.io/alertify.js/)
+
+
+Why did the chicken cross the road?
+-----------------------------------
+
+To get to the other side!
+
