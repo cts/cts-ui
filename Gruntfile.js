@@ -16,15 +16,19 @@ sourcelist = [
   "src/fragments/autoloader.js"
 ];
 
+var johnSourceList = sourcelist.slice(0);
 var devSourceList = sourcelist.slice(0);
 var prodSourceList = sourcelist.slice(0);
 
+johnSourceList.unshift('src/fragments/john/constants.js');
 devSourceList.unshift('src/fragments/development/constants.js');
 prodSourceList.unshift('src/fragments/production/constants.js');
 
+johnSourceList.unshift('<banner>');
 devSourceList.unshift('<banner>');
 prodSourceList.unshift('<banner>');
 
+johnSourceOut = 'release/cts-ui.john.js';
 devSourceOut = 'release/cts-ui.dev.js';
 prodSourceOut = 'release/cts-ui.js';
 
@@ -59,6 +63,10 @@ module.exports = function(grunt) {
       prod: {
         src : prodSourceList,
         dest : prodSourceOut
+      },
+      john: {
+        src : johnSourceList,
+        dest : johnSourceOut
       }
     },
     web_server: {
@@ -88,7 +96,6 @@ module.exports = function(grunt) {
       }
     }
   });
-
   grunt.registerTask('default', [
     'jshint',
     'concat']);

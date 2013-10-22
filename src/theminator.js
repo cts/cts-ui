@@ -20,6 +20,7 @@ _CTSUI.Theminator.prototype.loadMockup = function() {
   this._container.attr("data-cts", cts);
   var self = this;
   this._container.on("cts-received-is", function(evt) {
+      console.log("RECEIVED!!!!");
     self.setupMockup()
     evt.stopPropagation();
   });

@@ -11,18 +11,20 @@ one to rebuild the project when you make a change to the code.
 1. First checkout cts-js (github.com/cts/cts-js) and run the development server
    in that projet (port 9000):
 
-    ```
-    npm install (first time only)
-    grunt web_server
-    ```
+     ```
+     npm install (first time only)
+     grunt (per new release)
+     grunt web_server
+     ```
 
 2. Then, in this project, (github.com/cts/cts-ui), run the development server
    on (port 8000):
 
-    ```
-    npm install (first time only)
-    grunt web_server
-    ```
+     ```
+     npm install (first time only)
+     grunt (per new release)
+     grunt web_server
+     ```
 
 ### Getting the bookmarklet link
 

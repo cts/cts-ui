@@ -40,10 +40,10 @@ _CTSUI.Tray.prototype.setupMockup = function() {
   this._trayContentsNode.css("background-image",'url('+CTS.UI.Img.lightWool+')');
     // Create the theminator
   //this._editor = new CTS.UI.Editor(this, this._trayContentsNode);
-  //this._theminator = new CTS.UI.Theminator(this, this._trayContentsNode);
-  //this._pages.push(this._theminator);
-  this._editor = new CTS.UI.Editor(this, this._trayContentsNode);
-  this._pages.push(this._editor);
+  this._theminator = new CTS.UI.Theminator(this, this._trayContentsNode);
+  this._pages.push(this._theminator);
+  //this._editor = new CTS.UI.Editor(this, this._trayContentsNode);
+  //this._pages.push(this._editor);
   this.updateSize();
   CTS.$(window).resize(function() {
     self.updateSize();
