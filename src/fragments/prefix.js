@@ -1,5 +1,4 @@
 
-
 _CTSUI.Mockups = {
   tray: _CTSUI.mockupBase + "tray.html",
   editor: _CTSUI.mockupBase + "editor.html",
@@ -8,7 +7,7 @@ _CTSUI.Mockups = {
 };
 
 _CTSUI.CSS = {
-  tray: _CTSUI.mockupBaseLocal + "css/tray.css",
+  tray: _CTSUI.mockupBase + "css/tray.css",
   editor: _CTSUI.mockupBase + "css/editor.css",
   modal: _CTSUI.mockupBase + "css/modal.css",
   theminator: _CTSUI.mockupBase + "css/theminator.css",
