@@ -19,6 +19,7 @@ _CTSUI.Theminator.prototype.loadMockup = function() {
   this._container.attr("data-cts", cts);
   var self = this;
   this._container.on("cts-received-is", function(evt) {
+      console.log("RECEIVED!!!!");
     self.setupMockup()
     evt.stopPropagation();
   });
@@ -82,7 +83,7 @@ _CTSUI.Theminator.prototype.loadContent = function() {
 
 _CTSUI.Theminator.prototype.displayThemeThumbnail = function(theme, themeData) {
     this.theminator.find('.cts-ui-templates-container').append(
-        '<div class="cts-ui-screenshot-thumbnail cts-ui-effeckt-caption cts-ui-effeckt-caption-2" data-theme="'+theme+'">'+
+        '<div class="cts-ui-screenshot-thumbnail cts-ui-effeckt-caption cts-ui-effeckt-caption-2" data-theme="'+this.fixForObject(theme)+'">'+
             '<img class="cts-ui-screenshot" src="'+themeData.screenshot+'">'+
             '<div class="cts-ui-screenshot-options">'+
                 '<div class="cts-ui-btn-group">'+
@@ -90,7 +91,7 @@ _CTSUI.Theminator.prototype.displayThemeThumbnail = function(theme, themeData) {
                     '<button class="cts-ui-btn">Install</button>'+
                 '</div>'+
             '</div>'+
-            '<a class="cts-ui-add-to-favorites"><img class="cts-ui-not-favorite" src="' + _CTSUI.Img.emptyStar + '"></a>'+
+            '<a class="cts-ui-add-to-favorites"><img class="cts-ui-not-favorite" src="'+CTS.UI.Img.emptyStar+'"></a>'+
             '<figcaption>'+
                 '<div class="cts-ui-effeckt-figcaption-wrap">'+
                     '<span class="cts-ui-theme-title">'+this.prettify(theme)+'</span>'+
@@ -111,6 +112,10 @@ _CTSUI.Theminator.prototype.prettify = function(str) {
         stringArray[w] = stringArray[w].charAt(0).toUpperCase() + stringArray[w].substring(1);
     }
     return stringArray.join(" ");
+}
+_CTSUI.Theminator.prototype.fixForObject = function(str) {
+    var stringArray = str.split(/[\s-]+/);
+    return stringArray.join("_");
 }
 
 _CTSUI.Theminator.prototype.paginate = function(themesObject) {
@@ -232,7 +237,7 @@ _CTSUI.Theminator.prototype.initiateThumbnailVisibilities = function(thumbnail) 
         }
     });
     if (this.favorites.indexOf(thumbnail.data("theme")) != -1) {
-        thumbnail.find(".cts-ui-add-to-favorites").html('<img class="cts-ui-favorite" src="http://localhost:8000/css/img/star.png">');
+        thumbnail.find(".cts-ui-add-to-favorites").html('<img class="cts-ui-favorite" src="'+CTS.UI.Img.star+'">');
         thumbnail.find(".cts-ui-add-to-favorites").show();
     }
 };
@@ -244,12 +249,12 @@ _CTSUI.Theminator.prototype.initiateScreenshotTints = function(screenshot) {
 _CTSUI.Theminator.prototype.initiateFavoritesEvents = function(favoriteButton) {
     favoriteButton.on('mouseenter', function() {
         if (CTS.$(this).find('img').hasClass('cts-ui-not-favorite')) {
-            CTS.$(this).html('<img class="cts-ui-hover-favorite" src="http://localhost:8000/css/img/transparent-star.png">');
+            CTS.$(this).html('<img class="cts-ui-hover-favorite" src="'+CTS.UI.Img.transparentStar+'">');
         }
     });
     favoriteButton.on('mouseleave', function() {
         if (CTS.$(this).find('img').hasClass('cts-ui-hover-favorite')) {
-            CTS.$(this).html('<img class="cts-ui-not-favorite" src="http://localhost:8000/css/img/empty-star.png">');
+            CTS.$(this).html('<img class="cts-ui-not-favorite" src="'+CTS.UI.Img.emptyStar+'">');
         }
     });
     var self = this;
@@ -261,10 +266,10 @@ _CTSUI.Theminator.prototype.initiateFavoritesEvents = function(favoriteButton) {
 _CTSUI.Theminator.prototype.toggleFavorite = function(favoriteButton) {
     
     if (favoriteButton.find('img').hasClass('cts-ui-hover-favorite')) {
-        favoriteButton.html('<img class="cts-ui-favorite" src="http://localhost:8000/css/img/star.png">');
+        favoriteButton.html('<img class="cts-ui-favorite" src="'+CTS.UI.Img.star+'">');
         this.favorites.push(favoriteButton.parents('.cts-ui-screenshot-thumbnail').data("theme"));
     } else if (favoriteButton.find('img').hasClass('cts-ui-favorite')) {
-        favoriteButton.html('<img class="cts-ui-hover-favorite" src="http://localhost:8000/css/img/transparent-star.png">');
+        favoriteButton.html('<img class="cts-ui-hover-favorite" src="'+CTS.UI.Img.transparentStar+'">');
         this.favorites.splice(this.favorites.indexOf(favoriteButton.parents('.cts-ui-screenshot-thumbnail').data("theme")),1);
         
     }

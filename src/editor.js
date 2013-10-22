@@ -1,11 +1,15 @@
 _CTSUI.Editor = function(tray, trayContentsNode) {
   this._tray = tray; // A Javascript object
   this._trayContentsNode = trayContentsNode;
+  this._container = null;
+  this._node = null;
+  this.editing = false;
   this.loadMockup();
 };
 
 _CTSUI.Editor.prototype.loadMockup = function() {
   this._container = CTS.$("<div class='cts-ui-page cts-ui-editor-page'></div>");
+
   var cts = "@html editor " + CTS.UI.Mockups.editor + ";";
   CTS.UI.Util.addCss(CTS.UI.CSS.editor);
   cts += "this :is editor | #cts-ui-editor;";
@@ -16,11 +20,13 @@ _CTSUI.Editor.prototype.loadMockup = function() {
     evt.stopPropagation();
   });
   this._container.appendTo(this._trayContentsNode);
+    
 };
 
 _CTSUI.Editor.prototype.setupMockup = function() {
  // var whatever = this._node.height();
  // this._node.height(whatever);
+
   this._node = this._container.find('.cts-ui-editor');
   this._editBtn = this._node.find('.cts-ui-edit-btn');
   this._duplicateBtn = this._node.find('.cts-ui-duplicate-btn');
@@ -90,4 +96,9 @@ _CTSUI.Editor.prototype.updateSize = function(height) {
   if (typeof this._container != undefined) {
     this._container.height(height);
   }
+
 };
+
+_CTSUI.Editor.prototype.triggerSave = function(content) {
+    this.saveDialog = new CTS.UI.SaveDialog(content);
+}

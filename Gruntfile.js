@@ -15,6 +15,7 @@ sourcelist = [
   "src/theminator.js",
   "src/editor.js",
   "src/theme.js",
+  "src/saveDialog.js",
   "src/fragments/postfix.js",  
   "src/fragments/autoloader.js"
 ];
