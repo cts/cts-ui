@@ -15,11 +15,11 @@ _CTSUI.Editor.prototype.loadMockup = function() {
   cts += "this :is editor | #cts-ui-editor;";
   this._container.attr("data-cts", cts);
   var self = this;
+  this._container.appendTo(this._trayContentsNode);
   this._container.on("cts-received-is", function(evt) {
     self.setupMockup()
     evt.stopPropagation();
   });
-  this._container.appendTo(this._trayContentsNode);
     
 };
 
@@ -29,6 +29,7 @@ _CTSUI.Editor.prototype.setupMockup = function() {
 
   this._node = this._container.find('.cts-ui-editor');
   this._editBtn = this._node.find('.cts-ui-edit-btn');
+  console.log("Setup mockup called", this._editBtn);
   this._duplicateBtn = this._node.find('.cts-ui-duplicate-btn');
   var self = this;
 
@@ -39,12 +40,11 @@ _CTSUI.Editor.prototype.setupMockup = function() {
   this._editBtn.on('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
-    self.duplicateClicked();
+    self.editClicked();
   });
 
-  this._duplicateButton.on('click', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
+  this._duplicateBtn.on('click', function(e) {
+    console.log("Duplicate Btn!");
     self.duplicateClicked();
   });
 
@@ -55,17 +55,40 @@ _CTSUI.Editor.prototype.setupMockup = function() {
  */
 
 _CTSUI.Editor.prototype.duplicateClicked = function() {
+  // Hit the CTS server with a request to duplicate this page, and then redirect.
+  this.duplicateFailed("Not yet implemented!");
 };
 
+_CTSUI.Editor.prototype.duplicateSuccess = function(urlOfDuplicate) {
+  window.location.replace(urlOfDuplicate);
+};
+
+_CTSUI.Editor.prototype.duplicateFailed = function(reason) {
+  var body = "<p><b>Terribly sorry, but I wasn't able to duplicate the page.</b></p>" +
+    "<p>The error message my code generated was:</p><br />" +
+    "<p>" + reason + "</p>";
+  CTS.UI.modal.alert("Oops...", body).then(function() {}, function() {});
+};
 
 /* EDIT
  * ====================================================================
  */
 
 _CTSUI.Editor.prototype.editClicked = function() {
-  CTS.UI.picker.pick({
+  console.log("Edit clicked");
+  var pickPromise = CTS.UI.picker.pick({
     ignoreCTSUI: true
   });
+  var self = this;
+
+  pickPromise.then(
+    function(element) {
+      self.beginEdit(element);
+    },
+    function(errorReason) {
+      console.log("Edit canceled: ", errorReason);
+    }
+  );
 };
 
 _CTSUI.Editor.prototype.beginEdit = function($e) {
