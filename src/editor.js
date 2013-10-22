@@ -29,7 +29,7 @@ _CTSUI.Editor.prototype.setupMockup = function() {
 
   this._node = this._container.find('.cts-ui-editor');
   this._editBtn = this._node.find('.cts-ui-edit-btn');
-  this._duplicateBtn = this._node.find('.cts-ui-duplicate-btn');
+  //this._duplicateBtn = this._node.find('.cts-ui-duplicate-btn');
   var self = this;
 
   /* Note: picker-related events have to stop propagation.  Otherwise the
@@ -42,10 +42,10 @@ _CTSUI.Editor.prototype.setupMockup = function() {
     self.duplicateClicked();
   });
 
-  this._duplicateBtn.on('click', function(e) {
-    console.log("Duplicate Btn!");
-    self.duplicateClicked();
-  });
+//  this._duplicateBtn.on('click', function(e) {
+//    console.log("Duplicate Btn!");
+//    self.duplicateClicked();
+//  });
 
 };
 

@@ -1,11 +1,5 @@
 
 
-_CTSUI.mockupBase = "http://treesheets.csail.mit.edu/mockups/cts-ui/";
-_CTSUI.themeBase = "http://treesheets.csail.mit.edu/mockups/blog/";
-_CTSUI.mockupBaseLocal = "http://localhost:8000/mockups/";
-//_CTSUI.mockupBase = "http://localhost:8000/mockups/";
-//_CTSUI.themeBase = "http://localhost:4000/mockups/";
-
 _CTSUI.Mockups = {
   tray: _CTSUI.mockupBase + "tray.html",
   editor: _CTSUI.mockupBase + "editor.html",
