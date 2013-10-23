@@ -54,13 +54,6 @@ version.
 
 Note that sometimes you have to clear your browser history.
 
-Code Notes
-----------
-
-This code makes use of some other excellent open source libraries:
-
-*  **Alertify**, by Fabien Doiron (http://fabien-d.github.io/alertify.js/)
-
 ### Changing LESS
 
 To automatically compile LESS to CSS:
@@ -84,3 +77,16 @@ To manually compile:
 This will compiled your less files into the /mockups/css directory.
 
 Note that you must add new less files to the Gruntfile.
+
+Code Notes
+----------
+
+This code makes use of some other excellent open source libraries:
+
+*  **Alertify**, by Fabien Doiron (http://fabien-d.github.io/alertify.js/)
+
+
+Why did the chicken cross the road?
+-----------------------------------
+
+To get to the other side!

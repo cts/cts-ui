@@ -6,11 +6,16 @@
 sourcelist = [
   "src/fragments/prefix.js",
   "src/utilities.js",
+  "src/lib/alertify.js",
+  "src/switchboard.js",
   "src/tray.js",
   "src/picker.js",
+  "src/modal.js",
   "src/clipboard.js",
   "src/theminator.js",
+  "src/editor.js",
   "src/theme.js",
+  "src/saveDialog.js",
   "src/fragments/postfix.js",  
   "src/fragments/autoloader.js"
 ];

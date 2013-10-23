@@ -1,1 +1,15 @@
- 
+.cts-ui .cts-ui-tray .cts-ui-editor-page {
+    border-left:none;
+    height: 100%;
+    display: table;
+    padding: 10px;
+    background: white;
+}
+
+.cts-ui-editor {
+  padding: 15px;
+}
+
+.cts-ui-editor h3 {
+  border-bottom: 3px solid grey;
+}
