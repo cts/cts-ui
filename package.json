@@ -18,10 +18,17 @@
     "email": "eob@csail.mit.edu",
     "url": "http://www.edwardbenson.com/"
   },
-  "contributors": [{
-    "name": "Jessica Andersen",
-    "email": "jessmand@mit.edu"
-  }],
+  "contributors": [
+    {
+      "name": "Jessica Andersen",
+      "email": "jessmand@mit.edu"
+    },
+    {
+      "name": "Oliver Song",
+      "email": "osong@mit.edu"
+    }
+
+  ],
   "bugs": {
     "email": "eob@csail.mit.edu",
     "url": "https://github.com/cts/cts-ui/issues"
