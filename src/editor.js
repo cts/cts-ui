@@ -29,8 +29,9 @@ _CTSUI.Editor.prototype.setupMockup = function() {
 
   this._node = this._container.find('.cts-ui-editor');
   this._editBtn = this._node.find('.cts-ui-edit-btn');
-  console.log("Setup mockup called", this._editBtn);
   this._duplicateBtn = this._node.find('.cts-ui-duplicate-btn');
+  this._saveBtn = this._node.find('.cts-ui-save-btn');
+
   var self = this;
 
   /* Note: picker-related events have to stop propagation.  Otherwise the
@@ -44,10 +45,33 @@ _CTSUI.Editor.prototype.setupMockup = function() {
   });
 
   this._duplicateBtn.on('click', function(e) {
-    console.log("Duplicate Btn!");
     self.duplicateClicked();
   });
 
+  this._saveBtn.on('click', function(e) {
+    self.saveClicked();
+  });
+
+};
+
+
+/* SAVE
+ * ====================================================================
+ */
+
+_CTSUI.Editor.prototype.saveClicked = function() {
+  // Hit the CTS server with a request to duplicate this page, and then redirect.
+  var title = "Save your Changes";
+  var body = "How do you want to save?";
+  var options = ["Download HTML", "Download Complete Page"];
+  CTS.UI.modal.select(title, body, options).then(
+    this.saveChoiceMade,
+    function() {
+      console.log("Save canceled.");
+    });
+};
+
+_CTSUI.Editor.prototype.saveChoiceMade = function() {
 };
 
 /* DUPLICATE
