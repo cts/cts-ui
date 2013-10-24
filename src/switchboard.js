@@ -13,10 +13,12 @@ _CTSUI.Switchboard = function($, q, opts) {
   this._flushAgain = null; // Null or a promise
 };
 
-_CTSUI.Switchboard.prototype.saveOperation = function(operation) {
-  console.log("Saving operation: ", operation)
-  this._operationQueue.push(operation);
-  return this._maybeFlush();
+_CTSUI.Switchboard.prototype.recordOperation = function(operation) {
+  console.log("Saving operation: ", operation);
+  var tuple = [operation, this._q.defer()];
+  this._opQueue.push(tuple);
+  this._maybeFlush();
+  return tuple[1].promise;
 };
 
 _CTSUI.Switchboard.prototype.flush = function() {
@@ -34,8 +36,8 @@ _CTSUI.Switchboard.prototype.flush = function() {
     // No flush is in progress, so we'll perform one and return the promise to
     // finish it.
     this._flushLock = this._q.defer();
-    this._opSending = this._operationQueue.slice(0); // Clone the array
-    console.log("Switchboard::flush -- No flush in progress: performing flush of " + opsToSend.length + " operations");
+    this._opSending = this._opQueue.slice(0); // Clone the array
+    console.log("Switchboard::flush -- No flush in progress: performing flush of " + this._opSending.length + " operations");
     this._doFlush();
     return this._flushLock.promise;
   }
@@ -53,11 +55,18 @@ _CTSUI.Switchboard.prototype._flushComplete = function(success, msg, jqXHR, text
   if (success) {
     console.log("Switchboard::_flushComplete -- Success!");
     this._opQueue = this._opQueue.slice(this._opSending.length);
-    // TODO: Have a promise on each operation?
+    // Resolve all sending ops
+    var response = msg;
+    // TODO: Make sure the same number of ops were received.
+    // TODO: Before we flush, verify that we receive confirmation.
+    for (var i = 0; i < this._opSending.length; i++) {
+      var opResult = response[i];
+      this._opSending[i][1].resolve(opResult);
+    }
     this._opSending = null;
     oldLock.resolve();
   } else {
-    console.log("Switchboard::_flushComplete -- Fail");
+    console.log("Switchboard::_flushComplete -- Filed with message", msg);
     this._opSending = null;
     oldLock.reject();
   }
@@ -72,9 +81,21 @@ _CTSUI.Switchboard.prototype._flushComplete = function(success, msg, jqXHR, text
 _CTSUI.Switchboard.prototype._doFlush = function() {
   console.log("Switchboard::_doFlush");
   var self = this;
+
+  // Collet the operations to send.
+  var toSend = [];
+  for (var i = 0; i < this._opSending.length; i++) {
+    toSend.push(this._opSending[i][0]);
+  }
+
+  var data = JSON.stringify(toSend);
+  console.log("Posting data", data);
+
   this._$.ajax({
     type: "POST",
     url: this.opts.serverUrl,
+    data: data,
+    contentType:"application/json; charset=utf-8"
   }).done(function(message) {
     self._flushComplete(true, message, null, null);
   }).fail(function(jqXHR, textStatus) {

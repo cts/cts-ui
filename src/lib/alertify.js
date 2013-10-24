@@ -424,7 +424,7 @@ var Dialog = (function () {
             }
 
             if ((type === "prompt") || (type === "choose")) {
-                html += "<form id=\"alertify-form\">";
+                html += "<form id=\"alertify-form\" class=\"cts-ignore\">";
             }
 
             html += "<article class=\"alertify-inner\">";
@@ -434,7 +434,7 @@ var Dialog = (function () {
             }
 
             if (type === "choose") {
-                var choicesTxt = "<div id='alertify-choices' style='align: left'>";
+                var choicesTxt = "<div id='alertify-choices'>";
                 if ("choices" in item.placeholder) {
                   for (idx in item.placeholder.choices) {
                     var choice = item.placeholder.choices[idx];
