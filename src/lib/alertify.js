@@ -276,12 +276,12 @@ var Dialog = (function () {
             isOpen       = false,
             queue        = [],
             tpl          = {},
-            prefixEl     = Alertify._prefix + "-dialog cts-ignore",
-            prefixCover  = Alertify._prefix + "-cover cts-ignore",
+            prefixEl     = Alertify._prefix + "-dialog",
+            prefixCover  = Alertify._prefix + "-cover",
             clsElShow    = prefixEl + " is-" + prefixEl + "-showing",
             clsElHide    = prefixEl + " is-" + prefixEl + "-hidden",
-            clsCoverShow = prefixCover + " is-" + prefixCover + "-showing cts-ignore",
-            clsCoverHide = prefixCover + " is-" + prefixCover + "-hidden cts-ignore",
+            clsCoverShow = prefixCover + " is-" + prefixCover + "-showing",
+            clsCoverHide = prefixCover + " is-" + prefixCover + "-hidden",
             elCallee,
             $,
             appendBtns,
@@ -424,7 +424,7 @@ var Dialog = (function () {
             }
 
             if ((type === "prompt") || (type === "choose")) {
-                html += "<form id=\"alertify-form\">";
+                html += "<form id=\"alertify-form\" class=\"cts-ignore\">";
             }
 
             html += "<article class=\"alertify-inner\">";
@@ -434,7 +434,7 @@ var Dialog = (function () {
             }
 
             if (type === "choose") {
-                var choicesTxt = "<div id='alertify-choices' style='align: left'>";
+                var choicesTxt = "<div id='alertify-choices'>";
                 if ("choices" in item.placeholder) {
                   for (idx in item.placeholder.choices) {
                     var choice = item.placeholder.choices[idx];
@@ -607,6 +607,7 @@ var Dialog = (function () {
                 throw new Error(validate.messages.invalidArguments);
             }
             dialog.el = dialog.el || init();
+            dialog.el.className = dialog.el.className + " " + "cts-ignore"; 
             elCallee = document.activeElement;
 
             queue.push({

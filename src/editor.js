@@ -29,8 +29,9 @@ _CTSUI.Editor.prototype.setupMockup = function() {
 
   this._node = this._container.find('.cts-ui-editor');
   this._editBtn = this._node.find('.cts-ui-edit-btn');
-  console.log("Setup mockup called", this._editBtn);
   this._duplicateBtn = this._node.find('.cts-ui-duplicate-btn');
+  this._saveBtn = this._node.find('.cts-ui-save-btn');
+
   var self = this;
 
   /* Note: picker-related events have to stop propagation.  Otherwise the
@@ -44,11 +45,80 @@ _CTSUI.Editor.prototype.setupMockup = function() {
   });
 
   this._duplicateBtn.on('click', function(e) {
-    console.log("Duplicate Btn!");
     self.duplicateClicked();
   });
 
+  this._saveBtn.on('click', function(e) {
+    self.saveClicked();
+  });
+
 };
+
+
+/* SAVE
+ * ====================================================================
+ */
+
+var DOWNLOAD_HTML = "Download HTML";
+var DOWNLOAD_ZIP = "Download Complete Page";
+
+_CTSUI.Editor.prototype.saveClicked = function() {
+  // Hit the CTS server with a request to duplicate this page, and then redirect.
+  var title = "Save your Changes";
+  var body = "How do you want to save?";
+  var options = [DOWNLOAD_HTML, DOWNLOAD_ZIP];
+  CTS.UI.modal.select(title, body, options).then(
+    this.saveChoiceMade,
+    function() {
+      console.log("Save canceled.");
+    });
+};
+
+/**
+ * Applies any pending changes to the HTML and provides a link to
+ * download the modified page as source.
+ *
+ * See cts-server/app/models/operation.js for operation definition.
+ */
+_CTSUI.Editor.prototype.saveChoiceMade = function(choice) {
+  if ((choice != DOWNLOAD_HTML) && (choice != DOWNLOAD_ZIP)) {
+    console.log("Unknown save choice: " + choice);
+    return;
+  }
+
+  var operation = {
+    treeUrl: window.location.href,
+    treeType: 'html',
+    action: 'save',
+    parameters: {
+      // TODO: Figure out what to do w/ content.
+      content: CTS.$('html').html()
+    }
+  };
+
+  if (choice == DOWNLOAD_HTML) {
+    operation.parameters['format'] = 'html';
+  } else if (choice == DOWNLOAD_ZIP) {
+    operation.parameters['format'] = 'zip';
+  }
+
+  console.log("Attempting save operation", operation);
+
+  // Flush the queue of pending edit operations.
+  CTS.UI.switchboard.recordOperation(operation).then(
+    function(operation) {
+
+      //TODO: This is a hack. Figure out unified way to handle resources IDs.
+      var key = operation.result.url;
+      var url = _CTSUI.serverBase + 'tree/' + key;
+      CTS.UI.modal.alert("Page Saved", "<p><a href='" + url + "'>Download your Page</a></p>");
+    },
+    function(errorMesage) {
+      CTS.UI.modal.alert("Could not save", errorMessage);
+    }
+  );
+};
+
 
 /* DUPLICATE
  * ====================================================================

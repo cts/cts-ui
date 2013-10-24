@@ -6,6 +6,8 @@ _CTSUI.Mockups = {
   saveDialog: _CTSUI.mockupBase + "saveDialog.html"
 };
 
+_CTSUI.switchboardPath = "tree/switchboard";
+
 _CTSUI.CSS = {
   tray: _CTSUI.mockupBase + "css/tray.css",
   editor: _CTSUI.mockupBase + "css/editor.css",
