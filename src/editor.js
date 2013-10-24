@@ -20,7 +20,7 @@ _CTSUI.Editor.prototype.loadMockup = function() {
     self.setupMockup()
     evt.stopPropagation();
   });
-    
+
 };
 
 _CTSUI.Editor.prototype.setupMockup = function() {
@@ -31,7 +31,8 @@ _CTSUI.Editor.prototype.setupMockup = function() {
   this._editBtn = this._node.find('.cts-ui-edit-btn');
   this._duplicateBtn = this._node.find('.cts-ui-duplicate-btn');
   this._saveBtn = this._node.find('.cts-ui-save-btn');
-
+  this._loginBtn = this._node.find('.cts-ui-login-btn');
+  this._logoutBtn = this._node.find('.cts-ui-logout-btn');
   var self = this;
 
   /* Note: picker-related events have to stop propagation.  Otherwise the
@@ -50,6 +51,16 @@ _CTSUI.Editor.prototype.setupMockup = function() {
 
   this._saveBtn.on('click', function(e) {
     self.saveClicked();
+  });
+
+  this._loginBtn.on('click', function(e) {
+    console.log("Login Btn!");
+    self.loginClicked();
+  });
+
+  this._logoutBtn.on('click', function(e) {
+    console.log("Logout Btn!");
+    self.logoutClicked();
   });
 
 };
@@ -117,6 +128,29 @@ _CTSUI.Editor.prototype.saveChoiceMade = function(choice) {
       CTS.UI.modal.alert("Could not save", errorMessage);
     }
   );
+};
+
+/* LOGIN
+ * ====================================================================
+ */
+
+_CTSUI.Editor.prototype.loginClicked = function() {
+  console.log("Login clicked");
+  // post to CTS-server
+  // add cookie
+  // remove login form
+  // replace with username and logout button
+};
+
+/* LOGOUT
+ * ====================================================================
+ */
+
+_CTSUI.Editor.prototype.logoutClicked = function() {
+  console.log("Logout clicked");
+  // remove cookie
+  // remove login form
+  // replace with username and logout button
 };
 
 
