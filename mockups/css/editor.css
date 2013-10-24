@@ -1,7 +1,6 @@
 .cts-ui .cts-ui-tray .cts-ui-editor-page {
     border-left:none;
     height: 100%;
-    display: table;
     padding: 10px;
     background: white;
 }
