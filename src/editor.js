@@ -17,7 +17,7 @@ _CTSUI.Editor.prototype.loadMockup = function() {
   var self = this;
   this._container.appendTo(this._trayContentsNode);
   this._container.on("cts-received-is", function(evt) {
-    self.setupMockup()
+    self.setupMockup();
     evt.stopPropagation();
   });
 
@@ -135,11 +135,38 @@ _CTSUI.Editor.prototype.saveChoiceMade = function(choice) {
  */
 
 _CTSUI.Editor.prototype.loginClicked = function() {
+  this._node = this._container.find('.cts-ui-editor');
+  this._userField = this._node.find('.cts-ui-username-field');
+  this._passField = this._node.find('.cts-ui-password-field');
+  this._loginBtn = this._node.find('.cts-ui-login-btn');
+  this._logoutBtn = this._node.find('.cts-ui-logout-btn');
   console.log("Login clicked");
   // post to CTS-server
-  // add cookie
-  // remove login form
-  // replace with username and logout button
+  CTS.$.post(
+    'localhost:8888/login',
+    {
+      form: {
+        username: this._userField.val(),
+        password: this._passField.val()
+      }
+    },
+    function(error, response, body) {
+      if (!error && response.statusCode == 200) {
+        console.log(body);
+        // add cookie
+        docCookies.setItem('cts-session',body.sessionId);
+        // remove login form
+        this._loginBtn.hide();
+        this._userField.hide();
+        this._passField.hide();
+        // replace with username and logout button
+        this._logoutBtn.show();
+      }
+      else{
+        console.log('Login failed');
+      }
+    }
+  );
 };
 
 /* LOGOUT
@@ -147,10 +174,20 @@ _CTSUI.Editor.prototype.loginClicked = function() {
  */
 
 _CTSUI.Editor.prototype.logoutClicked = function() {
+  this._node = this._container.find('.cts-ui-editor');
+  this._userField = this._node.find('.cts-ui-username-field');
+  this._passField = this._node.find('.cts-ui-password-field');
+  this._loginBtn = this._node.find('.cts-ui-login-btn');
+  this._logoutBtn = this._node.find('.cts-ui-logout-btn');
+
   console.log("Logout clicked");
   // remove cookie
-  // remove login form
+  docCookies.removeItem('cts-session');
   // replace with username and logout button
+  this._userField.show();
+  this._passField.show();
+  this._loginBtn.show();
+  this._logoutBtn.hide();
 };
 
 
