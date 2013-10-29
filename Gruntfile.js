@@ -111,7 +111,8 @@ module.exports = function(grunt) {
         },
         files: {
           "mockups/css/theminator.css": "mockups/less/theminator.less",
-          "mockups/css/tray.css": "mockups/less/tray.less"
+          "mockups/css/tray.css": "mockups/less/tray.less",
+          "mockups/css/editor.css": "mockups/less/editor.less"
         }
       },
       production: {
@@ -121,7 +122,8 @@ module.exports = function(grunt) {
         },
         files: {
           "mockups/css/theminator.css": "mockups/less/theminator.less",
-          "mockups/css/tray.css": "mockups/less/tray.less"
+          "mockups/css/tray.css": "mockups/less/tray.less",
+          "mockups/css/editor.css": "mockups/less/editor.less"
         }
       }
     }

@@ -75,7 +75,7 @@ _CTSUI.Editor.prototype.loginClicked = function() {
   console.log("Login clicked");
   // post to CTS-server
   CTS.$.post(
-    'localhost:8888/login',
+    _CTSUI.serverBase + _CTSUI.switchboardPath,
     {
       form: {
         username: this._userField.val(),
