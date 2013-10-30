@@ -5,3 +5,4 @@ _CTSUI.themeBase = "http://treesheets.csail.mit.edu/mockups/blog";
 _CTSUI.serverBase = "http://treesheets.csail.mit.edu";
 _CTSUI.ctsJsLocation= "http://www.treesheets.org/cts.js";
 _CTSUI.switchboardPath = "switchboard";
+_CTSUI.loginPath= "login";
