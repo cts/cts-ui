@@ -142,31 +142,29 @@ _CTSUI.Editor.prototype.loginClicked = function() {
   this._logoutBtn = this._node.find('.cts-ui-logout-btn');
   console.log("Login clicked");
   // post to CTS-server
-  CTS.$.post(
-    _CTSUI.serverBase + _CTSUI.loginPath,
-    {
+  CTS.$.ajax({
+    type: "POST",
+    url: _CTSUI.serverBase + 'user/' + _CTSUI.loginPath,
+    crossDomain: true,
+    data: {
       form: {
         username: this._userField.val(),
         password: this._passField.val()
       }
-    },
-    function(error, response, body) {
-      if (!error && response.statusCode == 200) {
-        console.log(body);
-        // add cookie
-        docCookies.setItem('cts-session',body.sessionId);
-        // remove login form
-        this._loginBtn.hide();
-        this._userField.hide();
-        this._passField.hide();
-        // replace with username and logout button
-        this._logoutBtn.show();
-      }
-      else{
-        console.log('Login failed');
-      }
     }
-  );
+  }).done(function(message) {
+    console.log(message);
+    // add cookie
+    docCookies.setItem('cts-session',body.sessionId);
+    // remove login form
+    this._loginBtn.hide();
+    this._userField.hide();
+    this._passField.hide();
+    // replace with username and logout button
+    this._logoutBtn.show();
+  }).fail(function(jqXHR, textStatus){
+    console.log("Post failed: " + textStatus);
+  });
 };
 
 /* LOGOUT
