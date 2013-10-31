@@ -77,7 +77,6 @@ _CTSUI.Switchboard.prototype._flushComplete = function(success, msg, jqXHR, text
     this._doFlush();
   }
 };
-
 _CTSUI.Switchboard.prototype._doFlush = function() {
   console.log("Switchboard::_doFlush");
   var self = this;
