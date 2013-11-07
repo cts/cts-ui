@@ -65,7 +65,6 @@ _CTSUI.Editor.prototype.setupMockup = function() {
 
 };
 
-
 /* SAVE
  * ====================================================================
  */
