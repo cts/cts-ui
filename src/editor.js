@@ -144,18 +144,14 @@ _CTSUI.Editor.prototype.loginClicked = function() {
   // post to CTS-server
   CTS.$.ajax({
     type: "POST",
-    url: _CTSUI.serverBase + 'user/' + _CTSUI.loginPath,
+    url: _CTSUI.serverBase + _CTSUI.loginPath,
     crossDomain: true,
     data: {
-      form: {
-        username: this._userField.val(),
-        password: this._passField.val()
-      }
+      email: this._userField.val(),
+      password: this._passField.val()
     }
   }).done(function(message) {
     console.log(message);
-    // add cookie
-    docCookies.setItem('cts-session',body.sessionId);
     // remove login form
     this._loginBtn.hide();
     this._userField.hide();
