@@ -171,7 +171,7 @@ _CTSUI.Editor.prototype.uploadClicked = function(choice) {
     function(operation) {
      CTS.UI.modal.alert("Page Saved", "<p><a href='" + url + "'>Download your Page</a></p>");
     }, function(errMessage) {
-      CTS.UI.modal.alert("Could not save", errMessage);
+      CTS.UI.modal.alert("Could not save: " + errMessage);
     }
   );
 };
@@ -265,7 +265,7 @@ _CTSUI.Editor.prototype.completeEdit = function($e) {
   if (this._$editNode != null) {
     this._editBtn.removeClass("highlighted");
     if ((this._editor != null) && (this._editor.checkDirty())) {
-      var selector = CTS.UI.Util.uniqueSelectorFor($e);
+      var selector = CTS.UI.Util.uniqueSelectorFor(this._$editNode);
       content = this._editor.getData();
       console.log("content", content);
   
@@ -412,7 +412,7 @@ _CTSUI.Editor.prototype.cloneClicked = function() {
 
 _CTSUI.Editor.prototype.cloneElement = function($e) {
   var clone = $e.clone();
-  var selector = CTS.UI.uniqueSelectorFor($e);
+  var selector = CTS.UI.uniqueSelectorFor(e);
   clone.insertAfter($e);
   var operation = {
     treeUrl: window.location.href,

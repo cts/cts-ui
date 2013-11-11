@@ -20,7 +20,6 @@ _CTSUI.Switchboard.prototype.recordOperation = function(operation) {
   console.log("Saving operation: ", operation);
   var tuple = [operation, this._q.defer()];
   this._opQueue.push(tuple);
-  this._maybeFlush();
   return tuple[1].promise;
 };
 

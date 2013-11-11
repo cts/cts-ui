@@ -8,6 +8,7 @@ _CTSUI.autoload = function() {
   if (typeof CTS != 'undefined') {
     CTS.UI = _CTSUI;
     CTS.status.defaultTreeReady.then(function() {
+      CTS.Q.longStackSupport = true;
       CTS.UI.load();
       loadCtsUiFileDownloadPlugin();
     });
@@ -21,6 +22,7 @@ _CTSUI.autoload = function() {
       CTS.UI = _CTSUI;
       // Now we have to wait for $ to load
       CTS.status.defaultTreeReady.then(function() {
+        CTS.Q.longStackSupport = true;
         CTS.engine.booted.then(function() {
           CTS.UI.load();
           loadCtsUiFileDownloadPlugin();

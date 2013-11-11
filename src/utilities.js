@@ -7,8 +7,27 @@ _CTSUI.Util = {
     document.getElementsByTagName('head')[0].appendChild(link);
   },
 
-  uniqueSelectorFor: function($e) {
-    return null;
+  uniqueSelectorFor: function($node) {
+    // Taken from:
+    // http://stackoverflow.com/questions/5706837/get-unique-selector-of-element-in-jquery
+    var path;
+    while ($node.length) {
+        var realNode = $node[0], name = realNode.localName;
+        if (!name) break;
+        name = name.toLowerCase();
+        var parent = $node.parent();
+        var sameTagSiblings = parent.children(name);
+        if (sameTagSiblings.length > 1) { 
+            allSiblings = parent.children();
+            var index = allSiblings.index(realNode) + 1;
+            if (index > 1) {
+                name += ':nth-child(' + index + ')';
+            }
+        }
+        path = name + (path ? '>' + path : '');
+        $node = parent;
+    }
+    return path;
   },
 
   elementHtml: function($e) {
