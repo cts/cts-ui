@@ -1,8 +1,10 @@
-_CTSUI.Editor = function(tray, trayContentsNode) {
+_CTSUI.Editor = function(tray, $page) {
   this._tray = tray; // A Javascript object
-  this._trayContentsNode = trayContentsNode;
-  this._container = null;
-  this._node = null;
+
+  this.$page = $page;
+  this.$container = null;
+  this.$node = null;
+
   this._isEditing = false;
   this._$editNode = null; // Node being edited
   this._editor; // ckeditor
@@ -15,15 +17,16 @@ _CTSUI.Editor = function(tray, trayContentsNode) {
 };
 
 _CTSUI.Editor.prototype.loadMockup = function() {
-  this._container = CTS.$("<div class='cts-ui-page cts-ui-editor-page'></div>");
+  this.$container = CTS.$("<div class='cts-ui-editor-page'></div>");
 
   var cts = "@html editor " + CTS.UI.URLs.Mockups.editor + ";";
   CTS.UI.Util.addCss(CTS.UI.URLs.Styles.editor);
   cts += "this :is editor | #cts-ui-editor;";
-  this._container.attr("data-cts", cts);
+  this.$container.attr("data-cts", cts);
+
   var self = this;
-  this._container.appendTo(this._trayContentsNode);
-  this._container.on("cts-received-is", function(evt) {
+  this.$container.appendTo(this.$page);
+  this.$container.on("cts-received-is", function(evt) {
     self.setupMockup()
     evt.stopPropagation();
   });
@@ -31,17 +34,18 @@ _CTSUI.Editor.prototype.loadMockup = function() {
 };
 
 _CTSUI.Editor.prototype.setupMockup = function() {
- // var whatever = this._node.height();
- // this._node.height(whatever);
+ // var whatever = this.$node.height();
+ // this.$node.height(whatever);
 
-  this._node = this._container.find('.cts-ui-editor');
-  this._editBtn = this._node.find('.cts-ui-edit-btn');
-  this._uploadBtn = this._node.find('.cts-ui-upload-btn');
-  this._downloadBtn = this._node.find('.cts-ui-download-btn');
-  this._duplicateBtn = this._node.find('.cts-ui-duplicate-btn');
-  this._copyBtn = this._node.find('.cts-ui-copy-btn');
-  this._pasteBtn = this._node.find('.cts-ui-paste-btn');
-  this._saveBtn = this._node.find('.cts-ui-save-btn');
+  this.$node = this.$container.find('.cts-ui-editor');
+  this._editBtn = this.$node.find('.cts-ui-edit-btn');
+  this._uploadBtn = this.$node.find('.cts-ui-upload-btn');
+  this._downloadBtn = this.$node.find('.cts-ui-download-btn');
+  this._duplicateBtn = this.$node.find('.cts-ui-duplicate-btn');
+  this._copyBtn = this.$node.find('.cts-ui-copy-btn');
+  this._pasteBtn = this.$node.find('.cts-ui-paste-btn');
+  this._saveBtn = this.$node.find('.cts-ui-save-btn');
+  this._themeBtn = this.$node.find('.cts-ui-theme-btn');
 
   var self = this;
 
@@ -61,6 +65,10 @@ _CTSUI.Editor.prototype.setupMockup = function() {
 
   this._downloadBtn.on('click', function(e) {
     self.downloadClicked();
+  });
+
+  this._themeBtn.on('click', function(e) {
+    self.themesClicked();
   });
 
   this._copyBtn.on('click', function(e) {
@@ -385,6 +393,19 @@ _CTSUI.Editor.prototype._onCkEditorInstanceCreated = function(event) {
   }
 };
 
+
+/* Theminator
+ *
+ * ====================================================================
+ */
+_CTSUI.Editor.prototype.themesClicked = function() {
+  if (this._isEditing) {
+    this.completeEdit();
+  }
+  this._tray.invokeTheminator();
+};
+
+
 /* CLONE
  *   - cloneClicked
  *   - clone
@@ -441,9 +462,13 @@ _CTSUI.Editor.prototype.cloneElement = function($e) {
  * ====================================================================
  */
 
+_CTSUI.Editor.prototype.requestedWidth = function() {
+  return 100;
+};
+
 _CTSUI.Editor.prototype.updateSize = function(height) {
-  if (typeof this._container != undefined) {
-    this._container.height(height);
+  if (typeof this.$container != undefined) {
+    this.$container.height(height);
   }
 };
 

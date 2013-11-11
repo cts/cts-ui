@@ -17,16 +17,6 @@
 }
 
 
-/*
-.tray {
-  background-color: red !important; 
-  padding-bottom: 10px;
-}
-.templates-tray { background-color: blue !important; }
-.theminator { background-color: green !important; }
-.theminator { margin-bottom: 10px !important; }
-*/
-
 /* TRAY:
  * <div class="tray">
  *   <div class="tray-contents"></div>
@@ -34,39 +24,39 @@
  * </div>
  */
 
-.cts-ui .cts-ui-tray {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-  width: 137px;
-  height: 100%;
-  /*left:-300px;*/
-}
+.cts-ui {
+  .cts-ui-tray {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 137px;
+    height: 100%;
 
-.cts-ui .cts-ui-tray .cts-ui-tray-contents {
-  border-right: 1px solid black;
-  width: 100px;
-  height: 100%;
-  -moz-box-shadow: inset -5px 0 5px -2px #888;
-  -webkit-box-shadow: inset -5px 0 5px -2px #888;
-  box-shadow: inset -5px 0 5px -2px #888;
-}
+    /* This is the nib to open/close the tray */
+    .cts-ui-expand-tray {
+      position:absolute;
+      top:25%;
+      left:101px;
 
-.cts-ui .cts-ui-tray .cts-ui-tray-contents {
-  background-color: #ddd;
-}
+      .cts-ui-expand-tray-button {
+        cursor: pointer;
+        font-size: 24px;
+        color: red;
+        background-color: black;
+      }
+    }
 
-.cts-ui .cts-ui-tray .cts-ui-expand-tray {
-    position:absolute;
-    top:25%;
-    left:101px;
+    /* This is the gutter that contains the tray */
+    .cts-ui-tray-contents {
+      border-right: 1px solid black;
+      width: 100px;
+      height: 100%;
+      padding: 0;
+      -moz-box-shadow: inset -5px 0 5px -2px #888;
+      -webkit-box-shadow: inset -5px 0 5px -2px #888;
+      box-shadow: inset -5px 0 5px -2px #888;
+      background-color: #ddd;
+    }
+  }
 }
-
-.cts-ui .cts-ui-tray .cts-ui-expand-tray-button {
-    cursor: pointer;
-    font-size: 24px;
-    color: red;
-    background-color: black;
-}
-

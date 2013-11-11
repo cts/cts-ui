@@ -1,26 +1,25 @@
 _CTSUI.Tray = function() {
-  console.log("Tray Loading");
-
-  this._bodyNode = CTS.$('body');
-  this._bodyNode.css({"position": "relative", "overflow-x": "scroll", "left": "101px"});
-  this._originalBodyMargin = this._bodyNode.css("margin-left");
-  //alert(this._originalBodyMargin);
+  this.$body = CTS.$('body');
+  this._originalBodyMargin = this.$body.css("margin-left");
+  this.$body.css({"position": "relative", "overflow-x": "scroll"});
+  this._width = 100;
+  this._buttonWidth = 37;
 
   // Pages inside the tray, such as the theminator
   this._pages = [];
 
   // The container DIV which contains the CTS to load the HTML impl.
-  this._container = null;
+  this.$container = null;
 
   // The node representing the tray body, loaded by CTS.
-  this._node = null;
+  this.$node = null;
 
   this.loadMockup();
 };
 
 _CTSUI.Tray.prototype.loadMockup = function() {
-  this._container = CTS.$("<div class='cts-ui'></div>");
-  this._container.css({
+  this.$container = CTS.$("<div class='cts-ui'></div>");
+  this.$container.css({
     zIndex: 64999// Important: more than the picker.
   });
 
@@ -30,76 +29,112 @@ _CTSUI.Tray.prototype.loadMockup = function() {
   CTS.UI.Util.addCss(CTS.UI.URLs.Styles.modal);
   CTS.UI.Util.addCss(CTS.UI.URLs.Styles.ionicons);
   cts += "this :is tray | #cts-ui-tray;";
-  this._container.attr("data-cts", cts);
+  this.$container.attr("data-cts", cts);
   var self = this;
-  this._container.on("cts-received-is", function(evt) {
-    self.setupMockup()
+  this.$container.on("cts-received-is", function(evt) {
+    self.setupMockup();
     evt.stopPropagation();
   });
-  this._container.appendTo(this._bodyNode);
+  this.$container.appendTo(this.$body);
 };
 
 _CTSUI.Tray.prototype.setupMockup = function() {
   var self = this;
-  this._node = this._container.find('.cts-ui-tray');
-  this._trayContentsNode = this._container.find('.cts-ui-tray-contents');
+  this.$node = this.$container.find('.cts-ui-tray');
+  this.$trayContents = this.$container.find('.cts-ui-tray-contents');
 
-  this._button = this._node.find('.cts-ui-expand-tray-button');
+  this._button = this.$node.find('.cts-ui-expand-tray-button');
   this._button.on('click', function() {
     self.toggle();
   });
 
-  this._buttonContainer = this._node.find('.cts-ui-expand-tray');
+  this._buttonContainer = this.$node.find('.cts-ui-expand-tray');
   this._buttonContainer.css({ zIndex: 65000 });
 
-  //this._theminator = new CTS.UI.Theminator(this, this._trayContentsNode);
-  //this._pages.push(this._theminator);
- 
-  this._editor = new CTS.UI.Editor(this, this._trayContentsNode);
+  var $page = CTS.$('<div class="cts-ui-page"></div>');
+  $page.appendTo(this.$trayContents);
+  this._editor = new CTS.UI.Editor(this, $page);
   this._pages.push(this._editor);
 
   this.updateSize();
   CTS.$(window).resize(function() {
     self.updateSize();
   });
-  
-  
 
+  this.toggle();
+};
+
+_CTSUI.Tray.prototype.invokeTheminator = function(page) {
+  var $page = CTS.$('<div class="cts-ui-page"></div>');
+  $page.hide();
+  $page.appendTo(this.$trayContents);
+  this._theminator = new CTS.UI.Theminator(this, $page);
+  this.pushPage(this._theminator);
+};
+
+_CTSUI.Tray.prototype.pushPage = function(page) {
+  this._pages[this._pages.length - 1].$page.hide();
+  this._pages.push(page);
+  page.$page.show();
+  this.transitionToWidth(page.requestedWidth());
+  var windowHeight = CTS.$(window).height();
+  page.updateSize(windowHeight);
+};
+
+_CTSUI.Tray.prototype.popPage = function() {
+  var page = this._pages.pop();
+  if (page) {
+    page.$page.remove();
+  }
+  var newPage = this._pages[this._pages.length - 1];
+  this.transitionToWidth(newPage.requestedWidth());
+  newPage.$page.show();
+};
+
+_CTSUI.Tray.prototype.transitionToWidth = function(width) {
+  this._width = width;
+  var outerWidth = width + this._buttonWidth;
+  this.$node.find('.cts-ui-tray-contents').animate({
+    'width': width + 'px'
+  });
+  this.$node.animate({
+    'width': outerWidth + 'px'
+  });
+  var spec2 = {'left': ((this._width + 1) + "px")};
+  this.$node.find('.cts-ui-expand-tray').animate(spec2);
 };
 
 _CTSUI.Tray.prototype.open = function() {
     //var fromTop = CTS.$(window).scrollTop();
-  this._node.animate({"left":"0px"});
+  this.$node.animate({"left":"0px"});
     //CTS.$(window).scrollTop(fromTop);
-  this._bodyNode.animate({"left":"101px"});
-  
+  this.$body.animate({"left": ((this._width + 1) + "px")});
 };
 
 _CTSUI.Tray.prototype.close = function() {
     //var fromTop = CTS.$(window).scrollTop();
-  this._node.animate({"left":"-101px"});
+  this.$node.animate({"left":("-" + (this._width + 1) + "px")});
     //CTS.$(window).scrollTop(fromTop);
-  this._bodyNode.animate({"left":"0px"});
-
+  this.$body.animate({"left":"0px"});
 };
 
 _CTSUI.Tray.prototype.toggle = function() {
-  if (this._node.hasClass("cts-ui-open")) {
+  if (this.$node.hasClass("cts-ui-open")) {
     this.close();
-    this._node.removeClass("cts-ui-open");
-    this._node.addClass("cts-ui-closed");
-  } else if (this._node.hasClass("cts-ui-closed")) {
+    this.$node.removeClass("cts-ui-open");
+    this.$node.addClass("cts-ui-closed");
+  } else if (this.$node.hasClass("cts-ui-closed")) {
     this.open();
-    this._node.removeClass("cts-ui-closed");
-    this._node.addClass("cts-ui-open");
+    this.$node.removeClass("cts-ui-closed");
+    this.$node.addClass("cts-ui-open");
   } 
 };
 
 _CTSUI.Tray.prototype.updateSize = function() {
   // Set the height of the tray to the window size
   var windowHeight = CTS.$(window).height();
-  this._node.height(windowHeight);
-  this._trayContentsNode.height(windowHeight);
+  this.$node.height(windowHeight);
+  this.$trayContents.height(windowHeight);
   for (var i = 0; i < this._pages.length; i++) {
     this._pages[i].updateSize(windowHeight);
   }
