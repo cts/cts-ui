@@ -39,6 +39,8 @@ _CTSUI.Editor.prototype.setupMockup = function() {
   this._uploadBtn = this._node.find('.cts-ui-upload-btn');
   this._downloadBtn = this._node.find('.cts-ui-download-btn');
   this._duplicateBtn = this._node.find('.cts-ui-duplicate-btn');
+  this._copyBtn = this._node.find('.cts-ui-copy-btn');
+  this._pasteBtn = this._node.find('.cts-ui-paste-btn');
   this._saveBtn = this._node.find('.cts-ui-save-btn');
 
   var self = this;
@@ -59,6 +61,18 @@ _CTSUI.Editor.prototype.setupMockup = function() {
 
   this._downloadBtn.on('click', function(e) {
     self.downloadClicked();
+  });
+
+  this._copyBtn.on('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    self.copyClicked();
+  });
+
+  this._pasteBtn.on('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    self.pasteClicked();
   });
 
   this._duplicateBtn.on('click', function(e) {
@@ -127,6 +141,10 @@ _CTSUI.Editor.prototype.setupMockup = function() {
 //};
 
 _CTSUI.Editor.prototype.downloadClicked = function(choice) {
+  if (this._isEditing) {
+    this.completeEdit();
+  }
+
   CTS.$.fileDownload(CTS.UI.URLs.Services.zipFactory, {
     httpMethod: "POST",
     preparingMessageHtml: "We are preparing an archive of this page. Please wait...",
@@ -145,6 +163,10 @@ _CTSUI.Editor.prototype.downloadClicked = function(choice) {
 };
 
 _CTSUI.Editor.prototype.uploadClicked = function(choice) {
+  if (this._isEditing) {
+    this.completeEdit();
+  }
+
   CTS.UI.switchboard.flush().then(
     function(operation) {
      CTS.UI.modal.alert("Page Saved", "<p><a href='" + url + "'>Download your Page</a></p>");
@@ -159,6 +181,10 @@ _CTSUI.Editor.prototype.uploadClicked = function(choice) {
  */
 
 _CTSUI.Editor.prototype.duplicateClicked = function() {
+  if (this._isEditing) {
+    this.completeEdit();
+  }
+
   // Hit the CTS server with a request to duplicate this page, and then redirect.
   this.duplicateFailed("Not yet implemented!");
 };
@@ -274,6 +300,63 @@ _CTSUI.Editor.prototype.completeEdit = function($e) {
   this._editBefore = null;
   this._isEditing = false;
 };
+
+
+/* COPY
+ *
+ * ====================================================================
+ */
+_CTSUI.Editor.prototype.copyClicked = function() {
+  if (this._isEditing) {
+    this.completeEdit();
+  }
+
+ 
+  var pickPromise = CTS.UI.picker.pick({
+    ignoreCTSUI: true
+  });
+  var self = this;
+  
+  pickPromise.then(
+    function(element) {
+      var data = CTS.UI.Util.elementHtml(element);
+      console.log(data);
+      CTS.UI.clipboard.copy(data);
+      Alertify.log.success("Copied to web clipboard.", 1500);
+    },
+    function(errorReason) {
+      Alertify.log.error("Didn't copy: " + errorReason);
+    }
+  );
+};
+
+/* PASTE
+ *
+ * ====================================================================
+ */
+_CTSUI.Editor.prototype.pasteClicked = function() {
+  if (this._isEditing) {
+    this.completeEdit();
+  }
+ 
+  var pickPromise = CTS.UI.picker.pick({
+    ignoreCTSUI: true
+  });
+  var self = this;
+  
+  pickPromise.then(
+    function(element) {
+      CTS.UI.clipboard.paste(function(data) {
+        console.log(data);
+        element.append(data);
+      });
+    },
+    function(errorReason) {
+      Alertify.log.error("Didn't paste: " + errorReason);
+    }
+  );
+};
+
 
 
 _CTSUI.Editor.prototype._onCkEditorInstanceCreated = function(event) {

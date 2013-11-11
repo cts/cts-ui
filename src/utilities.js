@@ -9,5 +9,12 @@ _CTSUI.Util = {
 
   uniqueSelectorFor: function($e) {
     return null;
+  },
+
+  elementHtml: function($e) {
+    var $x = $e.clone();
+    var $c = CTS.$("<div></div>");
+    $c.append($x);
+    return $c.html();
   }
 };
