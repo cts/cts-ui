@@ -26,6 +26,10 @@
   margin-bottom: 10px;
 }
 
+.cts-ui-editor a.highlighted {
+  color: red;
+}
+
 .cts-ui-editor a.cts-editor-button i {
   font-size: 24px;
   display: block;

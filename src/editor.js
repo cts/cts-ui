@@ -3,8 +3,13 @@ _CTSUI.Editor = function(tray, trayContentsNode) {
   this._trayContentsNode = trayContentsNode;
   this._container = null;
   this._node = null;
-  this.editing = false;
+  this._isEditing = false;
+  this._$editNode = null; // Node being edited
+  this._editor; // ckeditor
+  this._editBefore; // HTML before the edit
   this.loadMockup();
+
+
   // TODO: Ensure CKEDITOR is available.
   CKEDITOR.on('instanceCreated', this._onCkEditorInstanceCreated);
 };
@@ -179,68 +184,95 @@ _CTSUI.Editor.prototype.duplicateFailed = function(reason) {
  */
 
 _CTSUI.Editor.prototype.editClicked = function() {
-  console.log("Edit clicked");
-  var pickPromise = CTS.UI.picker.pick({
-    ignoreCTSUI: true
-  });
-  var self = this;
-
-  pickPromise.then(
-    function(element) {
-      self.beginEdit(element);
-    },
-    function(errorReason) {
-      console.log("Edit canceled: ", errorReason);
-    }
-  );
+  if (this._isEditing) {
+    this.completeEdit();
+  } else {
+    var pickPromise = CTS.UI.picker.pick({
+      ignoreCTSUI: true
+    });
+    var self = this;
+  
+    pickPromise.then(
+      function(element) {
+        self.beginEdit(element);
+      },
+      function(errorReason) {
+        console.log("Edit canceled: ", errorReason);
+      }
+    );
+  }
 };
 
 _CTSUI.Editor.prototype.beginEdit = function($e) {
   // 1. Stash away the content of the old node.
+  if (this._$editNode != null) {
+    this.completeEdit();
+  }
   this._$editNode= $e;
+  $e.attr('contenteditable', 'true');
   this._editBefore = $e.html();
   this._editor = CKEDITOR.inline($e[0]);
-  
+  var self = this;
+  this._editor.on('instanceReady', function() {
+    self._isEditing = true;
+    self._editor.focus();
+    self._editBtn.addClass("highlighted");
+  });
 };
 
-_CTSUI.Editor.prototype.cancelEdit = function($e) {
-  $_$editNode.html(this._editBefore);
-  this._editor.destroy();
-  this._editBefore = null;
-  this._$editNode = null;
-  this._editor = null;
+_CTSUI.Editor.prototype.cancelEdit = function() {
+  Alertify.log.info("Cancel Edit");
+  if (this._$editNode != null) {
+    this._editBtn.removeClass("highlighted");
+    this._$editNode.html(this._editBefore);
+    this._$editNode.removeAttr('contenteditable');
+    this._$editNode = null;
+    this._editor.destroy();
+    this._editBefore = null;
+    this._editor = null;
+    this._isEditing = false;
+  }
 };
 
 _CTSUI.Editor.prototype.completeEdit = function($e) {
-  // Need to find a unique way to identify $e.
-  if ((this._editor != null) && (this._editor.checkDirty())) {
-    var selector = CTS.UI.Util.uniqueSelectorFor($e);
-    var content = this._editor.getData();
-
-    var operation = {
-      treeUrl: window.location.href,
-      treeType: 'html',
-      action: 'edit',
-      parameters: {
-        selector: selector,
-        content: content
-      }
-    };
+  var content = null;
+  if (this._$editNode != null) {
+    this._editBtn.removeClass("highlighted");
+    if ((this._editor != null) && (this._editor.checkDirty())) {
+      var selector = CTS.UI.Util.uniqueSelectorFor($e);
+      content = this._editor.getData();
+      console.log("content", content);
   
-    // Flush the queue of pending edit operations.
-    CTS.UI.switchboard.recordOperation(operation).then(
-      function(operation) {
-        console.log("Operation recorded.");
-      },
-      function(errorMesage) {
-        console.log("Error: operation not recorded.");
-      }
-    );
+      var operation = {
+        treeUrl: window.location.href,
+        treeType: 'html',
+        action: 'edit',
+        parameters: {
+          selector: selector,
+          content: content
+        }
+      };
+    
+      // Flush the queue of pending edit operations.
+      CTS.UI.switchboard.recordOperation(operation).then(
+        function(operation) {
+          console.log("Operation recorded.");
+        },
+        function(errorMesage) {
+          console.log("Error: operation not recorded.");
+        }
+      );
+    }
   }
   this._editor.destroy();
+  if (content != null) {
+    this._$editNode.html(content);
+  }
+  this._$editNode.removeAttr('contenteditable');
+  this._$editNode = null;
   this._editor = null;
   this._editBefore = null;
-  this._$editNode = null;
+  this._isEditing = false;
 };
 
 
@@ -264,7 +296,7 @@ _CTSUI.Editor.prototype._onCkEditorInstanceCreated = function(event) {
         { name: 'editing',		groups: [ 'basicstyles', 'links' ] },
         { name: 'undo' },
         { name: 'clipboard',	groups: [ 'selection', 'clipboard' ] },
-        { name: 'about' }
+        { name: 'save' }
       ];
     });
   }
