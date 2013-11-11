@@ -5,6 +5,8 @@ _CTSUI.Editor = function(tray, trayContentsNode) {
   this._node = null;
   this.editing = false;
   this.loadMockup();
+  // TODO: Ensure CKEDITOR is available.
+  CKEDITOR.on('instanceCreated', this._onCkEditorInstanceCreated);
 };
 
 _CTSUI.Editor.prototype.loadMockup = function() {
@@ -29,6 +31,8 @@ _CTSUI.Editor.prototype.setupMockup = function() {
 
   this._node = this._container.find('.cts-ui-editor');
   this._editBtn = this._node.find('.cts-ui-edit-btn');
+  this._uploadBtn = this._node.find('.cts-ui-upload-btn');
+  this._downloadBtn = this._node.find('.cts-ui-download-btn');
   this._duplicateBtn = this._node.find('.cts-ui-duplicate-btn');
   this._saveBtn = this._node.find('.cts-ui-save-btn');
 
@@ -42,6 +46,14 @@ _CTSUI.Editor.prototype.setupMockup = function() {
     e.preventDefault();
     e.stopPropagation();
     self.editClicked();
+  });
+
+  this._uploadBtn.on('click', function(e) {
+    self.uploadClicked();
+  });
+
+  this._downloadBtn.on('click', function(e) {
+    self.downloadClicked();
   });
 
   this._duplicateBtn.on('click', function(e) {
@@ -59,20 +71,20 @@ _CTSUI.Editor.prototype.setupMockup = function() {
  * ====================================================================
  */
 
-var DOWNLOAD_ZIP = "Download Complete Page";
-var SAVE_TO_WEB = "Save to web";
-
-_CTSUI.Editor.prototype.saveClicked = function() {
-  // Hit the CTS server with a request to duplicate this page, and then redirect.
-  var title = "Save your Changes";
-  var body = "How do you want to save?";
-  var options = [DOWNLOAD_ZIP, SAVE_TO_WEB];
-  CTS.UI.modal.select(title, body, options).then(
-    this.saveChoiceMade,
-    function() {
-      console.log("Save canceled.");
-    });
-};
+//var DOWNLOAD_ZIP = "Download Complete Page";
+//var SAVE_TO_WEB = "Save to web";
+//
+//_CTSUI.Editor.prototype.saveClicked = function() {
+//  // Hit the CTS server with a request to duplicate this page, and then redirect.
+//  var title = "Save your Changes";
+//  var body = "How do you want to save?";
+//  var options = [DOWNLOAD_ZIP, SAVE_TO_WEB];
+//  CTS.UI.modal.select(title, body, options).then(
+//    this.saveChoiceMade,
+//    function() {
+//      console.log("Save canceled.");
+//    });
+//};
 
 /**
  * Applies any pending changes to the HTML and provides a link to
@@ -80,39 +92,61 @@ _CTSUI.Editor.prototype.saveClicked = function() {
  *
  * See cts-server/app/models/operation.js for operation definition.
  */
-_CTSUI.Editor.prototype.saveChoiceMade = function(choice) {
-  if ((choice != DOWNLOAD_ZIP) && (choice != SAVE_TO_WEB)) {
-    console.log("Unknown save choice: " + choice);
-    return;
-  }
+//_CTSUI.Editor.prototype.saveChoiceMade = function(choice) {
+//  if ((choice != DOWNLOAD_ZIP) && (choice != SAVE_TO_WEB)) {
+//    console.log("Unknown save choice: " + choice);
+//    return;
+//  }
+//
+//  if (choice == DOWNLOAD_ZIP) {
+//  } else if (choice == SAVE_TO_WEB) {
+//    CTS.UI.switchboard.flush().then(
+//      function(operation) {
+//       CTS.UI.modal.alert("Page Saved", "<p><a href='" + url + "'>Download your Page</a></p>");
+//      }, function(errMessage) {
+//        CTS.UI.modal.alert("Could not save", errMessage);
+//      }
+//    );
+//  }
+//
+//  CTS.UI.switchboard.recordOperation(operation).then(
+//    function(operation) {
+//
+//      //TODO: This is a hack. Figure out unified way to handle resources IDs.
+//      var key = operation.result.url;
+//      var url = _CTSUI.serverBase + 'tree/' + key;
+//    },
+//    function(errorMesage) {
+//    }
+//  );
+//};
 
-  if (choice == DOWNLOAD_ZIP) {
-  } else if (choice == SAVE_TO_WEB) {
-    CTS.UI.switchboard.flush().then(
-      function(operation) {
-       CTS.UI.modal.alert("Page Saved", "<p><a href='" + url + "'>Download your Page</a></p>");
-      }, function(errMessage) {
-        CTS.UI.modal.alert("Could not save", errMessage);
-      }
-    );
-  }
+_CTSUI.Editor.prototype.downloadClicked = function(choice) {
+  CTS.$.fileDownload(CTS.UI.URLs.Services.zipFactory, {
+    httpMethod: "POST",
+    preparingMessageHtml: "We are preparing an archive of this page. Please wait...",
+    failMessageHtml: "There was a problem archiving this page for download.",
+    data: {
+      'url': window.location.href
+    }
+  });
+//  CTS.UI.switchboard.flush().then(
+//    function(operation) {
+//     CTS.UI.modal.alert("Page Saved", "<p><a href='" + url + "'>Download your Page</a></p>");
+//    }, function(errMessage) {
+//      CTS.UI.modal.alert("Could not save", errMessage);
+//    }
+//  );
+};
 
-  CTS.UI.switchboard.recordOperation(operation).then(
+_CTSUI.Editor.prototype.uploadClicked = function(choice) {
+  CTS.UI.switchboard.flush().then(
     function(operation) {
-
-      //TODO: This is a hack. Figure out unified way to handle resources IDs.
-      var key = operation.result.url;
-      var url = _CTSUI.serverBase + 'tree/' + key;
-    },
-    function(errorMesage) {
+     CTS.UI.modal.alert("Page Saved", "<p><a href='" + url + "'>Download your Page</a></p>");
+    }, function(errMessage) {
+      CTS.UI.modal.alert("Could not save", errMessage);
     }
   );
-};
-
-_CTSUI.Editor.prototype.saveZipResponse = function(choice) {
-};
-
-_CTSUI.Editor.prototype.saveToWebResponse = function(choice) {
 };
 
 /* DUPLICATE
@@ -165,39 +199,76 @@ _CTSUI.Editor.prototype.beginEdit = function($e) {
   // 1. Stash away the content of the old node.
   this._$editNode= $e;
   this._editBefore = $e.html();
+  this._editor = CKEDITOR.inline($e[0]);
+  
 };
 
 _CTSUI.Editor.prototype.cancelEdit = function($e) {
   $_$editNode.html(this._editBefore);
+  this._editor.destroy();
   this._editBefore = null;
-  this._$editNode = null
+  this._$editNode = null;
+  this._editor = null;
 };
 
 _CTSUI.Editor.prototype.completeEdit = function($e) {
   // Need to find a unique way to identify $e.
-  var selector = CTS.UI.Util.uniqueSelectorFor($e);
-  var content = $e.html();
-  var operation = {
-    treeUrl: window.location.href,
-    treeType: 'html',
-    action: 'edit',
-    parameters: {
-      selector: selector,
-      content: content
-    }
-  };
+  if ((this._editor != null) && (this._editor.checkDirty())) {
+    var selector = CTS.UI.Util.uniqueSelectorFor($e);
+    var content = this._editor.getData();
 
-  // Flush the queue of pending edit operations.
-  CTS.UI.switchboard.recordOperation(operation).then(
-    function(operation) {
-      console.log("Operation recorded.");
-    },
-    function(errorMesage) {
-      console.log("Error: operation not recorded.");
-    }
-  );
+    var operation = {
+      treeUrl: window.location.href,
+      treeType: 'html',
+      action: 'edit',
+      parameters: {
+        selector: selector,
+        content: content
+      }
+    };
+  
+    // Flush the queue of pending edit operations.
+    CTS.UI.switchboard.recordOperation(operation).then(
+      function(operation) {
+        console.log("Operation recorded.");
+      },
+      function(errorMesage) {
+        console.log("Error: operation not recorded.");
+      }
+    );
+  }
+  this._editor.destroy();
+  this._editor = null;
+  this._editBefore = null;
+  this._$editNode = null;
 };
 
+
+_CTSUI.Editor.prototype._onCkEditorInstanceCreated = function(event) {
+  var editor = event.editor,
+  element = editor.element;
+ 
+  // These editors don't need features like smileys, templates, iframes etc.
+  if ( element.is( 'h1', 'h2', 'h3' ) || element.getAttribute( 'id' ) == 'taglist' ) {
+    // Customize the editor configurations on "configLoaded" event,
+    // which is fired after the configuration file loading and
+    // execution. This makes it possible to change the
+    // configurations before the editor initialization takes place.
+    editor.on( 'configLoaded', function() {
+      // Remove unnecessary plugins to make the editor simpler.
+      editor.config.removePlugins = 'colorbutton,find,flash,font,' +
+        'forms,iframe,image,newpage,removeformat,' +
+        'smiley,specialchar,stylescombo,templates';
+      // Rearrange the layout of the toolbar.
+      editor.config.toolbarGroups = [
+        { name: 'editing',		groups: [ 'basicstyles', 'links' ] },
+        { name: 'undo' },
+        { name: 'clipboard',	groups: [ 'selection', 'clipboard' ] },
+        { name: 'about' }
+      ];
+    });
+  }
+};
 
 /* CLONE
  *   - cloneClicked

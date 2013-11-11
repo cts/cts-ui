@@ -7,6 +7,7 @@ sourcelist = [
   "src/fragments/prefix.js",
   "src/utilities.js",
   "src/lib/alertify.js",
+  "src/lib/jquery.fileDownload.js",
   "src/switchboard.js",
   "src/tray.js",
   "src/picker.js",

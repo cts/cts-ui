@@ -5,14 +5,16 @@ _CTSUI.URLs = {
     theminator: _CTSUI.Domains.UIMockups + "theminator.html"
   },
   Scripts: {
-    cts: _CTSUI.Domains.CTS + "cts.js"
+    cts: _CTSUI.Domains.CTS + "cts.js",
+    ckeditor: _CTSUI.Domains.Server + "js/ckeditor/ckeditor.js"
   },
   Styles: {
     tray: _CTSUI.Domains.UIMockups + "css/tray.css",
     editor: _CTSUI.Domains.UIMockups + "css/editor.css",
     modal: _CTSUI.Domains.UIMockups + "css/modal.css",
     theminator: _CTSUI.Domains.UIMockups + "css/theminator.css",
-    bootstrap: _CTSUI.Domains.UIMockups + "css/bootstrap/bootstrap.min.css"
+    bootstrap: _CTSUI.Domains.UIMockups + "css/bootstrap/bootstrap.min.css",
+    ionicons: _CTSUI.Domains.Server + "css/ionicons/css/ionicons.min.css"
   },
   Images: {
     lightWool: _CTSUI.Domains.UIMockups + "img/light_wool.png",
@@ -26,7 +28,8 @@ _CTSUI.URLs = {
     themeInfo: _CTSUI.Domains.Theme + "themeInfo.json"
   },
   Services: {
-    switchboard: _CTSUI.Domains.Server + 'tree/switchboard'
+    switchboard: _CTSUI.Domains.Server + 'tree/switchboard',
+    zipFactory: _CTSUI.Domains.Server + 'zip'
   }
 };
 

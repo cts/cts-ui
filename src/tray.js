@@ -2,7 +2,7 @@ _CTSUI.Tray = function() {
   console.log("Tray Loading");
 
   this._bodyNode = CTS.$('body');
-  this._bodyNode.css({"position": "relative", "overflow-x": "scroll", "left": "301px"});
+  this._bodyNode.css({"position": "relative", "overflow-x": "scroll", "left": "101px"});
   this._originalBodyMargin = this._bodyNode.css("margin-left");
   //alert(this._originalBodyMargin);
 
@@ -28,6 +28,7 @@ _CTSUI.Tray.prototype.loadMockup = function() {
   CTS.UI.Util.addCss(CTS.UI.URLs.Styles.tray);
   CTS.UI.Util.addCss(CTS.UI.URLs.Styles.bootstrap);
   CTS.UI.Util.addCss(CTS.UI.URLs.Styles.modal);
+  CTS.UI.Util.addCss(CTS.UI.URLs.Styles.ionicons);
   cts += "this :is tray | #cts-ui-tray;";
   this._container.attr("data-cts", cts);
   var self = this;
@@ -70,13 +71,13 @@ _CTSUI.Tray.prototype.open = function() {
     //var fromTop = CTS.$(window).scrollTop();
   this._node.animate({"left":"0px"});
     //CTS.$(window).scrollTop(fromTop);
-  this._bodyNode.animate({"left":"301px"});
+  this._bodyNode.animate({"left":"101px"});
   
 };
 
 _CTSUI.Tray.prototype.close = function() {
     //var fromTop = CTS.$(window).scrollTop();
-  this._node.animate({"left":"-301px"});
+  this._node.animate({"left":"-101px"});
     //CTS.$(window).scrollTop(fromTop);
   this._bodyNode.animate({"left":"0px"});
 
@@ -98,6 +99,7 @@ _CTSUI.Tray.prototype.updateSize = function() {
   // Set the height of the tray to the window size
   var windowHeight = CTS.$(window).height();
   this._node.height(windowHeight);
+  this._trayContentsNode.height(windowHeight);
   for (var i = 0; i < this._pages.length; i++) {
     this._pages[i].updateSize(windowHeight);
   }

@@ -39,24 +39,34 @@
   top: 0;
   left: 0;
   z-index: 9999;
-  width:337px;
+  width: 137px;
+  height: 100%;
   /*left:-300px;*/
 }
 
 .cts-ui .cts-ui-tray .cts-ui-tray-contents {
   border-right: 1px solid black;
-  width: 300px;
+  width: 100px;
   height: 100%;
+  -moz-box-shadow: inset -5px 0 5px -2px #888;
+  -webkit-box-shadow: inset -5px 0 5px -2px #888;
+  box-shadow: inset -5px 0 5px -2px #888;
+}
+
+.cts-ui .cts-ui-tray .cts-ui-tray-contents {
+  background-color: #ddd;
 }
 
 .cts-ui .cts-ui-tray .cts-ui-expand-tray {
     position:absolute;
     top:25%;
-    left:301px;
+    left:101px;
 }
 
 .cts-ui .cts-ui-tray .cts-ui-expand-tray-button {
-    cursor: hand;
     cursor: pointer;
+    font-size: 24px;
+    color: red;
+    background-color: black;
 }
 

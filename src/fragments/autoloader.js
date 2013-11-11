@@ -9,6 +9,7 @@ _CTSUI.autoload = function() {
     CTS.UI = _CTSUI;
     CTS.status.defaultTreeReady.then(function() {
       CTS.UI.load();
+      loadCtsUiFileDownloadPlugin();
     });
   } else {
     // CTS isn't present. Let's create it with a script.
@@ -22,12 +23,19 @@ _CTSUI.autoload = function() {
       CTS.status.defaultTreeReady.then(function() {
         CTS.engine.booted.then(function() {
           CTS.UI.load();
+          loadCtsUiFileDownloadPlugin();
         });
       });
     };
     document.getElementsByTagName('head')[0].appendChild(s);
+  }
 
-    // TODO(Jessica): Inject the editor stuff.
+  // Inject CK Editor
+  if (typeof CKEDITOR == 'undefined') {
+    var ckeditor = document.createElement('script');
+    ckeditor.setAttribute('src', _CTSUI.URLs.Scripts.ckeditor);
+    ckeditor.setAttribute('type', 'text/javascript');
+    document.getElementsByTagName('head')[0].appendChild(ckeditor);
   }
 };
 _CTSUI.autoload();

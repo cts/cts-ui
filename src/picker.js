@@ -137,7 +137,7 @@ _CTSUI.Picker.prototype._select = function($elem) {
     return;
   }
 
-  var bodyPos = $('body').position();
+  var bodyPos = this._$('body').position();
 
   var newCss = {
     position: 'absolute',

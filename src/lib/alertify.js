@@ -877,5 +877,4 @@ var logs = (function () {
     Alertify.log    = logs;
     window.Alertify = Alertify;
 
-
 })(this, document);
