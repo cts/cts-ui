@@ -1,7 +1,9 @@
-_CTSUI = {};
+_CTSUI = {
+  Domains: {
+    UIMockups: 'http://localhost:8000/mockups/',
+    CTS: 'http://localhost:9000/release/',
+    Server: 'http://localhost:8888/',
+    Theme: 'http://localhost:8888/mockups/blog/',
+  }
+};
 
-_CTSUI.mockupBase = "http://localhost:8000/mockups/";
-_CTSUI.themeBase = "http://treesheets.csail.mit.edu/mockups/blog/";
-_CTSUI.serverBase = "http://localhost:8888/";
-_CTSUI.ctsJsLocation = "http://localhost:9000/release/cts.js";
-_CTSUI.switchboardPath = "tree/switchboard";

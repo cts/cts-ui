@@ -510,6 +510,9 @@ var Dialog = (function () {
             var cover = element.create("div", { classes: clsCoverHide }),
                 el    = element.create("section", { classes: clsElHide });
 
+            cover.classList.add('cts-ui');
+            el.classList.add('cts-ui');
+
             document.body.appendChild(cover);
             document.body.appendChild(el);
             element.ready(cover);

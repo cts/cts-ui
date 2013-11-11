@@ -302,23 +302,36 @@ _CTSUI.Picker.prototype._complete= function(reason) {
  *
  * Planned modes:
  *   cts-value: Only permit editing cts-value nodes
+ *   cts-enumerated: Only permit editing cts-enumerated nodes
  * 
  */
 _CTSUI.Picker.prototype._canSelect = function($e) {
-  var passesRestriction = false;
 
-  if ('restrict' in this._currentOpts) {
-    if (this._currentOpts.restrict == 'text') {
-      passesRestriction = ($e.children().length == 0);
-    } else if (this._currentOpts.restrict == 'css') {
-      if ('restrict-class' in this._currentOpts) {
-        passesRestriction = $e.hasClass(this._currentOpts['restrict-class']);
-      }
-    } else {
-      passesRestriction = true;
+  if (!('restrict' in this._currentOpts)) {
+    return true;
+  }
+
+  var restriction = this._currentOpts.restrict;
+  var passesRestriction = true;
+
+  if (restriction == 'text') {
+    passesRestriction = ($e.children().length == 0);
+  } else if (restriction == 'css') {
+    if ('restrict-class' in this._currentOpts) {
+      passesRestriction = $e.hasClass(this._currentOpts['restrict-class']);
     }
-  } else {
-    passesRestriction = true;
+  } else if ((restriction == 'cts-value') || (restriction == 'cts-enumerated')) {
+    var body = CTS.engine.forrest.trees.body;
+    var $$node = body.getCtsNode($e);
+    if ($$node == null) {
+      passesRestriction = false;
+    } else {
+      if (restriction == 'cts-value') { 
+        passesRestriction = $$node.hasRule('is');
+      } else if (restriction == 'cts-enumerated') {
+        passesRestriction = $$node.isEnumerated();
+      }
+    }
   }
 
   var passesIgnore = true;

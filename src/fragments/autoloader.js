@@ -1,4 +1,10 @@
 _CTSUI.autoload = function() {
+  // Load CK Editor
+  var s = document.createElement('script');
+  s.setAttribute('src', _CTSUI.URLs.Scripts.ckeditor);
+  s.setAttribute('type', 'text/javascript');
+  document.getElementsByTagName('head')[0].appendChild(s);
+
   if (typeof CTS != 'undefined') {
     CTS.UI = _CTSUI;
     CTS.status.defaultTreeReady.then(function() {
@@ -7,9 +13,8 @@ _CTSUI.autoload = function() {
   } else {
     // CTS isn't present. Let's create it with a script.
     var s = document.createElement('script');
-    s.setAttribute('src', _CTSUI.ctsJsLocation);
+    s.setAttribute('src', _CTSUI.URLs.Scripts.cts);
     s.setAttribute('type', 'text/javascript');
-
     s.onload = function() {
 
       CTS.UI = _CTSUI;

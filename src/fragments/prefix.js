@@ -1,32 +1,33 @@
-
-_CTSUI.Mockups = {
-  tray: _CTSUI.mockupBase + "tray.html",
-  editor: _CTSUI.mockupBase + "editor.html",
-  theminator: _CTSUI.mockupBase + "theminator.html",
-  saveDialog: _CTSUI.mockupBase + "saveDialog.html"
-};
-
-_CTSUI.switchboardPath = "tree/switchboard";
-
-_CTSUI.CSS = {
-  tray: _CTSUI.mockupBase + "css/tray.css",
-  editor: _CTSUI.mockupBase + "css/editor.css",
-  modal: _CTSUI.mockupBase + "css/modal.css",
-  theminator: _CTSUI.mockupBase + "css/theminator.css",
-  bootstrap: _CTSUI.mockupBase + "css/bootstrap/bootstrap.min.css"
-};
-
-_CTSUI.Img = {
-    lightWool: _CTSUI.mockupBase + "img/light_wool.png",
-    transparentStar: _CTSUI.mockupBase + "img/transparent-star.png",
-    star: _CTSUI.mockupBase + "img/star.png",
-    emptyStar: _CTSUI.mockupBase + "img/empty-star.png",
-    header: _CTSUI.mockupBase + "img/cts-header-theminator.png"
-}
-
-_CTSUI.JSON = {
-  filterInfo: _CTSUI.themeBase + "filterInfo.json",
-  themeInfo: _CTSUI.themeBase + "themeInfo.json"
+_CTSUI.URLs = {
+  Mockups: {
+    tray: _CTSUI.Domains.UIMockups + "tray.html",
+    editor: _CTSUI.Domains.UIMockups + "editor.html",
+    theminator: _CTSUI.Domains.UIMockups + "theminator.html"
+  },
+  Scripts: {
+    cts: _CTSUI.Domains.CTS + "cts.js"
+  },
+  Styles: {
+    tray: _CTSUI.Domains.UIMockups + "css/tray.css",
+    editor: _CTSUI.Domains.UIMockups + "css/editor.css",
+    modal: _CTSUI.Domains.UIMockups + "css/modal.css",
+    theminator: _CTSUI.Domains.UIMockups + "css/theminator.css",
+    bootstrap: _CTSUI.Domains.UIMockups + "css/bootstrap/bootstrap.min.css"
+  },
+  Images: {
+    lightWool: _CTSUI.Domains.UIMockups + "img/light_wool.png",
+    transparentStar: _CTSUI.Domains.UIMockups + "img/transparent-star.png",
+    star: _CTSUI.Domains.UIMockups + "img/star.png",
+    emptyStar: _CTSUI.Domains.UIMockups + "img/empty-star.png",
+    header: _CTSUI.Domains.UIMockups + "img/cts-header-theminator.png"
+  },
+  Data: {
+    filterInfo: _CTSUI.Domains.Theme + "filterInfo.json",
+    themeInfo: _CTSUI.Domains.Theme + "themeInfo.json"
+  },
+  Services: {
+    switchboard: _CTSUI.Domains.Server + 'tree/switchboard'
+  }
 };
 
 _CTSUI.Blog = {

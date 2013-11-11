@@ -12,7 +12,7 @@ _CTSUI.Clipboard = function(server) {
 };
 
 _CTSUI.Clipboard.prototype.addIframe = function() {
-  this._iframe = CTS.$("<iframe src='" + this._server + "'></iframe>");
+  this._iframe = CTS.$("<iframe class='cts-ui' src='" + this._server + "'></iframe>");
   this._iframe.hide();
   CTS.$('body').append(this._iframe);
 };

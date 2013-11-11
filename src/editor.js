@@ -10,8 +10,8 @@ _CTSUI.Editor = function(tray, trayContentsNode) {
 _CTSUI.Editor.prototype.loadMockup = function() {
   this._container = CTS.$("<div class='cts-ui-page cts-ui-editor-page'></div>");
 
-  var cts = "@html editor " + CTS.UI.Mockups.editor + ";";
-  CTS.UI.Util.addCss(CTS.UI.CSS.editor);
+  var cts = "@html editor " + CTS.UI.URLs.Mockups.editor + ";";
+  CTS.UI.Util.addCss(CTS.UI.URLs.Styles.editor);
   cts += "this :is editor | #cts-ui-editor;";
   this._container.attr("data-cts", cts);
   var self = this;
@@ -59,14 +59,14 @@ _CTSUI.Editor.prototype.setupMockup = function() {
  * ====================================================================
  */
 
-var DOWNLOAD_HTML = "Download HTML";
 var DOWNLOAD_ZIP = "Download Complete Page";
+var SAVE_TO_WEB = "Save to web";
 
 _CTSUI.Editor.prototype.saveClicked = function() {
   // Hit the CTS server with a request to duplicate this page, and then redirect.
   var title = "Save your Changes";
   var body = "How do you want to save?";
-  var options = [DOWNLOAD_HTML, DOWNLOAD_ZIP];
+  var options = [DOWNLOAD_ZIP, SAVE_TO_WEB];
   CTS.UI.modal.select(title, body, options).then(
     this.saveChoiceMade,
     function() {
@@ -81,44 +81,39 @@ _CTSUI.Editor.prototype.saveClicked = function() {
  * See cts-server/app/models/operation.js for operation definition.
  */
 _CTSUI.Editor.prototype.saveChoiceMade = function(choice) {
-  if ((choice != DOWNLOAD_HTML) && (choice != DOWNLOAD_ZIP)) {
+  if ((choice != DOWNLOAD_ZIP) && (choice != SAVE_TO_WEB)) {
     console.log("Unknown save choice: " + choice);
     return;
   }
 
-  var operation = {
-    treeUrl: window.location.href,
-    treeType: 'html',
-    action: 'save',
-    parameters: {
-      // TODO: Figure out what to do w/ content.
-      content: CTS.$('html').html()
-    }
-  };
-
-  if (choice == DOWNLOAD_HTML) {
-    operation.parameters['format'] = 'html';
-  } else if (choice == DOWNLOAD_ZIP) {
-    operation.parameters['format'] = 'zip';
+  if (choice == DOWNLOAD_ZIP) {
+  } else if (choice == SAVE_TO_WEB) {
+    CTS.UI.switchboard.flush().then(
+      function(operation) {
+       CTS.UI.modal.alert("Page Saved", "<p><a href='" + url + "'>Download your Page</a></p>");
+      }, function(errMessage) {
+        CTS.UI.modal.alert("Could not save", errMessage);
+      }
+    );
   }
 
-  console.log("Attempting save operation", operation);
-
-  // Flush the queue of pending edit operations.
   CTS.UI.switchboard.recordOperation(operation).then(
     function(operation) {
 
       //TODO: This is a hack. Figure out unified way to handle resources IDs.
       var key = operation.result.url;
       var url = _CTSUI.serverBase + 'tree/' + key;
-      CTS.UI.modal.alert("Page Saved", "<p><a href='" + url + "'>Download your Page</a></p>");
     },
     function(errorMesage) {
-      CTS.UI.modal.alert("Could not save", errorMessage);
     }
   );
 };
 
+_CTSUI.Editor.prototype.saveZipResponse = function(choice) {
+};
+
+_CTSUI.Editor.prototype.saveToWebResponse = function(choice) {
+};
 
 /* DUPLICATE
  * ====================================================================
@@ -141,6 +136,11 @@ _CTSUI.Editor.prototype.duplicateFailed = function(reason) {
 };
 
 /* EDIT
+ *   - editClicked
+ *   - beginEdit
+ *   - cancelEdit
+ *   - completeEdit
+ *
  * ====================================================================
  */
 
@@ -162,25 +162,102 @@ _CTSUI.Editor.prototype.editClicked = function() {
 };
 
 _CTSUI.Editor.prototype.beginEdit = function($e) {
-  // TODO: Jessica
+  // 1. Stash away the content of the old node.
+  this._$editNode= $e;
+  this._editBefore = $e.html();
 };
 
 _CTSUI.Editor.prototype.cancelEdit = function($e) {
-  // TODO: Jessica
+  $_$editNode.html(this._editBefore);
+  this._editBefore = null;
+  this._$editNode = null
 };
 
 _CTSUI.Editor.prototype.completeEdit = function($e) {
-  // TODO: Jessica
+  // Need to find a unique way to identify $e.
+  var selector = CTS.UI.Util.uniqueSelectorFor($e);
+  var content = $e.html();
+  var operation = {
+    treeUrl: window.location.href,
+    treeType: 'html',
+    action: 'edit',
+    parameters: {
+      selector: selector,
+      content: content
+    }
+  };
+
+  // Flush the queue of pending edit operations.
+  CTS.UI.switchboard.recordOperation(operation).then(
+    function(operation) {
+      console.log("Operation recorded.");
+    },
+    function(errorMesage) {
+      console.log("Error: operation not recorded.");
+    }
+  );
 };
 
+
+/* CLONE
+ *   - cloneClicked
+ *   - clone
+ *
+ * ====================================================================
+ */
+
+_CTSUI.Editor.prototype.cloneClicked = function() {
+  console.log("Duplicate clicked");
+  var pickPromise = CTS.UI.picker.pick({
+    ignoreCTSUI: true,
+    restrict: 'cts-enumerated'
+  });
+  var self = this;
+
+  pickPromise.then(
+    function(element) {
+      self.cloneElement(element);
+    },
+    function(errorReason) {
+      console.log("Duplicate canceled: ", errorReason);
+    }
+  );
+};
+
+_CTSUI.Editor.prototype.cloneElement = function($e) {
+  var clone = $e.clone();
+  var selector = CTS.UI.uniqueSelectorFor($e);
+  clone.insertAfter($e);
+  var operation = {
+    treeUrl: window.location.href,
+    treeType: 'html',
+    action: 'clone',
+    parameters: {
+      selector: selector
+    }
+  };
+
+  // Flush the queue of pending edit operations.
+  CTS.UI.switchboard.recordOperation(operation).then(
+    function(operation) {
+      console.log("Operation recorded.");
+    },
+    function(errorMesage) {
+      console.log("Error: operation not recorded.");
+    }
+  );
+};
+
+/* DUPLICATE
+ *   - duplicateClicked
+ *   - duplicate
+ *
+ * ====================================================================
+ */
 
 _CTSUI.Editor.prototype.updateSize = function(height) {
   if (typeof this._container != undefined) {
     this._container.height(height);
   }
-
 };
 
-_CTSUI.Editor.prototype.triggerSave = function(content) {
-    this.saveDialog = new CTS.UI.SaveDialog(content);
-}

@@ -11,6 +11,9 @@ _CTSUI.Switchboard = function($, q, opts) {
   this._opSending = null;
   this._flushLock = null; // Null or a promise.
   this._flushAgain = null; // Null or a promise
+
+  // TEMPORARY:
+  this.opts.serverUrl = 'cts.php';
 };
 
 _CTSUI.Switchboard.prototype.recordOperation = function(operation) {
@@ -77,6 +80,7 @@ _CTSUI.Switchboard.prototype._flushComplete = function(success, msg, jqXHR, text
     this._doFlush();
   }
 };
+
 _CTSUI.Switchboard.prototype._doFlush = function() {
   console.log("Switchboard::_doFlush");
   var self = this;
@@ -87,7 +91,11 @@ _CTSUI.Switchboard.prototype._doFlush = function() {
     toSend.push(this._opSending[i][0]);
   }
 
-  var data = JSON.stringify(toSend);
+  var data = {
+    'operations': toSend
+  };
+
+  var data = JSON.stringify(data);
   console.log("Posting data", data);
 
   this._$.ajax({

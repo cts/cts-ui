@@ -1,6 +1,8 @@
-_CTSUI = {};
-
-_CTSUI.mockupBase = "http://treesheets.csail.mit.edu/mockups";
-_CTSUI.themeBase = "http://treesheets.csail.mit.edu/mockups/blog";
-_CTSUI.serverBase = "http://treesheets.csail.mit.edu";
-_CTSUI.ctsJsLocation= "http://www.treesheets.org/cts.js";
+_CTSUI = {
+  Domains: {
+    UIMockups: 'http://www.treesheets.org/mockups/ctsui',
+    CTS: 'http://www.treesheets.org/hotlink/',
+    Server: 'http://www.treesheets.org/',
+    Theme: 'http://www.treesheets.org/mockups/blog/',
+  }
+};
