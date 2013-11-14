@@ -141,22 +141,23 @@ _CTSUI.Editor.prototype.loginClicked = function() {
   this._logoutBtn = this._node.find('.cts-ui-logout-btn');
   console.log("Login clicked");
   // post to CTS-server
+  var self = this;
   CTS.$.ajax({
     type: "POST",
     url: _CTSUI.serverBase + _CTSUI.loginPath,
     crossDomain: true,
     data: {
-      email: this._userField.val(),
-      password: this._passField.val()
+      email: self._userField.val(),
+      password: self._passField.val()
     }
   }).done(function(message) {
     console.log(message);
     // remove login form
-    this._loginBtn.hide();
-    this._userField.hide();
-    this._passField.hide();
+    self._loginBtn.hide();
+    self._userField.hide();
+    self._passField.hide();
     // replace with username and logout button
-    this._logoutBtn.show();
+    self._logoutBtn.show();
   }).fail(function(jqXHR, textStatus){
     console.log("Post failed: " + textStatus);
   });
@@ -174,10 +175,10 @@ _CTSUI.Editor.prototype.logoutClicked = function() {
   this._logoutBtn = this._node.find('.cts-ui-logout-btn');
 
   console.log("Logout clicked");
-  // remove cookie
-  docCookies.removeItem('cts-session');
   // replace with username and logout button
+  this._userField.val('');
   this._userField.show();
+  this._passField.val('');
   this._passField.show();
   this._loginBtn.show();
   this._logoutBtn.hide();
