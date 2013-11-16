@@ -28,7 +28,24 @@ _CTSUI.Picker = function($, q) {
     'QUIT': 27, // Esc
     'MOUSE_MOVEMENT_GRANULARITY': 25, // Millisec
     'UI_ID': 'cts-ui-picker-chrome',
-    'UI_BORDER': 1
+    'UI': {
+      'OptionOnly': {
+        'border': '1px solid red',
+        'background': 'rgba(255, 0, 0, 0.3)',
+        'text': ''
+      },
+      'Offer': {
+        'border': '1px solid blue',
+        'background': 'rgba(0, 0, 255, 0.3)',
+        'text': 'Click to Edit'
+      },
+      'NoOffer': {
+        'border': 'none',
+        'background': 'transparent',
+        'text': ''
+      }
+
+    }
   };
 
   // This dictionary stores a copy of these methods with the scope
@@ -50,8 +67,8 @@ _CTSUI.Picker = function($, q) {
     display: 'none',
     position: 'absolute',
     zIndex: 60000,
-    background: 'rgba(255, 0, 0, 0.3)',
-    border: this.CONST.UI_BORDER + 'px solid red'
+    background: this.CONST.UI.Offer.background,
+    border: this.CONST.UI.Offer.border
   });
 
   // Options for the current picking action
@@ -137,7 +154,8 @@ _CTSUI.Picker.prototype._select = function($elem) {
     return;
   }
 
-  var bodyPos = this._$('body').position();
+  var offerElementSelection = this._canSelect($elem);
+  var offerElementOptions = this._canOfferOptions($elem);
 
   var newCss = {
     position: 'absolute',
@@ -146,8 +164,24 @@ _CTSUI.Picker.prototype._select = function($elem) {
     left: ($elem.offset().left - bodyPos.left) + 'px',
     top: ($elem.offset().top - bodyPos.top) + 'px'
   };
+  var bodyPos = this._$('body').position();
 
+  if (offerElementSelection) {
+    newCss['background'] = this.CONST.UI.Offer.background;
+    newCss['broder'] = this.CONST.UI.Offer.border;
+  } else if ((!offerElementSelection) && (offerElementOptions)) {
+    newCss['background'] = this.CONST.UI.OptionOnly.background;
+    newCss['broder'] = this.CONST.UI.OptionOnly.border;
+  } else {
+    newCss['background'] = this.CONST.UI.NoOffer.background;
+    newCss['broder'] = this.CONST.UI.NoOffer.border;
+  }
   this._$ui.css(newCss);
+
+  if (offerElementOptions) {
+  } else {
+  }
+
   this._$ui.show();
   this._$selected = $elem;
 }
@@ -349,6 +383,11 @@ _CTSUI.Picker.prototype._canSelect = function($e) {
   var passes = (passesRestriction && passesIgnore);
   console.log(passes);
   return passes;
+};
+
+
+_CTSUI.Picker.prototype._canSelectOfferOptions = function($e) {
+  return false;
 };
 
 _CTSUI.Picker.prototype._swallowEvent = function(e) {
