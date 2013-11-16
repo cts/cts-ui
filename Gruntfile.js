@@ -10,6 +10,7 @@ sourcelist = [
   "src/lib/jquery.fileDownload.js",
   "src/switchboard.js",
   "src/tray.js",
+  "src/card.js",
   "src/picker.js",
   "src/modal.js",
   "src/clipboard.js",
