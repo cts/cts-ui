@@ -139,26 +139,35 @@ _CTSUI.Editor.prototype.loginClicked = function() {
   this._passField = this._node.find('.cts-ui-password-field');
   this._loginBtn = this._node.find('.cts-ui-login-btn');
   this._logoutBtn = this._node.find('.cts-ui-logout-btn');
+  this._flash = this._node.find('.flash');
   console.log("Login clicked");
   // post to CTS-server
   var self = this;
-  CTS.$.ajax({
+  var tryLogin = CTS.$.ajax({
     type: "POST",
     url: _CTSUI.serverBase + _CTSUI.loginPath,
     crossDomain: true,
     data: {
       email: self._userField.val(),
       password: self._passField.val()
+    },
+    xhrFields: {
+      withCredentials: true
     }
-  }).done(function(message) {
+  });
+  tryLogin.done(function(message, status, xhr) {
+    debugger;
     console.log(message);
     // remove login form
     self._loginBtn.hide();
+    self._flash.hide();
     self._userField.hide();
     self._passField.hide();
     // replace with username and logout button
     self._logoutBtn.show();
-  }).fail(function(jqXHR, textStatus){
+  });
+  tryLogin.fail(function(jqXHR, textStatus){
+    self._flash.show();
     console.log("Post failed: " + textStatus);
   });
 };
