@@ -386,7 +386,7 @@ _CTSUI.Picker.prototype._canSelect = function($e) {
 };
 
 
-_CTSUI.Picker.prototype._canSelectOfferOptions = function($e) {
+_CTSUI.Picker.prototype._canOfferOptions = function($e) {
   return false;
 };
 
