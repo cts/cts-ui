@@ -72,6 +72,14 @@ _CTSUI.Tray.prototype.invokeTheminator = function(page) {
   this.pushPage(this._theminator);
 };
 
+_CTSUI.Tray.prototype.invokeScraper = function(page) {
+  var $page = CTS.$('<div class="cts-ui-page"></div>');
+  $page.hide();
+  $page.appendTo(this.$trayContents);
+  this._scraper = new CTS.UI.Scraper(this, $page);
+  this.pushPage(this._scraper);
+};
+
 _CTSUI.Tray.prototype.pushPage = function(page) {
   this._pages[this._pages.length - 1].$page.hide();
   this._pages.push(page);

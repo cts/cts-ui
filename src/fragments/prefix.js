@@ -2,7 +2,8 @@ _CTSUI.URLs = {
   Mockups: {
     tray: _CTSUI.Domains.UIMockups + "tray.html",
     editor: _CTSUI.Domains.UIMockups + "editor.html",
-    theminator: _CTSUI.Domains.UIMockups + "theminator.html"
+    theminator: _CTSUI.Domains.UIMockups + "theminator.html",
+    scraper: _CTSUI.Domains.UIMockups + "scraper.html"
   },
   Scripts: {
     cts: _CTSUI.Domains.CTS + "cts.js",
@@ -13,6 +14,7 @@ _CTSUI.URLs = {
     editor: _CTSUI.Domains.UIMockups + "css/editor.css",
     modal: _CTSUI.Domains.UIMockups + "css/modal.css",
     theminator: _CTSUI.Domains.UIMockups + "css/theminator.css",
+    scraper: _CTSUI.Domains.UIMockups + "css/scraper.css",
     bootstrap: _CTSUI.Domains.UIMockups + "css/bootstrap/bootstrap.min.css",
     ionicons: _CTSUI.Domains.Server + "css/ionicons/css/ionicons.min.css"
   },
