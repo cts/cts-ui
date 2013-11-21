@@ -46,6 +46,7 @@ _CTSUI.Editor.prototype.setupMockup = function() {
   this._pasteBtn = this.$node.find('.cts-ui-paste-btn');
   this._saveBtn = this.$node.find('.cts-ui-save-btn');
   this._themeBtn = this.$node.find('.cts-ui-theme-btn');
+  this._scrapeBtn = this.$node.find('.cts-ui-scrape-btn');
 
   var self = this;
 
@@ -69,6 +70,10 @@ _CTSUI.Editor.prototype.setupMockup = function() {
 
   this._themeBtn.on('click', function(e) {
     self.themesClicked();
+  });
+
+  this._scrapeBtn.on('click', function(e) {
+    self.scrapeClicked();
   });
 
   this._copyBtn.on('click', function(e) {
@@ -403,6 +408,18 @@ _CTSUI.Editor.prototype.themesClicked = function() {
     this.completeEdit();
   }
   this._tray.invokeTheminator();
+};
+
+
+/* Scrape Clicked
+ *
+ * ====================================================================
+ */
+_CTSUI.Editor.prototype.scrapeClicked = function() {
+  if (this._isEditing) {
+    this.completeEdit();
+  }
+  this._tray.invokeScraper();
 };
 
 

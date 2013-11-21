@@ -15,6 +15,7 @@ sourcelist = [
   "src/modal.js",
   "src/clipboard.js",
   "src/theminator.js",
+  "src/scraper.js",
   "src/editor.js",
   "src/theme.js",
   "src/saveDialog.js",

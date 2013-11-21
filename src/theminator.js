@@ -432,7 +432,8 @@ _CTSUI.Theminator.prototype.requestedWidth = function() {
   return 200;
 };
 
-_CTSUI.Theminator.prototype.updateSize = function(height) {
+_CTSUI.Theminator.prototype.updateSize = function(height, width) {
     this.$container.height(height);
     this.$themeList.height(height - this.$header.height());
+    this.$header.width(width);
 };

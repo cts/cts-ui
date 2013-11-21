@@ -33,6 +33,47 @@
     width: 137px;
     height: 100%;
 
+    .cts-ui-header {
+      margin: 0;
+      font-size: 20px;
+      font-color: black;
+      text-align: center;
+      position: relative;
+      display: block;
+      padding: 10px 5px 10px 5px;
+      background-color: #D2B0B2;
+      overflow: hidden;
+
+      /* To blend in with background */
+      -moz-box-shadow: inset -5px 0 5px -2px #888;
+      -webkit-box-shadow: inset -5px 0 5px -2px #888;
+      box-shadow: inset -5px 0 5px -2px #888;
+
+      h3 {
+        margin: 0 0 0 5px;
+        float: left;
+      }
+
+      a.cts-ui-back {
+        margin-top: 5px;
+        color: black;
+        text-align: left;
+        margin-left: 5px;
+        float: left;
+        border-radius: 4px;
+        background-color: red;
+      }
+
+      a.cts-ui-back:hover {
+      }
+
+      a.cts-ui-back i {
+        padding: 4px;
+        color: white;
+      }
+    }
+
+
     /* This is the nib to open/close the tray */
     .cts-ui-expand-tray {
       position:absolute;
