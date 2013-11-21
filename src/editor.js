@@ -419,10 +419,8 @@ _CTSUI.Editor.prototype.scrapeClicked = function() {
   if (this._isEditing) {
     this.completeEdit();
   }
-  this._tray.invokeTheminator();
+  this._tray.invokeScraper();
 };
-
-
 
 
 /* CLONE

@@ -99,7 +99,7 @@ _CTSUI.Tray.prototype.popPage = function() {
   newPage.$page.show();
 };
 
-_CTSUI.Tray.prototype.transitionToWidth = function(width) {
+_CTSUI.Tray.prototype.transitionToWidth = function(width, completeFn) {
   this._width = width;
   var outerWidth = width + this._buttonWidth;
   this.$node.find('.cts-ui-tray-contents').animate({
@@ -108,7 +108,9 @@ _CTSUI.Tray.prototype.transitionToWidth = function(width) {
   this.$node.animate({
     'width': outerWidth + 'px'
   });
-  var spec2 = {'left': ((this._width + 1) + "px")};
+  var spec2 = {
+    'left': ((this._width + 1) + "px"),
+  };
   this.$node.find('.cts-ui-expand-tray').animate(spec2);
 };
 
@@ -144,6 +146,6 @@ _CTSUI.Tray.prototype.updateSize = function() {
   this.$node.height(windowHeight);
   this.$trayContents.height(windowHeight);
   for (var i = 0; i < this._pages.length; i++) {
-    this._pages[i].updateSize(windowHeight);
+    this._pages[i].updateSize(windowHeight, this._width);
   }
 };

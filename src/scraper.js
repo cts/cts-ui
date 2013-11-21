@@ -7,8 +7,8 @@ _CTSUI.Scraper = function(tray, $page) {
   this.loadMockup();
 };
 
-_CTSUI.Theminator.prototype.loadMockup = function() {
-  this.$container = CTS.$("<div class='cts-ui-theminator-page'></div>");
+_CTSUI.Scraper.prototype.loadMockup = function() {
+  this.$container = CTS.$("<div class='cts-ui-scraper-page'></div>");
   var cts = "@html scraper " + CTS.UI.URLs.Mockups.scraper + ";";
   CTS.UI.Util.addCss(CTS.UI.URLs.Styles.scraper);
   cts += "this :is scraper | #cts-ui-scraper;";
@@ -21,20 +21,22 @@ _CTSUI.Theminator.prototype.loadMockup = function() {
   this.$container.appendTo(this.$page);
 };
 
-_CTSUI.Theminator.prototype.setupMockup = function() {
+_CTSUI.Scraper.prototype.setupMockup = function() {
     var self = this;
     this.$node = this.$container.find('.cts-ui-scraper');
+    this.$header = this.$node.find('.cts-ui-header');
+    this.$back = this.$node.find('.cts-ui-back');
     this.$back.on('click', function() {
       self._tray.popPage();
     });
 };
 
-_CTSUI.Theminator.prototype.requestedWidth = function() {
+_CTSUI.Scraper.prototype.requestedWidth = function() {
   return 200;
 };
 
-_CTSUI.Theminator.prototype.updateSize = function(height) {
+_CTSUI.Scraper.prototype.updateSize = function(height) {
     this.$container.height(height);
-    this.$themeList.height(height - this.$header.height());
+    this.$header.width(width);
 };
 
