@@ -31,6 +31,7 @@ _CTSUI.URLs = {
   },
   Services: {
     switchboard: _CTSUI.Domains.Server + 'tree/switchboard',
+    clipboard: _CTSUI.Domains.Server + 'hotlink/clipboard/clipboard.html',
     zipFactory: _CTSUI.Domains.Server + 'zip'
   }
 };
