@@ -29,13 +29,15 @@ _CTSUI.Picker = function($, q) {
     'MOUSE_MOVEMENT_GRANULARITY': 25, // Millisec
     'UI_ID': 'cts-ui-picker-chrome',
     'UI': {
+      'BorderThickness': 2,
+      'BorderPadding': 5,
       'OptionOnly': {
-        'border': '1px solid red',
+        'border': '2px solid red',
         'background': 'rgba(255, 0, 0, 0.3)',
         'text': ''
       },
       'Offer': {
-        'border': '1px solid blue',
+        'border': '2px solid blue',
         'background': 'rgba(0, 0, 255, 0.3)',
         'text': 'Click to Edit'
       },
@@ -156,15 +158,15 @@ _CTSUI.Picker.prototype._select = function($elem) {
 
   var offerElementSelection = this._canSelect($elem);
   var offerElementOptions = this._canOfferOptions($elem);
+  var bodyPos = this._$('body').position();
 
   var newCss = {
     position: 'absolute',
-    width: ($elem.outerWidth() - (this.CONST.UI_BORDER * 2)) + 'px',
-    height: ($elem.outerHeight() - (this.CONST.UI_BORDER * 2)) + 'px',
-    left: ($elem.offset().left - bodyPos.left) + 'px',
-    top: ($elem.offset().top - bodyPos.top) + 'px'
+    left: ($elem.offset().left - bodyPos.left - this.CONST.UI.BorderPadding) + 'px',
+    top: ($elem.offset().top - bodyPos.top - this.CONST.UI.BorderPadding) + 'px',
+    width: ($elem.outerWidth() - (this.CONST.UI.BorderThickness * 2) + (2 * this.CONST.UI.BorderPadding)) + 'px',
+    height: ($elem.outerHeight() - (this.CONST.UI.BorderThickness * 2) + (2 * this.CONST.UI.BorderPadding)) + 'px'
   };
-  var bodyPos = this._$('body').position();
 
   if (offerElementSelection) {
     newCss['background'] = this.CONST.UI.Offer.background;
@@ -176,6 +178,8 @@ _CTSUI.Picker.prototype._select = function($elem) {
     newCss['background'] = this.CONST.UI.NoOffer.background;
     newCss['broder'] = this.CONST.UI.NoOffer.border;
   }
+  console.log(newCss);
+  console.log($elem);
   this._$ui.css(newCss);
 
   if (offerElementOptions) {

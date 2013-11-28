@@ -11,6 +11,37 @@ _CTSUI.Editor = function(tray, $page) {
   this._editBefore; // HTML before the edit
   this.loadMockup();
 
+  this.ckEditorConfig = {
+    toolbarGroups: [
+      { name: 'mode' },
+      { name: 'basicstyles' },
+      { name: 'links' }
+    ],
+    extraPlugins: 'sourcedialog',
+    removePlugins: 'sourcearea',
+    allowedContent: true, // Suppresses content filter.
+    codemirror: {
+      theme: 'default',
+      lineNumbers: true,
+      lineWrapping: true,
+      matchBrackets: true,
+      autoCloseTags: true,
+      enableSearchTools: true,
+      enableCodeFormatting: true,
+      autoFormatOnStart: true,
+      autoFormatOnModeChange: true,
+      autoFormatOnUncomment: true,
+      highlightActiveLine: true,
+      mode: 'htmlmixed', // Includes css and js
+      showSearchButton: true,
+      showTrailingSpace: false,
+      highlightMatches: true,
+      showFormatButton: false,
+      showCommentButton: false,
+      showUncommentButton: false,
+      showAutoCompleteButton: false
+    }
+  }
 
   // TODO: Ensure CKEDITOR is available.
   CKEDITOR.on('instanceCreated', this._onCkEditorInstanceCreated);
@@ -226,20 +257,25 @@ _CTSUI.Editor.prototype.editClicked = function() {
   if (this._isEditing) {
     this.completeEdit();
   } else {
-    var pickPromise = CTS.UI.picker.pick({
-      ignoreCTSUI: true
-    });
-    var self = this;
-  
-    pickPromise.then(
-      function(element) {
-        self.beginEdit(element);
-      },
-      function(errorReason) {
-        console.log("Edit canceled: ", errorReason);
-      }
-    );
+    this.offerEditSelect();
   }
+};
+
+
+_CTSUI.Editor.prototype.offerEditSelect = function() {
+  var pickPromise = CTS.UI.picker.pick({
+    ignoreCTSUI: true
+  });
+  var self = this;
+ 
+  pickPromise.then(
+    function(element) {
+      self.beginEdit(element);
+    },
+    function(errorReason) {
+      console.log("Edit canceled: ", errorReason);
+    }
+  );
 };
 
 _CTSUI.Editor.prototype.beginEdit = function($e) {
@@ -250,12 +286,22 @@ _CTSUI.Editor.prototype.beginEdit = function($e) {
   this._$editNode= $e;
   $e.attr('contenteditable', 'true');
   this._editBefore = $e.html();
-  this._editor = CKEDITOR.inline($e[0]);
+  this._editor = CKEDITOR.inline($e[0], this.ckEditorConfig);
   var self = this;
   this._editor.on('instanceReady', function() {
     self._isEditing = true;
     self._editor.focus();
     self._editBtn.addClass("highlighted");
+  });
+
+  /* 
+   * The BLUR event is thrown when the editor loses focus.
+   * We turn that back into a select operation.
+   */
+  this._editor.on('blur', function(evt) {
+    // Save the contents.
+    self.completeEdit();
+    self.offerEditSelect();
   });
 };
 
@@ -273,7 +319,7 @@ _CTSUI.Editor.prototype.cancelEdit = function() {
   }
 };
 
-_CTSUI.Editor.prototype.completeEdit = function($e) {
+_CTSUI.Editor.prototype.completeEdit = function() {
   var content = null;
   if (this._$editNode != null) {
     this._editBtn.removeClass("highlighted");
@@ -370,8 +416,6 @@ _CTSUI.Editor.prototype.pasteClicked = function() {
   );
 };
 
-
-
 _CTSUI.Editor.prototype._onCkEditorInstanceCreated = function(event) {
   var editor = event.editor,
   element = editor.element;
@@ -382,22 +426,10 @@ _CTSUI.Editor.prototype._onCkEditorInstanceCreated = function(event) {
     // which is fired after the configuration file loading and
     // execution. This makes it possible to change the
     // configurations before the editor initialization takes place.
-    editor.on( 'configLoaded', function() {
-      // Remove unnecessary plugins to make the editor simpler.
-      editor.config.removePlugins = 'colorbutton,find,flash,font,' +
-        'forms,iframe,image,newpage,removeformat,' +
-        'smiley,specialchar,stylescombo,templates';
-      // Rearrange the layout of the toolbar.
-      editor.config.toolbarGroups = [
-        { name: 'editing',		groups: [ 'basicstyles', 'links' ] },
-        { name: 'undo' },
-        { name: 'clipboard',	groups: [ 'selection', 'clipboard' ] },
-        { name: 'save' }
-      ];
-    });
+    // editor.on( 'configLoaded', function() {
+    // });
   }
 };
-
 
 /* Theminator
  *
