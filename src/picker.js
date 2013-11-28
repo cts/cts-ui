@@ -280,29 +280,40 @@ _CTSUI.Picker.prototype._mouseMove = function(event) {
 
   var element = event.target;
 
-  if (element == document.body) {
-    // Selecting the document body is silly.
-    return;
-  } else if (element.id == this.CONST.UI_ID) {
+  if (element.id == this.CONST.UI_ID) {
     // We've selected our own user interface element! Need to
     // figure out what is beneath by momentarily hiding the UI.
     this._$ui.hide();
     element = document.elementFromPoint(event.clientX, event.clientY);
+    this._$ui.show();
   }
 
   $element = this._$(element);
-  
-  if (this._canSelect($element)) {
+
+  // If we're over a CTS-UI widget, bail out.
+  if (! this._canConsider($element)) {
+    this._deselect();
+    return;
+  }
+
+  // If we can offer selection, let's try.
+  if (this._canSelect($element) || this._canOfferOptions($element)) {
+    this._select($element);
+    return;
+  }
+
+  // Look for a parent that is selectable it not.
+  while (($element.length > 0) &&
+         ($element[0] != document.body) &&
+         (! (this._canConsider($element) && 
+            (this._canSelect($element) || this._canOfferOptions($element))))) {
+    $element = $element.parent();
+  }
+
+  if (this._canSelect($element) || this._canConsider($element)) {
     this._select($element);
   } else {
-    while (($element.length > 0) && ($element[0] != document.body) && (! this._canSelect($element))) {
-      $element = $element.parent();
-    }
-    if (this._canSelect($element)) {
-      this._select($element);
-    } else {
-      this._deselect();
-    }
+    this._deselect();
   }
 };
 
@@ -329,6 +340,25 @@ _CTSUI.Picker.prototype._complete= function(reason) {
 /*
  * Utility methods (General)
  *-----------------------------------------------------*/
+
+/* 
+ * This filters out any CTS elements.
+ */
+_CTSUI.Picker.prototype._canConsider = function($e) {
+  var passesIgnore = true;
+
+  // Don't consider if part of the side tray
+  if ($e.is(CTS.UI.tray.$container) || (CTS.UI.tray.$container.find($e).length)) {
+    passesIgnore = false;
+  }
+
+  // Don't consider if the BODY element.
+  if ($e[0] == document.body) {
+    passesIgnore = false;
+  }
+
+  return passesIgnore;
+};
 
 /**
  * Returns whether the picker is able to select the jQuery element $e
@@ -371,24 +401,8 @@ _CTSUI.Picker.prototype._canSelect = function($e) {
       }
     }
   }
-
-  var passesIgnore = true;
-  if (('ignoreCTSUI' in this._currentOpts) && (this._currentOpts.ignoreCTSUI)) {
-    if ($e.is(CTS.UI.tray._container) || (CTS.UI.tray._container.find($e).length)) {
-      passesIgnore = false;
-    } else {
-      console.log(CTS.UI.tray._container.find($e), $e);
-      passesIgnore = true;
-    }
-  }
-
-  console.log(passesRestriction, passesIgnore);
-
-  var passes = (passesRestriction && passesIgnore);
-  console.log(passes);
-  return passes;
+  return passesRestriction;
 };
-
 
 _CTSUI.Picker.prototype._canOfferOptions = function($e) {
   return false;
