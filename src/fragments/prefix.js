@@ -7,7 +7,8 @@ _CTSUI.URLs = {
   },
   Scripts: {
     cts: _CTSUI.Domains.CTS + "cts.js",
-    ckeditor: _CTSUI.Domains.Server + "js/ckeditor/ckeditor.js"
+    ckeditor: _CTSUI.Domains.Server + "js/ckeditor/ckeditor.js",
+    ckeditor_codemirror: _CTSUI.Domains.Server + "js/ckeditor/plugins/codemirror/js/codemirror.js"
   },
   Styles: {
     tray: _CTSUI.Domains.UIMockups + "css/tray.css",
