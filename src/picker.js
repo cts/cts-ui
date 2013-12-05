@@ -93,6 +93,8 @@ _CTSUI.Picker.prototype.isPickInProgress = function() {
  * Returns a promise to pick something.
  */
 _CTSUI.Picker.prototype.pick = function(opts) {
+  CTS.engine.forrest.stopListening();
+
   this._currentOpts = opts || {};
 
   if (this.isPickInProgress()) {
@@ -107,6 +109,8 @@ _CTSUI.Picker.prototype.pick = function(opts) {
  * Cancel the current picking action.
  */
 _CTSUI.Picker.prototype.cancel = function(reason) {
+  CTS.engine.forrest.startListening();
+
   if (this.isPickInProgress()) {
     this._destroyUI();
     this._deferred.reject(reason);
@@ -159,12 +163,14 @@ _CTSUI.Picker.prototype._select = function($elem) {
   var offerElementSelection = this._canSelect($elem);
   var offerElementOptions = this._canOfferOptions($elem);
   var bodyPos = this._$('body').position();
+  var w = this._elementWidth($elem);
+  var x = this._elementX($elem);
 
   var newCss = {
     position: 'absolute',
-    left: ($elem.offset().left - bodyPos.left - this.CONST.UI.BorderPadding) + 'px',
+    left: (x - bodyPos.left - this.CONST.UI.BorderPadding) + 'px',
     top: ($elem.offset().top - bodyPos.top - this.CONST.UI.BorderPadding) + 'px',
-    width: ($elem.outerWidth() - (this.CONST.UI.BorderThickness * 2) + (2 * this.CONST.UI.BorderPadding)) + 'px',
+    width: (w - (this.CONST.UI.BorderThickness * 2) + (2 * this.CONST.UI.BorderPadding)) + 'px',
     height: ($elem.outerHeight() - (this.CONST.UI.BorderThickness * 2) + (2 * this.CONST.UI.BorderPadding)) + 'px'
   };
 
@@ -329,6 +335,7 @@ _CTSUI.Picker.prototype._click = function(event) {
  */
 _CTSUI.Picker.prototype._complete= function(reason) {
   this._destroyUI();
+  CTS.engine.forrest.startListening();
   if (this._deferred != null) {
     this._deferred.resolve(this._$selected);
     this._deferred = null;
@@ -353,7 +360,7 @@ _CTSUI.Picker.prototype._canConsider = function($e) {
   }
 
   // Don't consider if the BODY element.
-  if ($e[0] == document.body) {
+  if (($e[0] == document.body) || ($e[0] == document.documentElement)) {
     passesIgnore = false;
   }
 
@@ -402,6 +409,40 @@ _CTSUI.Picker.prototype._canSelect = function($e) {
     }
   }
   return passesRestriction;
+};
+
+_CTSUI.Picker.prototype._elementWidth = function($e) {
+  // http://stackoverflow.com/questions/10277323/get-real-width-of-elements-with-jquery
+  //if ($e.children().length > 0) {
+  //  return $e.outerWidth();
+  //} 
+  var element = $e[0];
+  var $wrapper= CTS.$('<div style="display: inline-block"></div>');
+  var wrapper = $wrapper[0];
+  var result;
+  while (element.firstChild) {
+    wrapper.appendChild(element.firstChild);
+  }
+  element.appendChild(wrapper);
+  result = wrapper.offsetWidth;
+  element.removeChild(wrapper);
+  while (wrapper.firstChild) {
+    element.appendChild(wrapper.firstChild);
+  }
+  return result;
+};
+
+_CTSUI.Picker.prototype._elementX = function($e) {
+  var el = $e[0];
+  var _x = 0;
+  var _y = 0;
+  while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) {
+    _x += el.offsetLeft - el.scrollLeft;
+    _y += el.offsetTop - el.scrollTop;
+    el = el.offsetParent;
+  }
+  // _y and _x
+  return _x;
 };
 
 _CTSUI.Picker.prototype._canOfferOptions = function($e) {

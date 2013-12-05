@@ -279,6 +279,8 @@ _CTSUI.Editor.prototype.offerEditSelect = function() {
 };
 
 _CTSUI.Editor.prototype.beginEdit = function($e) {
+  CTS.engine.forrest.stopListening();
+
   // 1. Stash away the content of the old node.
   if (this._$editNode != null) {
     this.completeEdit();
@@ -307,6 +309,7 @@ _CTSUI.Editor.prototype.beginEdit = function($e) {
 
 _CTSUI.Editor.prototype.cancelEdit = function() {
   Alertify.log.info("Cancel Edit");
+  CTS.engine.forrest.startListening();
   if (this._$editNode != null) {
     this._editBtn.removeClass("highlighted");
     this._$editNode.html(this._editBefore);
@@ -321,6 +324,7 @@ _CTSUI.Editor.prototype.cancelEdit = function() {
 
 _CTSUI.Editor.prototype.completeEdit = function() {
   var content = null;
+  CTS.engine.forrest.startListening();
   if (this._$editNode != null) {
     this._editBtn.removeClass("highlighted");
     if ((this._editor != null) && (this._editor.checkDirty())) {
