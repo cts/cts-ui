@@ -93,6 +93,7 @@ _CTSUI.Picker.prototype.isPickInProgress = function() {
  * Returns a promise to pick something.
  */
 _CTSUI.Picker.prototype.pick = function(opts) {
+  console.log("Offer Pick");
   CTS.engine.forrest.stopListening();
 
   this._currentOpts = opts || {};
@@ -109,6 +110,7 @@ _CTSUI.Picker.prototype.pick = function(opts) {
  * Cancel the current picking action.
  */
 _CTSUI.Picker.prototype.cancel = function(reason) {
+  console.log("Cancel Pick");
   CTS.engine.forrest.startListening();
 
   if (this.isPickInProgress()) {
@@ -156,7 +158,7 @@ _CTSUI.Picker.prototype._select = function($elem) {
   }
 
   // If the selected element is already this, do nothing.
-  if ($elem == this._$selected) {
+  if ($elem.is(this._$selected)) {
     return;
   }
 
@@ -175,17 +177,18 @@ _CTSUI.Picker.prototype._select = function($elem) {
   };
 
   if (offerElementSelection) {
+    console.log("Offer Selection");
     newCss['background'] = this.CONST.UI.Offer.background;
     newCss['broder'] = this.CONST.UI.Offer.border;
   } else if ((!offerElementSelection) && (offerElementOptions)) {
+    console.log("Offer Options");
     newCss['background'] = this.CONST.UI.OptionOnly.background;
     newCss['broder'] = this.CONST.UI.OptionOnly.border;
   } else {
+    console.log("Offer Neither");
     newCss['background'] = this.CONST.UI.NoOffer.background;
     newCss['broder'] = this.CONST.UI.NoOffer.border;
   }
-  console.log(newCss);
-  console.log($elem);
   this._$ui.css(newCss);
 
   if (offerElementOptions) {
@@ -334,6 +337,7 @@ _CTSUI.Picker.prototype._click = function(event) {
  * Completes the current pick.
  */
 _CTSUI.Picker.prototype._complete= function(reason) {
+  console.log("Complete Pick");
   this._destroyUI();
   CTS.engine.forrest.startListening();
   if (this._deferred != null) {
@@ -381,6 +385,9 @@ _CTSUI.Picker.prototype._canConsider = function($e) {
  * 
  */
 _CTSUI.Picker.prototype._canSelect = function($e) {
+  if ($e == null) {
+    return false;
+  }
 
   if (!('restrict' in this._currentOpts)) {
     return true;
@@ -396,8 +403,7 @@ _CTSUI.Picker.prototype._canSelect = function($e) {
       passesRestriction = $e.hasClass(this._currentOpts['restrict-class']);
     }
   } else if ((restriction == 'cts-value') || (restriction == 'cts-enumerated')) {
-    var body = CTS.engine.forrest.trees.body;
-    var $$node = body.getCtsNode($e);
+    var $$node = CTS.engine.forrest.trees.body.getCtsNode($e);
     if ($$node == null) {
       passesRestriction = false;
     } else {

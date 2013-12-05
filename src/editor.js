@@ -61,7 +61,6 @@ _CTSUI.Editor.prototype.loadMockup = function() {
     self.setupMockup()
     evt.stopPropagation();
   });
-    
 };
 
 _CTSUI.Editor.prototype.setupMockup = function() {
@@ -261,13 +260,13 @@ _CTSUI.Editor.prototype.editClicked = function() {
   }
 };
 
-
 _CTSUI.Editor.prototype.offerEditSelect = function() {
+  this._editBtn.addClass("highlighted");
   var pickPromise = CTS.UI.picker.pick({
-    ignoreCTSUI: true
+    ignoreCTSUI: true,
+    restrict: 'cts-enumerated'
   });
   var self = this;
- 
   pickPromise.then(
     function(element) {
       self.beginEdit(element);
@@ -279,7 +278,12 @@ _CTSUI.Editor.prototype.offerEditSelect = function() {
 };
 
 _CTSUI.Editor.prototype.beginEdit = function($e) {
+  debugger;
   CTS.engine.forrest.stopListening();
+  var ctsNode = $e.data('ctsnode');
+  if (ctsNode) {
+    ctsNode.stash();
+  }
 
   // 1. Stash away the content of the old node.
   if (this._$editNode != null) {
@@ -293,7 +297,6 @@ _CTSUI.Editor.prototype.beginEdit = function($e) {
   this._editor.on('instanceReady', function() {
     self._isEditing = true;
     self._editor.focus();
-    self._editBtn.addClass("highlighted");
   });
 
   /* 
