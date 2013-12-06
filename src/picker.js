@@ -408,9 +408,11 @@ _CTSUI.Picker.prototype._canSelect = function($e) {
       passesRestriction = false;
     } else {
       if (restriction == 'cts-value') { 
-        passesRestriction = $$node.hasRule('is');
+        passesRestriction = ($$node.hasRule('is') ||
+            (typeof $e.attr('data-cts-value') != 'undefined'));
       } else if (restriction == 'cts-enumerated') {
-        passesRestriction = $$node.isEnumerated();
+        passesRestriction = ($$node.isEnumerated() || 
+            (typeof $e.attr('data-cts-enumeration') != 'undefined'));
       }
     }
   }

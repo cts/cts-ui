@@ -6,6 +6,7 @@ _CTSUI.Editor = function(tray, $page) {
   this.$node = null;
 
   this._isEditing = false;
+  this._isEditMode = false;
   this._$editNode = null; // Node being edited
   this._editor; // ckeditor
   this._editBefore; // HTML before the edit
@@ -184,8 +185,8 @@ _CTSUI.Editor.prototype.setupMockup = function() {
 //};
 
 _CTSUI.Editor.prototype.downloadClicked = function(choice) {
-  if (this._isEditing) {
-    this.completeEdit();
+  if (this._isEditMode) {
+    this.exitEditMode();
   }
 
   CTS.$.fileDownload(CTS.UI.URLs.Services.zipFactory, {
@@ -206,8 +207,8 @@ _CTSUI.Editor.prototype.downloadClicked = function(choice) {
 };
 
 _CTSUI.Editor.prototype.uploadClicked = function(choice) {
-  if (this._isEditing) {
-    this.completeEdit();
+  if (this._isEditMode) {
+    this.exitEditMode();
   }
 
   CTS.UI.switchboard.flush().then(
@@ -224,8 +225,8 @@ _CTSUI.Editor.prototype.uploadClicked = function(choice) {
  */
 
 _CTSUI.Editor.prototype.duplicateClicked = function() {
-  if (this._isEditing) {
-    this.completeEdit();
+  if (this._isEditMode) {
+    this.exitEditMode();
   }
 
   // Hit the CTS server with a request to duplicate this page, and then redirect.
@@ -253,18 +254,31 @@ _CTSUI.Editor.prototype.duplicateFailed = function(reason) {
  */
 
 _CTSUI.Editor.prototype.editClicked = function() {
-  if (this._isEditing) {
-    this.completeEdit();
+  if (this._isEditMode) {
+    this.exitEditMode();
   } else {
-    this.offerEditSelect();
+    this.enterEditMode();
   }
+};
+
+_CTSUI.Editor.prototype.exitEditMode = function() {
+  this.completeEdit();
+  this._isEditMode = false;
+  this._editBtn.removeClass("highlighted");
+  CTS.UI.picker.cancel();
+};
+
+_CTSUI.Editor.prototype.enterEditMode = function() {
+  this._isEditMode = true;
+  this._editBtn.addClass("highlighted");
+  this.offerEditSelect();
 };
 
 _CTSUI.Editor.prototype.offerEditSelect = function() {
   this._editBtn.addClass("highlighted");
   var pickPromise = CTS.UI.picker.pick({
     ignoreCTSUI: true,
-    restrict: 'cts-enumerated'
+    restrict: 'cts-value'
   });
   var self = this;
   pickPromise.then(
@@ -278,7 +292,8 @@ _CTSUI.Editor.prototype.offerEditSelect = function() {
 };
 
 _CTSUI.Editor.prototype.beginEdit = function($e) {
-  debugger;
+  console.log("Begin Edit", $e);
+  this._isEditing = true;
   CTS.engine.forrest.stopListening();
   var ctsNode = $e.data('ctsnode');
   if (ctsNode) {
@@ -295,7 +310,6 @@ _CTSUI.Editor.prototype.beginEdit = function($e) {
   this._editor = CKEDITOR.inline($e[0], this.ckEditorConfig);
   var self = this;
   this._editor.on('instanceReady', function() {
-    self._isEditing = true;
     self._editor.focus();
   });
 
@@ -311,22 +325,27 @@ _CTSUI.Editor.prototype.beginEdit = function($e) {
 };
 
 _CTSUI.Editor.prototype.cancelEdit = function() {
-  Alertify.log.info("Cancel Edit");
+  console.log("Cancel Edit");
+  this._isEditing = false;
   CTS.engine.forrest.startListening();
   if (this._$editNode != null) {
-    this._editBtn.removeClass("highlighted");
-    this._$editNode.html(this._editBefore);
-    this._$editNode.removeAttr('contenteditable');
+    if (this._$editNode) {
+      this._$editNode.html(this._editBefore);
+      this._$editNode.removeAttr('contenteditable');
+    }
     this._$editNode = null;
-    this._editor.destroy();
+    if (this._editor) {
+      this._editor.destroy();
+    }
     this._editBefore = null;
     this._editor = null;
-    this._isEditing = false;
   }
 };
 
 _CTSUI.Editor.prototype.completeEdit = function() {
+  console.log("Completed Edit");
   var content = null;
+  this._isEditing = false;
   CTS.engine.forrest.startListening();
   if (this._$editNode != null) {
     this._editBtn.removeClass("highlighted");
@@ -356,15 +375,18 @@ _CTSUI.Editor.prototype.completeEdit = function() {
       );
     }
   }
-  this._editor.destroy();
+  if (this._editor) {
+    this._editor.destroy();
+  }
   if (content != null) {
     this._$editNode.html(content);
   }
-  this._$editNode.removeAttr('contenteditable');
+  if (this._$editNode) {
+    this._$editNode.removeAttr('contenteditable');
+  }
   this._$editNode = null;
   this._editor = null;
   this._editBefore = null;
-  this._isEditing = false;
 };
 
 
@@ -373,8 +395,8 @@ _CTSUI.Editor.prototype.completeEdit = function() {
  * ====================================================================
  */
 _CTSUI.Editor.prototype.copyClicked = function() {
-  if (this._isEditing) {
-    this.completeEdit();
+  if (this._isEditMode) {
+    this.exitEditMode();
   }
 
  
@@ -401,8 +423,8 @@ _CTSUI.Editor.prototype.copyClicked = function() {
  * ====================================================================
  */
 _CTSUI.Editor.prototype.pasteClicked = function() {
-  if (this._isEditing) {
-    this.completeEdit();
+  if (this._isEditMode) {
+    this.exitEditMode();
   }
  
   var pickPromise = CTS.UI.picker.pick({
@@ -443,9 +465,10 @@ _CTSUI.Editor.prototype._onCkEditorInstanceCreated = function(event) {
  * ====================================================================
  */
 _CTSUI.Editor.prototype.themesClicked = function() {
-  if (this._isEditing) {
-    this.completeEdit();
+  if (this._isEditMode) {
+    this.exitEditMode();
   }
+
   this._tray.invokeTheminator();
 };
 
@@ -455,9 +478,10 @@ _CTSUI.Editor.prototype.themesClicked = function() {
  * ====================================================================
  */
 _CTSUI.Editor.prototype.scrapeClicked = function() {
-  if (this._isEditing) {
-    this.completeEdit();
+  if (this._isEditMode) {
+    this.exitEditMode();
   }
+
   this._tray.invokeScraper();
 };
 
