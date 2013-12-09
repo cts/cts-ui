@@ -33,6 +33,7 @@ _CTSUI.Editor.prototype.setupMockup = function() {
   this._saveBtn = this._node.find('.cts-ui-save-btn');
   this._loginBtn = this._node.find('.cts-ui-login-btn');
   this._logoutBtn = this._node.find('.cts-ui-logout-btn');
+  this._boomBtn= this._node.find('.cts-ui-boom');
   var self = this;
 
   /* Note: picker-related events have to stop propagation.  Otherwise the
@@ -63,6 +64,10 @@ _CTSUI.Editor.prototype.setupMockup = function() {
     self.logoutClicked();
   });
 
+  this._boomBtn.on('click', function(e) {
+    console.log('boom');
+    self.boomClicked();
+  });
 };
 
 /* SAVE
@@ -156,7 +161,6 @@ _CTSUI.Editor.prototype.loginClicked = function() {
     }
   });
   tryLogin.done(function(message, status, xhr) {
-    debugger;
     console.log(message);
     // remove login form
     self._loginBtn.hide();
@@ -171,6 +175,21 @@ _CTSUI.Editor.prototype.loginClicked = function() {
     console.log("Post failed: " + textStatus);
   });
 };
+
+_CTSUI.Editor.prototype.boomClicked = function() {
+  var argh = CTS.$.ajax({
+      url: "http://127.0.0.1:8888/user/isLoggedIn",
+      type: "POST",
+      xhrFields:
+      {withCredentials: true}
+  });
+  argh.done(function(message, status, xhr){
+    console.log(message);
+    console.log(status);
+    console.log(xhr);
+  });
+};
+
 
 /* LOGOUT
  * ====================================================================
