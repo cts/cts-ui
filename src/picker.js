@@ -27,7 +27,7 @@ _CTSUI.Picker = function($, q) {
     'SELECT': 13, // Enter
     'QUIT': 27, // Esc
     'MOUSE_MOVEMENT_GRANULARITY': 25, // Millisec
-    'UI_ID': 'cts-ui-picker-chrome',
+    'UI_CLASS': 'cts-ui-picker-chrome',
     'UI': {
       'BorderThickness': 2,
       'BorderPadding': 5,
@@ -64,7 +64,9 @@ _CTSUI.Picker = function($, q) {
   this._$selected = null;
 
   // The visual representation of the picker focus in the DOM
-  this._$ui = this._$('<div id="' + this.CONST.UI_ID + '" class="cts-ignore"></div>');
+  this._$ui = this._$('<div class="cts-ignore ' + this.CONST.UI_CLASS + '"></div>');
+  this._$optionTray  = this._$('<div class="cts-ignore ' + this.CONST.UI_CLASS + '"></div>');
+
   this._$ui.css({
     display: 'none',
     position: 'absolute',
@@ -152,6 +154,7 @@ _CTSUI.Picker.prototype._destroyUI = function() {
  *  $elem - jQuery object
  */
 _CTSUI.Picker.prototype._select = function($elem) {
+  console.log("Select", $elem);
   // Behavior on empty selection: nothing
   if ((typeof $elem == 'undefined') || ($elem == null) || ($elem.length == 0)) {
     return;
@@ -168,12 +171,22 @@ _CTSUI.Picker.prototype._select = function($elem) {
   var w = this._elementWidth($elem);
   var x = this._elementX($elem);
 
+  var left = x - bodyPos.left - this.CONST.UI.BorderPadding;
+  var top = ($elem.offset().top - bodyPos.top - this.CONST.UI.BorderPadding);
+  var width = w - (this.CONST.UI.BorderThickness * 2) + (2 * this.CONST.UI.BorderPadding);
+  var height = ($elem.outerHeight() - (this.CONST.UI.BorderThickness * 2) + (2 * this.CONST.UI.BorderPadding));
+
+  // Possibly offset the left and width if the tray is open.
+  if (CTS.UI.tray.isOpen()) {
+    left = left + CTS.UI.tray._width;
+  } 
+
   var newCss = {
     position: 'absolute',
-    left: (x - bodyPos.left - this.CONST.UI.BorderPadding) + 'px',
-    top: ($elem.offset().top - bodyPos.top - this.CONST.UI.BorderPadding) + 'px',
-    width: (w - (this.CONST.UI.BorderThickness * 2) + (2 * this.CONST.UI.BorderPadding)) + 'px',
-    height: ($elem.outerHeight() - (this.CONST.UI.BorderThickness * 2) + (2 * this.CONST.UI.BorderPadding)) + 'px'
+    left: left  + 'px',
+    top: top + 'px',
+    width: width + 'px',
+    height: height + 'px'
   };
 
   if (offerElementSelection) {
@@ -184,6 +197,7 @@ _CTSUI.Picker.prototype._select = function($elem) {
     console.log("Offer Options");
     newCss['background'] = this.CONST.UI.OptionOnly.background;
     newCss['broder'] = this.CONST.UI.OptionOnly.border;
+    this.offerOptions($elem);
   } else {
     console.log("Offer Neither");
     newCss['background'] = this.CONST.UI.NoOffer.background;
@@ -197,7 +211,18 @@ _CTSUI.Picker.prototype._select = function($elem) {
 
   this._$ui.show();
   this._$selected = $elem;
-}
+};
+
+
+_CTSUI.Picker.prototype.makeOptionTray = function($elem) {
+
+};
+
+
+_CTSUI.Picker.prototype.offerOptions = function($elem) {
+  // make option tray
+  // show option tray
+};
 
 /*
  * Clears current selection.
@@ -205,6 +230,7 @@ _CTSUI.Picker.prototype._select = function($elem) {
 _CTSUI.Picker.prototype._deselect = function() {
   this._$selected = null;
   this._$ui.hide();
+  this._$optionTray.hide();
 };
 
 /*
@@ -388,35 +414,24 @@ _CTSUI.Picker.prototype._canSelect = function($e) {
   if ($e == null) {
     return false;
   }
-
   if (!('restrict' in this._currentOpts)) {
     return true;
   }
 
-  var restriction = this._currentOpts.restrict;
-  var passesRestriction = true;
+  // We're restricted if we're still here.
 
-  if (restriction == 'text') {
-    passesRestriction = ($e.children().length == 0);
-  } else if (restriction == 'css') {
-    if ('restrict-class' in this._currentOpts) {
-      passesRestriction = $e.hasClass(this._currentOpts['restrict-class']);
+  if (('value' in this._currentOpts) && (this._currentOpts['value'])) {
+    if (typeof $e.attr('data-cts-value') != 'undefined') {
+      return true;
     }
-  } else if ((restriction == 'cts-value') || (restriction == 'cts-enumerated')) {
     var $$node = CTS.engine.forrest.trees.body.getCtsNode($e);
-    if ($$node == null) {
-      passesRestriction = false;
-    } else {
-      if (restriction == 'cts-value') { 
-        passesRestriction = ($$node.hasRule('is') ||
-            (typeof $e.attr('data-cts-value') != 'undefined'));
-      } else if (restriction == 'cts-enumerated') {
-        passesRestriction = ($$node.isEnumerated() || 
-            (typeof $e.attr('data-cts-enumeration') != 'undefined'));
+    if ($$node != null) {
+      if ($$node.hasRule('is')) {
+        return true;
       }
     }
   }
-  return passesRestriction;
+  return false;
 };
 
 _CTSUI.Picker.prototype._elementWidth = function($e) {
@@ -454,6 +469,16 @@ _CTSUI.Picker.prototype._elementX = function($e) {
 };
 
 _CTSUI.Picker.prototype._canOfferOptions = function($e) {
+  if ($e == null) {
+    return false;
+  }
+
+  if (('enumeration' in this._currentOpts) && 
+      (this._currentOpts['enumeration'])) {
+    var $$node = CTS.engine.forrest.trees.body.getCtsNode($e);
+    return ($$node.isEnumerated() || (typeof $e.attr('data-cts-enumeration') != 'undefined'));
+  }
+
   return false;
 };
 

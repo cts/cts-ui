@@ -114,6 +114,10 @@ _CTSUI.Tray.prototype.transitionToWidth = function(width, completeFn) {
   this.$node.find('.cts-ui-expand-tray').animate(spec2);
 };
 
+_CTSUI.Tray.prototype.isOpen = function() {
+  return this.$node.css("left") == "0px";
+};
+
 _CTSUI.Tray.prototype.open = function() {
     //var fromTop = CTS.$(window).scrollTop();
   this.$node.animate({"left":"0px"});

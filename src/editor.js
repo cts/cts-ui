@@ -278,7 +278,9 @@ _CTSUI.Editor.prototype.offerEditSelect = function() {
   this._editBtn.addClass("highlighted");
   var pickPromise = CTS.UI.picker.pick({
     ignoreCTSUI: true,
-    restrict: 'cts-value'
+    restrict: true,
+    enumeration: true,
+    value: true
   });
   var self = this;
   pickPromise.then(
