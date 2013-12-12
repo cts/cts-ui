@@ -95,7 +95,6 @@ _CTSUI.Switchboard.prototype._doFlush = function() {
   };
 
   var data = JSON.stringify(data);
-  console.log("Posting data", data);
 
   this._$.ajax({
     type: "POST",

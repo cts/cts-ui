@@ -75,7 +75,6 @@ _CTSUI.Editor.prototype.setupMockup = function() {
   this._duplicateBtn = this.$node.find('.cts-ui-duplicate-btn');
   this._copyBtn = this.$node.find('.cts-ui-copy-btn');
   this._pasteBtn = this.$node.find('.cts-ui-paste-btn');
-  this._saveBtn = this.$node.find('.cts-ui-save-btn');
   this._themeBtn = this.$node.find('.cts-ui-theme-btn');
   this._scrapeBtn = this.$node.find('.cts-ui-scrape-btn');
   this._loginBtn = this.$node.find('.cts-ui-login-btn');
@@ -129,11 +128,6 @@ _CTSUI.Editor.prototype.setupMockup = function() {
   this._duplicateBtn.on('click', function(e) {
     self.duplicateClicked();
   });
-
-  this._saveBtn.on('click', function(e) {
-    self.saveClicked();
-  });
-
 };
 
 
@@ -201,7 +195,8 @@ _CTSUI.Editor.prototype.downloadClicked = function(choice) {
     preparingMessageHtml: "We are preparing an archive of this page. Please wait...",
     failMessageHtml: "There was a problem archiving this page for download.",
     data: {
-      'url': window.location.href
+      'url': window.location.href,
+      'onlyDownload': true
     }
   });
 //  CTS.UI.switchboard.flush().then(
@@ -220,7 +215,7 @@ _CTSUI.Editor.prototype.uploadClicked = function(choice) {
 
   CTS.UI.switchboard.flush().then(
     function(operation) {
-     CTS.UI.modal.alert("Page Saved", "<p><a href='" + url + "'>Download your Page</a></p>");
+      Alertify.log.success("Saved!", 2500);
     }, function(errMessage) {
       CTS.UI.modal.alert("Could not save: " + errMessage);
     }
@@ -235,13 +230,24 @@ _CTSUI.Editor.prototype.duplicateClicked = function() {
   if (this._isEditMode) {
     this.exitEditMode();
   }
+  var self = this;
 
-  // Hit the CTS server with a request to duplicate this page, and then redirect.
-  this.duplicateFailed("Not yet implemented!");
+  CTS.$.ajax({
+    type: "POST",
+    url: CTS.UI.URLs.Services.zipFactory,
+    data: JSON.stringify({
+      'url': window.location.href
+    }),
+    contentType:"application/json; charset=utf-8"
+  }).done(self.duplicateSuccess).fail(self.duplicateFailed);
 };
 
-_CTSUI.Editor.prototype.duplicateSuccess = function(urlOfDuplicate) {
-  window.location.replace(urlOfDuplicate);
+_CTSUI.Editor.prototype.duplicateSuccess = function(response) {
+  var response = JSON.parse(response);
+  var serverWithoutSlash = CTS.UI.Domains.Server.substring(0, CTS.UI.Domains.Server.length - 1);
+  var downloadUrl = serverWithoutSlash + response.downloadUrl;
+  var viewUrl = serverWithoutSlash + response.viewUrl;
+  window.location.replace(viewUrl);
 };
 
 _CTSUI.Editor.prototype.duplicateFailed = function(reason) {

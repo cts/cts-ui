@@ -22,6 +22,7 @@ _CTSUI.Tray.prototype.loadMockup = function() {
   this.$container.css({
     zIndex: 64999// Important: more than the picker.
   });
+  this.$body.animate({"left": ((this._width + 1) + "px")});
 
   var cts = "@html tray " + CTS.UI.URLs.Mockups.tray + ";";
   CTS.UI.Util.addCss(CTS.UI.URLs.Styles.tray);
@@ -133,11 +134,11 @@ _CTSUI.Tray.prototype.close = function() {
 };
 
 _CTSUI.Tray.prototype.toggle = function() {
-  if (this.$node.hasClass("cts-ui-open")) {
+  if (this.isOpen()) {
     this.close();
     this.$node.removeClass("cts-ui-open");
     this.$node.addClass("cts-ui-closed");
-  } else if (this.$node.hasClass("cts-ui-closed")) {
+  } else {
     this.open();
     this.$node.removeClass("cts-ui-closed");
     this.$node.addClass("cts-ui-open");
