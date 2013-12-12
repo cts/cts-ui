@@ -78,6 +78,8 @@ _CTSUI.Editor.prototype.setupMockup = function() {
   this._saveBtn = this.$node.find('.cts-ui-save-btn');
   this._themeBtn = this.$node.find('.cts-ui-theme-btn');
   this._scrapeBtn = this.$node.find('.cts-ui-scrape-btn');
+  this._loginBtn = this.$node.find('.cts-ui-login-btn');
+  this._logoutBtn = this.$node.find('.cts-ui-logout-btn');
 
   var self = this;
 
@@ -106,7 +108,12 @@ _CTSUI.Editor.prototype.setupMockup = function() {
   this._scrapeBtn.on('click', function(e) {
     self.scrapeClicked();
   });
-
+  this._loginBtn.on('click', function(e) {
+    self.loginClicked();
+  });
+  this._logoutBtn.on('click', function(e) {
+    self.logoutClicked();
+  });
   this._copyBtn.on('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -544,13 +551,34 @@ _CTSUI.Editor.prototype.cloneElement = function($e) {
  * ====================================================================
  */
 
-_CTSUI.Editor.prototype.requestedWidth = function() {
-  return 100;
+_CTSUI.Editor.prototype.loginClicked = function() {
+  var self = this;
+  CTS.UI.modal.login("Login", "Yeah").then(
+    self.loginCredentialsProvided,
+    self.loginCredentialsCanceled
+  );
 };
 
-_CTSUI.Editor.prototype.updateSize = function(height) {
-  if (typeof this.$container != undefined) {
-    this.$container.height(height);
-  }
+_CTSUI.Editor.prototype.loginCredentialsProvided = function(tuple) {
+  console.log(tuple);
 };
+
+_CTSUI.Editor.prototype.loginCredentialsCanceled = function() {
+  // No op
+};
+
+_CTSUI.Editor.prototype.loginHandshakeSucceeded = function() {
+  Alertify.log.success("Login success!", 1500);
+};
+
+_CTSUI.Editor.prototype.loginHandshakeFailed = function() {
+  CTS.UI.modal.alert("Login Failed", "<p>Sorry. The odds were not in your favor.");
+};
+
+/* DUPLICATE
+ *   - duplicateClicked
+ *   - duplicate
+ *
+ * ====================================================================
+ */
 

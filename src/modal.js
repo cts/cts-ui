@@ -105,6 +105,36 @@ _CTSUI.Modal.prototype.prompt = function(title, body) {
   return deferred.promise;
 };
 
+
+/**
+ * Presents a question with text answer to be filled in.
+ *
+ * Params:
+ *   title   - null, or the Title of the modal.
+ *   body    - null, or the body of the modal.
+ *
+ * Note: either the title or body must contain a non-empty string.
+ *
+ * Returns via promise:
+ *   The selection.
+ * Rejects via promise:
+ *   "No input" if no data entered.
+ *   "Canceled" if the cancel button clicked.
+ */
+_CTSUI.Modal.prototype.login = function(title, body) {
+  var deferred = this._deferred = this._q.defer();
+  var content = this._makeContent(title, body);
+  Alertify.dialog.login(content,
+    function(tuple) {
+      deferred.resolve(tuple);
+    },
+    function() {
+      deferred.reject("Canceled");
+    }
+  );
+  return deferred.promise;
+};
+
 /**
  * Presents a set of choices to the user as radio-button options.
  *

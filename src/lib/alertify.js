@@ -307,6 +307,7 @@ var Dialog = (function () {
                 cancel : "<button role=\"button\" type=\"button\" class=\"alertify-button alertify-button-cancel\" id=\"alertify-cancel\">{{cancel}}</button>"
             },
             input   : "<div class=\"alertify-text-wrapper\"><input type=\"text\" class=\"alertify-text\" id=\"alertify-text\"></div>",
+            login : "<div class=\"alertify-text-wrapper\"><input type=\"text\" class=\"alertify-text\" id=\"alertify-text\"><input type=\"password\" class=\"alertify-text\" id=\"alertify-password\"></div>",
             choices : "<div class=\"alertify-choices-wrapper\">{{choices}}</div>",
             message : "<p class=\"alertify-message\">{{message}}</p>",
             log     : "<article class=\"alertify-log{{class}}\">{{message}}</article>"
@@ -330,6 +331,11 @@ var Dialog = (function () {
                   if (selected) {
                     val = selected.value;
                   }
+                }
+                if (controls.password) {
+                  var login = controls.input.value;
+                  var password = controls.password.value;
+                  val = [login, password];
                 }
                 if (typeof item.accept === "function") {
                     if ((controls.input) || (controls.choices)) {
@@ -426,12 +432,19 @@ var Dialog = (function () {
             if ((type === "prompt") || (type === "choose")) {
                 html += "<form id=\"alertify-form\" class=\"cts-ignore\">";
             }
+            if ((type === "login") || (type === "choose")) {
+                html += "<form id=\"alertify-form\" class=\"cts-ignore\">";
+            }
 
             html += "<article class=\"alertify-inner\">";
             html += tpl.message.replace("{{message}}", message);
             if (type === "prompt") {
                 html += tpl.input;
             }
+            if (type === "login") {
+                html += tpl.login;
+            }
+
 
             if (type === "choose") {
                 var choicesTxt = "<div id='alertify-choices'>";
@@ -448,7 +461,7 @@ var Dialog = (function () {
             html += tpl.buttons.holder;
             html += "</article>";
 
-            if ((type === "prompt") || (type === "choose")) {
+            if ((type === "prompt") || (type === "choose") || (type === "login")) {
                 html += "</form>";
             }
 
@@ -461,6 +474,10 @@ var Dialog = (function () {
                 html = html.replace("{{ok}}", dialog.labels.ok).replace("{{cancel}}", dialog.labels.cancel);
                 break;
             case "prompt":
+                html = html.replace("{{buttons}}", appendBtns(tpl.buttons.cancel, tpl.buttons.submit));
+                html = html.replace("{{ok}}", dialog.labels.ok).replace("{{cancel}}", dialog.labels.cancel);
+                break;
+            case "login":
                 html = html.replace("{{buttons}}", appendBtns(tpl.buttons.cancel, tpl.buttons.submit));
                 html = html.replace("{{ok}}", dialog.labels.ok).replace("{{cancel}}", dialog.labels.cancel);
                 break;
@@ -545,6 +562,7 @@ var Dialog = (function () {
             controls.cancel = Alertify.get("alertify-cancel") || undefined;
             controls.focus  = (dialog.buttonFocus === "cancel" && controls.cancel) ? controls.cancel : ((dialog.buttonFocus === "none") ? Alertify.get("alertify-noneFocus") : controls.ok),
             controls.input  = Alertify.get("alertify-text")   || undefined;
+            controls.password = Alertify.get("alertify-password")   || undefined;
             controls.choices = Alertify.get("alertify-choices")   || undefined;
             controls.form   = Alertify.get("alertify-form")   || undefined;
 
@@ -648,6 +666,11 @@ var Dialog = (function () {
             prompt: function (msg, accept, deny, placeholder) {
                 dialog = this;
                 setup("prompt", msg, accept, deny, placeholder);
+                return this;
+            },
+            login: function (msg, accept, deny, placeholder) {
+                dialog = this;
+                setup("login", msg, accept, deny, placeholder);
                 return this;
             },
             choose: function (msg, accept, deny, choices) {
