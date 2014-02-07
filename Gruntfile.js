@@ -136,5 +136,14 @@ module.exports = function(grunt) {
     'concat',
     'less:production'
   ]);
+
+  grunt.task.registerTask('background_server', 'Host AND Watch for changes.', function(arg1, arg2) {
+    var child_process = require('child_process');
+    var child = child_process.exec('grunt web_server');
+    child.stdout.pipe(process.stdout);
+    child.stderr.pipe(process.stderr);
+  });
+
+  grunt.registerTask('server', ['default', 'jshint', 'concat', 'background_server', 'watch']);
 };
 
