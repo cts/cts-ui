@@ -94,7 +94,7 @@ module.exports = function(grunt) {
     },
     watch: {
       scripts: {
-        files: "<config:lint.files>",
+        files: "src/**/*.js",
         tasks: "default"
       },
       less: {
