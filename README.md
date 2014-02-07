@@ -13,18 +13,22 @@ one to rebuild the project when you make a change to the code.
 
      ```
      npm install (first time only)
-     grunt (per new release)
-     grunt web_server
+     grunt server
      ```
+
+     The `grunt server` task will run a web server hosting `cts.js` on port
+     9000 and also watch and recompile upon file changes.
 
 2. Then, in this project, (github.com/cts/cts-ui), run the development server
    on (port 8000):
 
      ```
      npm install (first time only)
-     grunt (per new release)
-     grunt web_server
+     grunt server
      ```
+
+     The `grunt server` task will run a web server hosting `ctsui.js` on port
+     8000 and also watch and recompile upon file changes.
 
 ### Getting the bookmarklet link
 
@@ -42,7 +46,9 @@ And drag the bookmarklet link to the toolbar of your browser.
 
 ### Changing the code and re-running
 
-From a separate console, run grunt in the project root:
+If you're running `grunt server`, the code should update automatically as you
+make changes in your editor. If you want to manually re-compile, in a separate
+console, run the following command in the project root:
 
     ```
     grunt
