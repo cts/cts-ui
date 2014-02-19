@@ -9,7 +9,7 @@ the CTS-JS development server, one to run the CTS-UI development server, and
 one to rebuild the project when you make a change to the code.
 
 1. First checkout cts-js (github.com/cts/cts-js) and run the development server
-   in that projet (port 9000):
+   in that projet (port 3000):
 
      ```
      npm install (first time only)
@@ -17,7 +17,7 @@ one to rebuild the project when you make a change to the code.
      ```
 
      The `grunt server` task will run a web server hosting `cts.js` on port
-     9000 and also watch and recompile upon file changes.
+     3000 and also watch and recompile upon file changes.
 
 2. Then, in this project, (github.com/cts/cts-ui), run the development server
    on (port 8000):
