@@ -1,0 +1,3 @@
+This code is offered under the BSD license.
+
+Some portions of the CK Editor may be bundled with this code. The CK Editor is being used under an LGPL license. Our understanding is that we can package this LGPL code in the same repository (for convenience) while still offering our code as BSD. 
